@@ -9,8 +9,7 @@
     "test:e2e": "playwright test --config=e2e.config.ts --project=Chromium",
     "test:visual": "playwright test --config=visual.config.ts --project=Chromium",
     "test:api": "playwright test --config=api.config.ts --project=Chromium",
-    "test:browser": "npx playwright open --timezone='Europe/Rome' --lang='it-IT' google.com",
-    "test": "mocha server/**/*.test.js --timeout 30000"
+    "test:browser": "npx playwright open --timezone='Europe/Rome' --lang='it-IT' google.com"
   },
   "author": "Mykhailo",
   "license": "ISC",
