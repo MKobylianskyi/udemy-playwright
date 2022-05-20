@@ -12,7 +12,7 @@ test.describe('Feedback form', () => {
     loginPage = new LoginPage(page)
     homePage = new HomePage(page)
     feedbackPage = new FeedbackPage(page)
-    await homePage.visit()
+    await homePage.visitHomePage()
     await homePage.clickOnSignIn()
     await loginPage.login('username', 'password')
     await page.goto('http://zero.webappsecurity.com/feedback.html')

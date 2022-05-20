@@ -14,7 +14,7 @@ test.describe('Suite with filtering', () => {
     loginPage = new LoginPage(page)
     homePage = new HomePage(page)
     transactionsPage = new TransactionsPage(page)
-    await homePage.visit()
+    await homePage.visitHomePage()
     await homePage.clickOnSignIn()
     await loginPage.login('username', 'password')
     await page.goto('http://zero.webappsecurity.com/bank/account-activity.html')

@@ -15,7 +15,7 @@ test.describe('sendgin payments', () => {
     homePage = new HomePage(page)
     paymentPage = new PaymentPage(page)
     navbar = new Navbar(page)
-    await homePage.visit()
+    await homePage.visitHomePage()
     await homePage.clickOnSignIn()
     await loginPage.login('username', 'password')
     await page.goto('http://zero.webappsecurity.com/bank/pay-bills.html')

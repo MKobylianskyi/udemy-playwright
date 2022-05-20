@@ -6,7 +6,7 @@ test.describe('Searching feature with typing', () => {
 
   test('Search test', async ({ page }) => {
     homePage = new HomePage(page)
-    await homePage.visit()
+    await homePage.visitHomePage()
     await homePage.searchByText('bank')
     await homePage.checkSearchResults(2)
   })

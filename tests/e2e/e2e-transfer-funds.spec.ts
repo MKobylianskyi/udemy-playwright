@@ -12,7 +12,7 @@ test.describe('transfer Found Suite', () => {
     loginPage = new LoginPage(page)
     homePage = new HomePage(page)
     transferPage = new TransferPage(page)
-    await homePage.visit()
+    await homePage.visitHomePage()
     await homePage.clickOnSignIn()
     await loginPage.login('username', 'password')
     await page.goto('http://zero.webappsecurity.com/bank/transfer-funds.html')

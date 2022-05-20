@@ -8,7 +8,7 @@ test.describe('testing last', () => {
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page)
     homePage = new HomePage(page)
-    await homePage.visit()
+    await homePage.visitHomePage()
     await homePage.clickOnSignIn()
     await loginPage.login('username', 'password')
     await page.goto('http://zero.webappsecurity.com/bank/account-activity.html')
