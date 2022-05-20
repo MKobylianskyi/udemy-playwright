@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import { ByoePage } from '../../page-objects/page-objects-BYOE/ByoePage'
 import { LoginPage } from '../../page-objects/page-objects-BYOE/LoginPage'
 import { getRandomNumber } from '../../utils/data-helpers'
-test.describe('BYOE', () => {
+test.describe('BYOE Adding feature', () => {
   let byoePage: ByoePage
   let loginPage: LoginPage
 
@@ -31,7 +31,9 @@ test.describe('BYOE', () => {
     await page.goto(expertsTabLink)
   })
 
-  test('Login to Expert BYOE panel', async ({ page }, testInfo) => {
+  test('Successfull adding BYOE w/o shceduling call', async ({
+    page,
+  }, testInfo) => {
     let uniqueId = await getRandomNumber(100000)
     await byoePage.assertExpertTabDiplsyed()
     await byoePage.navigateToByoeForm()
@@ -52,6 +54,45 @@ test.describe('BYOE', () => {
     )
     await byoePage.submitForm()
     await byoePage.agreeOnAgreement()
-    console.log(uniqueId, '-->', testInfo.expectedStatus)
+  })
+
+  test('Adding BYOE w/o mandatory fields', async ({ page }, testInfo) => {
+    let uniqueId = await getRandomNumber(100000)
+    await byoePage.assertExpertTabDiplsyed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.assertAddingFormBlocked()
+    await byoePage.fillEmailInput(uniqueId, 'mykhailo.kobylianskyi.work')
+    await byoePage.assertAddingFormUnblocked()
+    await byoePage.submitForm()
+    await byoePage.assertErrorMessageForFields(
+      [
+        'Source',
+        'Angle',
+        'First name',
+        'Last name',
+        'Relevant position',
+        'Company relevant to project',
+        'Project Hourly Rate',
+      ],
+      `can't be blank`
+    )
+    await byoePage.clearBYOEForm()
+    await byoePage.fillForm(
+      uniqueId,
+      'mykhailo.kobylianskyi.work',
+      'APAC',
+      'QA lead',
+      'proSapient',
+      '1000',
+      3,
+      1,
+      'Tag sample name',
+      'Ukraine',
+      '+380992435802',
+      'Kiev',
+      'https://www.linkedin.com/in/mykhailo-kobylianskyi-22023b133/'
+    )
+    await byoePage.submitForm()
+    await byoePage.agreeOnAgreement()
   })
 })
