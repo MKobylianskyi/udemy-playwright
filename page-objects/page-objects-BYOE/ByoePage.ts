@@ -78,34 +78,36 @@ export class ByoePage {
   }
 
   async fillForm(
-    uniqueId,
-    emailpart: string,
-    sourceOption: string,
-    positionvalue: string,
-    companyname: string,
-    rate: string,
-    currencyOptionIndex: number,
-    angleOptionIndex: number,
-    tagname: string,
-    expertGeo: string,
-    phone: string,
-    timezoneName: string,
-    linkedinURl: string
+    uniqueId: number,
+    obj: {
+      emailpart: string
+      sourceOption: string
+      positionvalue: string
+      companyname: string
+      rate: string
+      currencyOptionIndex: number
+      angleOptionIndex: number
+      tagname: string
+      expertGeo: string
+      phone: string
+      timezoneName: string
+      linkedinURl: string
+    }
   ) {
-    await this.fillEmailInput(uniqueId, emailpart)
-    await this.selectorPickOptionByName('Source', sourceOption)
+    await this.fillEmailInput(uniqueId, obj.emailpart)
+    await this.selectorPickOptionByName('Source', obj.sourceOption)
     await this.firstnameInput.type('FirstName-BYOE-' + uniqueId)
     await this.lastnameInput.type('LastName-BYOE-' + uniqueId)
-    await this.positionInput.type(positionvalue)
-    await this.companyInput.type(companyname)
-    await this.rateInput.type(rate)
-    await this.selectorPickOptionByIndex('Currency', currencyOptionIndex)
-    await this.selectorPickOptionByIndex('Angle', angleOptionIndex)
-    await this.addSeveralTags(tagname, 4)
-    await this.phoneInput.type(phone)
-    await this.selectorPickOptionByName('Geography (optional)', expertGeo)
-    await this.selectorPickOptionByName('Timezone (optional)', timezoneName)
-    await this.linkedinInput.type(linkedinURl)
+    await this.positionInput.type(obj.positionvalue)
+    await this.companyInput.type(obj.companyname)
+    await this.rateInput.type(obj.rate)
+    await this.selectorPickOptionByIndex('Currency', obj.currencyOptionIndex)
+    await this.selectorPickOptionByIndex('Angle', obj.angleOptionIndex)
+    await this.addSeveralTags(obj.tagname, 4)
+    await this.phoneInput.type(obj.phone)
+    await this.selectorPickOptionByName('Geography (optional)', obj.expertGeo)
+    await this.selectorPickOptionByName('Timezone (optional)', obj.timezoneName)
+    await this.linkedinInput.type(obj.linkedinURl)
   }
 
   async fillEmailInput(uniqueId, emailpart: string) {
