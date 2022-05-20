@@ -129,8 +129,8 @@ export class ByoePage {
   async assertErrorMessageForFields(fields: string[], errorMessage: string) {
     for (const titleName of fields) {
       await expect(
-        this.page.locator(':text("' + titleName + '") + div >> nth=1')
-      ).toBeTruthy()
+        this.page.locator(':text("' + titleName + '") + div + div')
+      ).toBeVisible()
       await expect(
         this.page.locator(':text("' + titleName + '") + div + div')
       ).toContainText(errorMessage)
@@ -142,7 +142,7 @@ export class ByoePage {
 
   async assertErrorMessageForField(titleName: string, errorMessage: string) {
     await expect(
-      this.page.locator(':text("' + titleName + '") + div >> nth=1')
+      this.page.locator(':text("' + titleName + '")+ div + div')
     ).toBeTruthy()
     await expect(
       this.page.locator(':text("' + titleName + '") + div + div')

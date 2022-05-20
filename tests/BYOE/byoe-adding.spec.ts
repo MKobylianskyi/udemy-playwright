@@ -1,9 +1,11 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { ByoePage } from '../../page-objects/page-objects-BYOE/ByoePage'
 import { LoginPage } from '../../page-objects/page-objects-BYOE/LoginPage'
 import { getRandomNumber } from '../../utils/data-helpers'
+
 test.describe('BYOE Adding feature', () => {
   let byoePage: ByoePage
+  // test.setTimeout(100000)
   let loginPage: LoginPage
 
   ///ENVIROMENT DETAILS
@@ -63,6 +65,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertAddingFormBlocked()
     await byoePage.fillEmailInput(uniqueId, 'mykhailo.kobylianskyi.work')
     await byoePage.assertAddingFormUnblocked()
+    await byoePage.submitForm()
     await byoePage.submitForm()
     await byoePage.assertErrorMessageForFields(
       [
