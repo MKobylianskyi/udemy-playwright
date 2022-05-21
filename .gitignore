@@ -19,6 +19,7 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
+#Adding some chamges
 coverage
 *.lcov
 
@@ -104,3 +105,7 @@ dist
 .tern-port
 
 /pub
+test-results/
+playwright-report/
+
+.DS_Store
