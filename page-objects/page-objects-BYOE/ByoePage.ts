@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test'
+import { getCurrentDay, getCurrentTime } from '../../utils/data-helpers'
 
 export class ByoePage {
   readonly page: Page
@@ -16,6 +17,8 @@ export class ByoePage {
   readonly phoneInput: Locator
   readonly linkedinInput: Locator
   readonly clearFormIcon: Locator
+  readonly callDateInput: Locator
+  readonly callScheduleToggle: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -35,6 +38,8 @@ export class ByoePage {
     this.phoneInput = page.locator('[name=phone]')
     this.linkedinInput = page.locator('[label="LinkedIn URL (optional)"]')
     this.clearFormIcon = page.locator(':text("Email")+div>>svg >> nth=0')
+    this.callDateInput = page.locator('[placeholder="Pick date"]')
+    this.callScheduleToggle = page.locator(':text("Create a call")')
   }
 
   async selectorPickOptionByName(titleName: string, textValue: string) {
@@ -169,5 +174,16 @@ export class ByoePage {
     await expect(this.submitAgreementButton).toBeVisible()
     await this.submitAgreementButton.click()
     await expect(this.submitAgreementButton).toBeVisible({ timeout: 10000 })
+  }
+
+  async provideSchedulingDetails(callDuration) {
+    let currentDate = getCurrentDay()
+    let currentTime = getCurrentTime(1)
+    await this.callScheduleToggle.click()
+    await this.callDateInput.type(currentDate)
+    await this.selectorPickOptionByName('Call time (GMT+3)', currentTime)
+    await this.selectorPickOptionByName('Call duration', callDuration)
+
+    //set duration
   }
 }

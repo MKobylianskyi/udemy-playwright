@@ -19,7 +19,7 @@ test.describe('BYOE Adding feature', () => {
   const envList = JSON.parse(rawdata)
 
   const ENV = envList[0]
-
+  const date = new Date()
   test.beforeEach(async ({ page }) => {
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
@@ -37,6 +37,19 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertExpertTabDiplsyed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillForm(uniqueId, BYOE)
+    await byoePage.submitForm()
+    await byoePage.agreeOnAgreement()
+  })
+
+  test.only('Successfull adding BYOE with shceduling call', async ({
+    page,
+  }, testInfo) => {
+    let uniqueId = await getRandomNumber(100000)
+    await byoePage.assertExpertTabDiplsyed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillForm(uniqueId, BYOE)
+    await byoePage.provideSchedulingDetails('45 minutes')
+    await page.pause()
     await byoePage.submitForm()
     await byoePage.agreeOnAgreement()
   })
