@@ -1,0 +1,30 @@
+[
+  {
+    "emailpart": "mykhailo.kobylianskyi.work",
+    "sourceOption": "APAC",
+    "positionvalue": "QA lead",
+    "companyname": "proSapient",
+    "rate": "1000",
+    "currencyOptionIndex": 3,
+    "angleOptionIndex": 1,
+    "tagname": "Tag sample name",
+    "expertGeo": "Ukraine",
+    "phone": "+380992435802",
+    "timezoneName": "Kiev",
+    "linkedinURl": "https://www.linkedin.com/in/mykhailo-kobylianskyi-22023b133/"
+  },
+  {
+    "emailpart": "mykhailo.kobylianskyi.work",
+    "sourceOption": "APAC",
+    "positionvalue": "engeneer",
+    "companyname": "proSapient inc",
+    "rate": "500",
+    "currencyOptionIndex": 1,
+    "angleOptionIndex": 2,
+    "tagname": "QA",
+    "expertGeo": "Ukraine",
+    "phone": "+380992435800",
+    "timezoneName": "London",
+    "linkedinURl": "https://www.linkedin.com/in/mykhailo-kobylianskyi-22023b133/"
+  }
+]

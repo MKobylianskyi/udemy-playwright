@@ -4,7 +4,7 @@
   "description": "testing project",
   "main": "index.js",
   "scripts": {
-    "test:BYOE": "playwright test tests/BYOE --config=playwright.config.ts --project=Chromium --repeat-each 1",
+    "test:BYOE": "playwright test --config=main.config.ts --project=Chromium --repeat-each 1",
     "test:example": "playwright test tests/example.spec.ts --config=playwright.config.ts  --project=Chromium",
     "test:e2e": "playwright test --config=e2e.config.ts --project=Chromium",
     "test:visual": "playwright test --config=visual.config.ts --project=Chromium",

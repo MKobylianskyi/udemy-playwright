@@ -6,49 +6,19 @@ import { getRandomNumber } from '../../utils/data-helpers'
 test.describe('BYOE Adding feature', () => {
   let byoePage: ByoePage
   let loginPage: LoginPage
-  const mandatoryFields = [
-    'Source',
-    'Angle',
-    'First name',
-    'Last name',
-    'Relevant position',
-    'Company relevant to project',
-    'Project Hourly Rate',
-  ]
+  const fs = require('fs')
+  let rawdata = fs.readFileSync('test-data/byoe-data.json')
 
-  const BYOE = {
-    emailpart: 'mykhailo.kobylianskyi.work',
-    sourceOption: 'APAC',
-    positionvalue: 'QA lead',
-    companyname: 'proSapient',
-    rate: '1000',
-    currencyOptionIndex: 3,
-    angleOptionIndex: 1,
-    tagname: 'Tag sample name',
-    expertGeo: 'Ukraine',
-    phone: '+380992435802',
-    timezoneName: 'Kiev',
-    linkedinURl: 'https://www.linkedin.com/in/mykhailo-kobylianskyi-22023b133/',
-  }
+  const byoeList = JSON.parse(rawdata)
+  const BYOE = byoeList[1]
 
-  const lekSpotENV = {
-    URL: 'https://spot-aggregator-messaging-templates.test.prosapient.app/',
-    email: 'admin@odin.expert',
-    password: '1q2w3e4rA++!!',
-    clientID: '1c628bf7-a32e-4f4c-ac56-f289b6430e09',
-    expertsTabLink:
-      'https://spot-aggregator-messaging-templates.test.prosapient.app/client/projects/fd59faf8-edf5-4f3e-9ef9-cf1496fa3659/experts',
-  }
+  rawdata = fs.readFileSync('test-data/mandatory-fields-list.json')
+  const mandatoryFields = JSON.parse(rawdata)
 
-  const platfromAgregatorENV = {
-    URL: 'https://platform-aggregator.test.prosapient.app/',
-    email: 'test.admin@pSapient.onmicrosoft.com',
-    password: '1q2w3e4rAA++!!!1',
-    clientID: '6cbf9743-0f9c-4b36-91a3-0c22e84d28c6',
-    expertsTabLink:
-      'https://platform-aggregator.test.prosapient.app/client/projects/6b6f7169-14e9-42be-ada1-37e4caa96e4f/experts',
-  }
-  const ENV = lekSpotENV
+  rawdata = fs.readFileSync('test-data/ENV.json')
+  const envList = JSON.parse(rawdata)
+
+  const ENV = envList[0]
 
   test.beforeEach(async ({ page }) => {
     await page.goto(ENV.URL)
