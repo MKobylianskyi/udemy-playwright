@@ -12,6 +12,7 @@ export class ByoePage extends BasePage {
   readonly companyInput: Locator
   readonly rateInput: Locator
   readonly submitFormButton: Locator
+  readonly saveFormButton: Locator
   readonly agreementCheckbox: Locator
   readonly submitAgreementButton: Locator
   readonly phoneInput: Locator
@@ -19,6 +20,8 @@ export class ByoePage extends BasePage {
   readonly clearEmailFormIcon: Locator
   readonly callDateInput: Locator
   readonly callScheduleToggle: Locator
+  readonly searchInput: Locator
+  readonly editExpertButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -31,6 +34,7 @@ export class ByoePage extends BasePage {
     this.companyInput = page.locator('[name=company]')
     this.rateInput = page.locator('[name=rate]')
     this.submitFormButton = page.locator('button:has-text("Continue")')
+    this.saveFormButton = page.locator('button:has-text("Save")')
     this.agreementCheckbox = page.locator(
       '//*[@class="sc-qYSYK kDbsfS"]//child::span[@class="tick"]'
     )
@@ -40,6 +44,10 @@ export class ByoePage extends BasePage {
     this.clearEmailFormIcon = page.locator(':text("Email")+div>>svg >> nth=0')
     this.callDateInput = page.locator('[placeholder="Pick date"]')
     this.callScheduleToggle = page.locator(':text("Create a call")')
+    this.editExpertButton = page.locator('button:has-text("Edit profile")')
+    this.searchInput = page.locator(
+      '[placeholder="Filter by name, keyword or company"]'
+    )
   }
 
   async addSeveralTags(name: string, quantity: number) {
@@ -104,11 +112,6 @@ export class ByoePage extends BasePage {
     await this.clearField(this.rateInput)
     await this.clearField(this.phoneInput)
     await this.clearField(this.linkedinInput)
-    await this.clearSelectorField('Source')
-    await this.clearSelectorField('Currency')
-    await this.clearSelectorField('Angle')
-    await this.clearSelectorField('Geography (optional)')
-    await this.clearSelectorField('Timezone (optional)')
     // add clearing tags if needed
   }
 
@@ -138,7 +141,7 @@ export class ByoePage extends BasePage {
   }
 
   async assertAddingFormAvailable() {
-    await expect(this.submitFormButton).toBeVisible()
+    // await expect(this.submitFormButton).toBeVisible()
     await expect(this.rateInput).toBeEnabled()
     await expect(this.phoneInput).toBeEnabled()
     await expect(this.companyInput).toBeEnabled()
@@ -148,8 +151,21 @@ export class ByoePage extends BasePage {
     await expect(this.linkedinInput).toBeEnabled()
   }
 
-  async submitForm() {
+  async findExistedExpert(name) {
+    await this.searchInput.fill(name)
+  }
+
+  async openEditExpertFormByExpertName(name) {
+    this.findExistedExpert(name)
+    this.editExpertButton.click()
+  }
+
+  async submitFormWithContinueButton() {
     await this.submitFormButton.click()
+  }
+
+  async submitFormWithSaveButton() {
+    await this.saveFormButton.click()
   }
   async agreeOnAgreement() {
     await this.agreementCheckbox.click()

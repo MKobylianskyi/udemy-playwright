@@ -21,14 +21,6 @@ export class BasePage {
     await field.fill('')
   }
 
-  async clearSelectorField(titleName: string) {
-    const element = await this.page.$(
-      ':text("' + titleName + '") + div >> nth=0'
-    )
-    await element.click()
-    await element.fill('')
-  }
-
   async selectorPickOptionByIndex(titleName: string, option: number) {
     const element = await this.page.$(
       ':text("' + titleName + '") + div >> nth=0'
