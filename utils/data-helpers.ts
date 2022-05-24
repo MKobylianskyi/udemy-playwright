@@ -4,14 +4,10 @@ export async function getRandomNumber(max) {
   return Math.floor(Math.random() * max + 1)
 }
 
-// export async function getRandomString(length:number) {
-//     return crypto.randomBytes(length).tos
-// }
-
 export async function getRandomString(length) {
   return crypto.randomBytes(length).toString('hex')
 }
-export function getCurrentTime(hoursInFuture) {
+export function getCurrentTimeFormated(hoursInFuture) {
   let time = new Date()
   let hour = time.getHours() + hoursInFuture
   let minute = time.getMinutes()

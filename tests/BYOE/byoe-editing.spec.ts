@@ -3,7 +3,7 @@ import { ByoePage } from '../../page-objects/page-objects-BYOE/ByoePage'
 import { LoginPage } from '../../page-objects/page-objects-BYOE/LoginPage'
 import { getRandomNumber } from '../../utils/data-helpers'
 
-test.describe('BYOE Adding feature', () => {
+test.describe.skip('BYOE Editing feature', () => {
   let byoePage: ByoePage
   let loginPage: LoginPage
   const fs = require('fs')
@@ -30,9 +30,7 @@ test.describe('BYOE Adding feature', () => {
     await page.goto(ENV.expertsTabLink)
   })
 
-  test('Successfull adding BYOE w/o scheduling call', async ({
-    page,
-  }, testInfo) => {
+  test('Editing existing expert', async ({ page }, testInfo) => {
     let uniqueId = await getRandomNumber(100000)
     await byoePage.assertExpertTabDiplsyed()
     await byoePage.navigateToByoeForm()
@@ -40,38 +38,33 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.fillForm(uniqueId, BYOE)
     await byoePage.submitForm()
     await byoePage.agreeOnAgreement()
-  })
-
-  test.skip('Successfull adding BYOE with scheduling call', async ({
-    page,
-  }, testInfo) => {
-    let uniqueId = await getRandomNumber(100000)
-    await byoePage.assertExpertTabDiplsyed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
-    await byoePage.fillForm(uniqueId, BYOE)
-    await byoePage.provideSchedulingDetails('45 minutes')
-    await byoePage.submitForm()
-    await byoePage.agreeOnAgreement()
-  })
-
-  test('Adding BYOE w/o mandatory fields', async ({ page }, testInfo) => {
-    let uniqueId = await getRandomNumber(100000)
-    await byoePage.assertExpertTabDiplsyed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.assertAddingFormUnavailable()
-    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
+    //find added expert
+    //Get to editing panel
     await byoePage.assertAddingFormAvailable()
+    //check that all created DATA is present
+    //clear all data
+    await byoePage.clearBYOEEmailField()
+    await byoePage.fillForm(uniqueId, BYOE)
+    await byoePage.submitForm()
+  })
+  test('Editing required mandatory fields', async ({ page }, testInfo) => {
+    let uniqueId = await getRandomNumber(100000)
+    await byoePage.assertExpertTabDiplsyed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
+    await byoePage.fillForm(uniqueId, BYOE)
+    await byoePage.submitForm()
+    await byoePage.agreeOnAgreement()
+    //find added expert
+    //Get to editing panel
+    await byoePage.assertAddingFormAvailable()
+    //check that all created DATA is present
+    //clear all data
     await byoePage.submitForm()
     await byoePage.submitForm()
     await byoePage.assertErrorMessageForFields(
       mandatoryFields,
       `can't be blank`
     )
-    await byoePage.clearBYOEEmailField()
-    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
-    await byoePage.fillForm(uniqueId, BYOE)
-    await byoePage.submitForm()
-    await byoePage.agreeOnAgreement()
   })
 })

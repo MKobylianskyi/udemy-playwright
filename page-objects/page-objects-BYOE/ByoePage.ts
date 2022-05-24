@@ -1,8 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test'
-import { getCurrentDay, getCurrentTime } from '../../utils/data-helpers'
+import { getCurrentDay, getCurrentTimeFormated } from '../../utils/data-helpers'
+import { BasePage } from './BasePage'
 
-export class ByoePage {
-  readonly page: Page
+export class ByoePage extends BasePage {
   readonly addByoeTitle: Locator
   readonly addByoeButton: Locator
   readonly howItWorksLabel: Locator
@@ -21,7 +21,7 @@ export class ByoePage {
   readonly callScheduleToggle: Locator
 
   constructor(page: Page) {
-    this.page = page
+    super(page)
     this.addByoeTitle = page.locator('text=Add your own expert')
     this.addByoeButton = page.locator('text=Add your own expert')
     this.howItWorksLabel = page.locator('button:has-text("How it works")')
@@ -40,30 +40,6 @@ export class ByoePage {
     this.clearFormIcon = page.locator(':text("Email")+div>>svg >> nth=0')
     this.callDateInput = page.locator('[placeholder="Pick date"]')
     this.callScheduleToggle = page.locator(':text("Create a call")')
-  }
-
-  async selectorPickOptionByName(titleName: string, textValue: string) {
-    const element = await this.page.$(
-      ':text("' + titleName + '") + div >> nth=0'
-    )
-    await element.click()
-    await element.type(textValue)
-    const firstOption = await this.page.locator('.select__option >> nth=0')
-    await expect(firstOption).toBeVisible()
-    await firstOption.click({ delay: 200 })
-  }
-
-  async selectorPickOptionByIndex(titleName: string, option: number) {
-    const element = await this.page.$(
-      ':text("' + titleName + '") + div >> nth=0'
-    )
-    await element.click()
-
-    const optionItem = await this.page.locator(
-      '.select__option >> nth=' + (option - 1)
-    )
-    await expect(optionItem).toBeVisible()
-    await optionItem.click({ delay: 200 })
   }
 
   async addSeveralTags(name: string, quantity: number) {
@@ -85,7 +61,6 @@ export class ByoePage {
   async fillForm(
     uniqueId: number,
     obj: {
-      emailpart: string
       sourceOption: string
       positionvalue: string
       companyname: string
@@ -99,7 +74,6 @@ export class ByoePage {
       linkedinURl: string
     }
   ) {
-    await this.fillEmailInput(uniqueId, obj.emailpart)
     await this.selectorPickOptionByName('Source', obj.sourceOption)
     await this.firstnameInput.type('FirstName-BYOE-' + uniqueId)
     await this.lastnameInput.type('LastName-BYOE-' + uniqueId)
@@ -122,7 +96,23 @@ export class ByoePage {
     )
   }
 
-  async assertAddingFormBlocked() {
+  async clearForm() {
+    // await this.selectorPickOptionByName('Source', obj.sourceOption)
+    // await this.firstnameInput.type('FirstName-BYOE-' + uniqueId)
+    // await this.lastnameInput.type('LastName-BYOE-' + uniqueId)
+    // await this.positionInput.type(obj.positionvalue)
+    // await this.companyInput.type(obj.companyname)
+    // await this.rateInput.type(obj.rate)
+    // await this.selectorPickOptionByIndex('Currency', obj.currencyOptionIndex)
+    // await this.selectorPickOptionByIndex('Angle', obj.angleOptionIndex)
+    // await this.addSeveralTags(obj.tagname, 4)
+    // await this.phoneInput.type(obj.phone)
+    // await this.selectorPickOptionByName('Geography (optional)', obj.expertGeo)
+    // await this.selectorPickOptionByName('Timezone (optional)', obj.timezoneName)
+    // await this.linkedinInput.type(obj.linkedinURl)
+  }
+
+  async assertAddingFormUnavailable() {
     await expect(this.submitFormButton).toBeVisible()
     await expect(this.rateInput).toBeDisabled()
     await expect(this.phoneInput).toBeDisabled()
@@ -143,19 +133,11 @@ export class ByoePage {
       ).toContainText(errorMessage)
     }
   }
-  async clearBYOEForm() {
+  async clearBYOEEmailField() {
     await this.clearFormIcon.click()
   }
 
-  async assertErrorMessageForField(titleName: string, errorMessage: string) {
-    await expect(
-      this.page.locator(':text("' + titleName + '")+ div + div')
-    ).toBeTruthy()
-    await expect(
-      this.page.locator(':text("' + titleName + '") + div + div')
-    ).toContainText(errorMessage)
-  }
-  async assertAddingFormUnblocked() {
+  async assertAddingFormAvailable() {
     await expect(this.submitFormButton).toBeVisible()
     await expect(this.rateInput).toBeEnabled()
     await expect(this.phoneInput).toBeEnabled()
@@ -178,12 +160,10 @@ export class ByoePage {
 
   async provideSchedulingDetails(callDuration) {
     let currentDate = getCurrentDay()
-    let currentTime = getCurrentTime(1)
+    let currentTime = getCurrentTimeFormated(1)
     await this.callScheduleToggle.click()
     await this.callDateInput.type(currentDate)
     await this.selectorPickOptionByName('Call time (GMT+3)', currentTime)
     await this.selectorPickOptionByName('Call duration', callDuration)
-
-    //set duration
   }
 }
