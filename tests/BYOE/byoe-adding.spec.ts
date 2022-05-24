@@ -41,6 +41,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.agreeOnAgreement()
   })
 
+  // TO DO  - Complete test and unskip
   test.skip('Autocomplete BYOE details during adding', async ({
     page,
   }, testInfo) => {
@@ -56,19 +57,6 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
     //check that fields are prepopuldated
-  })
-
-  test('Successfull adding BYOE with scheduling call', async ({
-    page,
-  }, testInfo) => {
-    let uniqueId = await getRandomString(5)
-    await byoePage.assertExpertTabDiplsyed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
-    await byoePage.fillForm(uniqueId, BYOE)
-    await byoePage.provideSchedulingDetails('45 minutes')
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
   })
 
   test('Adding BYOE w/o mandatory fields', async ({ page }, testInfo) => {
@@ -89,5 +77,43 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.fillForm(uniqueId, BYOE)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
+  })
+
+  test('Successfull adding BYOE with scheduling call', async ({
+    page,
+  }, testInfo) => {
+    let uniqueId = await getRandomString(5)
+    await byoePage.assertExpertTabDiplsyed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
+    await byoePage.fillForm(uniqueId, BYOE)
+    await byoePage.provideSchedulingDetails('45 minutes')
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await byoePage.assertSuccessAllert('Call was scheduled')
+  })
+
+  test('Successfull adding BYOE with scheduling conflict call ', async ({
+    page,
+  }, testInfo) => {
+    let uniqueId = await getRandomString(5)
+    await byoePage.assertExpertTabDiplsyed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
+    await byoePage.fillForm(uniqueId, BYOE)
+    await byoePage.provideSchedulingDetails('45 minutes')
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await byoePage.assertSuccessAllert('Call was scheduled')
+    uniqueId = await getRandomString(5)
+    await byoePage.assertExpertTabDiplsyed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
+    await byoePage.fillForm(uniqueId, BYOE)
+    await byoePage.provideSchedulingDetails('45 minutes')
+    await byoePage.assertConflictCallWarning()
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await byoePage.assertSuccessAllert('Call was scheduled')
   })
 })

@@ -22,6 +22,7 @@ export class ByoePage extends BasePage {
   readonly callScheduleToggle: Locator
   readonly searchInput: Locator
   readonly editExpertButton: Locator
+  readonly conflictCallWarning: Locator
 
   constructor(page: Page) {
     super(page)
@@ -47,6 +48,9 @@ export class ByoePage extends BasePage {
     this.editExpertButton = page.locator('button:has-text("Edit profile")')
     this.searchInput = page.locator(
       '[placeholder="Filter by name, keyword or company"]'
+    )
+    this.conflictCallWarning = page.locator(
+      'text=Please note, you have another call at this timeslot'
     )
   }
 
@@ -141,7 +145,6 @@ export class ByoePage extends BasePage {
   }
 
   async assertAddingFormAvailable() {
-    // await expect(this.submitFormButton).toBeVisible()
     await expect(this.rateInput).toBeEnabled()
     await expect(this.phoneInput).toBeEnabled()
     await expect(this.companyInput).toBeEnabled()
@@ -164,6 +167,10 @@ export class ByoePage extends BasePage {
     await this.submitFormButton.click()
   }
 
+  async assertConflictCallWarning() {
+    await expect(this.conflictCallWarning).toBeVisible()
+  }
+
   async submitFormWithSaveButton() {
     await this.saveFormButton.click()
   }
@@ -176,7 +183,7 @@ export class ByoePage extends BasePage {
 
   async selectCallDate(currentDate) {
     await this.callDateInput.click()
-    await this.page.click('text=29 >> nth=1')
+    await this.page.click('div:nth-child(6) div:nth-child(7)')
     await this.callDateInput.fill(currentDate)
   }
   async provideSchedulingDetails(callDuration) {

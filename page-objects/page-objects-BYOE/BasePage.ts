@@ -1,9 +1,11 @@
 import { Page, Locator, expect } from '@playwright/test'
 export class BasePage {
   readonly page: Page
+  readonly successAlert: Locator
 
   constructor(page: Page) {
     this.page = page
+    this.successAlert = page.locator('[type=success]')
   }
 
   async selectorPickOptionByName(titleName: string, textValue: string) {
@@ -15,6 +17,10 @@ export class BasePage {
     const firstOption = await this.page.locator('.select__option >> nth=0')
     await expect(firstOption).toBeVisible()
     await firstOption.click({ delay: 200 })
+  }
+  async assertSuccessAllert(message) {
+    await expect(this.successAlert).toBeVisible()
+    await expect(this.successAlert).toContainText(message)
   }
 
   async clearField(field) {
