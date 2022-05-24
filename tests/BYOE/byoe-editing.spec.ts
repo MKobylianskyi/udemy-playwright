@@ -8,17 +8,15 @@ test.describe('BYOE Editing feature', () => {
   let loginPage: LoginPage
   const fs = require('fs')
   let rawdata = fs.readFileSync('test-data/byoe-data.json')
-
   const byoeList = JSON.parse(rawdata)
+  //Specify BYOE data set
   let BYOE = byoeList[1]
-
-  rawdata = fs.readFileSync('test-data/mandatory-fields-list.json')
-  const mandatoryFields = JSON.parse(rawdata)
-
+  //Specify BYOE data set
   rawdata = fs.readFileSync('test-data/ENV.json')
   const envList = JSON.parse(rawdata)
-
+  //Specify ENV
   const ENV = envList[0]
+  //Specify ENV
   test.beforeEach(async ({ page }) => {
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)

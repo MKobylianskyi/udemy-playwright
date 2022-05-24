@@ -2,8 +2,8 @@
   {
     "emailpart": "mykhailo.kobylianskyi.work",
     "sourceOption": "APAC",
-    "positionvalue": "QA lead",
-    "companyname": "proSapient",
+    "positionvalue": "QA Lead",
+    "companyname": "proSapient COMPANY",
     "rate": "1000",
     "currencyOptionIndex": 3,
     "angleOptionIndex": 1,
@@ -16,7 +16,7 @@
   {
     "emailpart": "mykhailo.kobylianskyi.work",
     "sourceOption": "APAC",
-    "positionvalue": "engeneer",
+    "positionvalue": "Engineer",
     "companyname": "proSapient inc",
     "rate": "500",
     "currencyOptionIndex": 1,
@@ -30,9 +30,9 @@
   {
     "emailpart": "mykhailo.kobylianskyi.work",
     "sourceOption": "APAC",
-    "positionvalue": "engeneer NEW",
+    "positionvalue": "Engineer NEW",
     "companyname": "proSapient inc NEW",
-    "rate": "500",
+    "rate": "123",
     "currencyOptionIndex": 1,
     "angleOptionIndex": 2,
     "tagname": "NEW TAG",
