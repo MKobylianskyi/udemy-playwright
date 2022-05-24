@@ -42,7 +42,7 @@ test.describe.skip('BYOE Editing feature', () => {
     //Get to editing panel
     await byoePage.assertAddingFormAvailable()
     //check that all created DATA is present
-    //clear all data
+    await byoePage.clearForm()
     await byoePage.clearBYOEEmailField()
     await byoePage.fillForm(uniqueId, BYOE)
     await byoePage.submitForm()
@@ -59,7 +59,7 @@ test.describe.skip('BYOE Editing feature', () => {
     //Get to editing panel
     await byoePage.assertAddingFormAvailable()
     //check that all created DATA is present
-    //clear all data
+    await byoePage.clearForm()
     await byoePage.submitForm()
     await byoePage.submitForm()
     await byoePage.assertErrorMessageForFields(

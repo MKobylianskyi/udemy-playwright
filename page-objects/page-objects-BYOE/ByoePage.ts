@@ -16,7 +16,7 @@ export class ByoePage extends BasePage {
   readonly submitAgreementButton: Locator
   readonly phoneInput: Locator
   readonly linkedinInput: Locator
-  readonly clearFormIcon: Locator
+  readonly clearEmailFormIcon: Locator
   readonly callDateInput: Locator
   readonly callScheduleToggle: Locator
 
@@ -37,7 +37,7 @@ export class ByoePage extends BasePage {
     this.submitAgreementButton = page.locator('button:has-text("Add Expert")')
     this.phoneInput = page.locator('[name=phone]')
     this.linkedinInput = page.locator('[label="LinkedIn URL (optional)"]')
-    this.clearFormIcon = page.locator(':text("Email")+div>>svg >> nth=0')
+    this.clearEmailFormIcon = page.locator(':text("Email")+div>>svg >> nth=0')
     this.callDateInput = page.locator('[placeholder="Pick date"]')
     this.callScheduleToggle = page.locator(':text("Create a call")')
   }
@@ -97,19 +97,19 @@ export class ByoePage extends BasePage {
   }
 
   async clearForm() {
-    // await this.selectorPickOptionByName('Source', obj.sourceOption)
-    // await this.firstnameInput.type('FirstName-BYOE-' + uniqueId)
-    // await this.lastnameInput.type('LastName-BYOE-' + uniqueId)
-    // await this.positionInput.type(obj.positionvalue)
-    // await this.companyInput.type(obj.companyname)
-    // await this.rateInput.type(obj.rate)
-    // await this.selectorPickOptionByIndex('Currency', obj.currencyOptionIndex)
-    // await this.selectorPickOptionByIndex('Angle', obj.angleOptionIndex)
-    // await this.addSeveralTags(obj.tagname, 4)
-    // await this.phoneInput.type(obj.phone)
-    // await this.selectorPickOptionByName('Geography (optional)', obj.expertGeo)
-    // await this.selectorPickOptionByName('Timezone (optional)', obj.timezoneName)
-    // await this.linkedinInput.type(obj.linkedinURl)
+    await this.clearField(this.firstnameInput)
+    await this.clearField(this.lastnameInput)
+    await this.clearField(this.positionInput)
+    await this.clearField(this.companyInput)
+    await this.clearField(this.rateInput)
+    await this.clearField(this.phoneInput)
+    await this.clearField(this.linkedinInput)
+    await this.clearSelectorField('Source')
+    await this.clearSelectorField('Currency')
+    await this.clearSelectorField('Angle')
+    await this.clearSelectorField('Geography (optional)')
+    await this.clearSelectorField('Timezone (optional)')
+    // add clearing tags if needed
   }
 
   async assertAddingFormUnavailable() {
@@ -134,7 +134,7 @@ export class ByoePage extends BasePage {
     }
   }
   async clearBYOEEmailField() {
-    await this.clearFormIcon.click()
+    await this.clearEmailFormIcon.click()
   }
 
   async assertAddingFormAvailable() {
@@ -158,11 +158,16 @@ export class ByoePage extends BasePage {
     await expect(this.submitAgreementButton).toBeVisible({ timeout: 10000 })
   }
 
+  async selectCallDate(currentDate) {
+    await this.callDateInput.click()
+    await this.page.click('text=29 >> nth=1')
+    await this.callDateInput.fill(currentDate)
+  }
   async provideSchedulingDetails(callDuration) {
     let currentDate = getCurrentDay()
     let currentTime = getCurrentTimeFormated(1)
     await this.callScheduleToggle.click()
-    await this.callDateInput.type(currentDate)
+    await this.selectCallDate(currentDate)
     await this.selectorPickOptionByName('Call time (GMT+3)', currentTime)
     await this.selectorPickOptionByName('Call duration', callDuration)
   }
