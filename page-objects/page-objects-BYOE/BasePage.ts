@@ -9,24 +9,32 @@ export class BasePage {
   }
 
   async selectorPickOptionByName(titleName: string, textValue: string) {
+    await this.fillSelectorInput(titleName, textValue)
+    await this.pickSelectorFirstOption()
+  }
+
+  async pickSelectorFirstOption() {
+    const firstOption = await this.page.locator('.select__option >> nth=0')
+    await expect(firstOption).toBeVisible()
+    await firstOption.click({ delay: 200 })
+  }
+
+  async fillSelectorInput(titleName, textValue) {
     const element = await this.page.$(
       ':text("' + titleName + '") + div >> nth=0'
     )
     await element.click()
     await element.type(textValue)
-    const firstOption = await this.page.locator('.select__option >> nth=0')
-    await expect(firstOption).toBeVisible()
-    await firstOption.click({ delay: 200 })
-  }
-  async assertSuccessAllert(message) {
-    await expect(this.successAlert).toBeVisible()
-    await expect(this.successAlert).toContainText(message)
   }
 
   async clearField(field) {
     await field.fill('')
   }
 
+  async assertSuccessAllert(message) {
+    await expect(this.successAlert).toBeVisible()
+    await expect(this.successAlert).toContainText(message)
+  }
   async selectorPickOptionByIndex(titleName: string, option: number) {
     const element = await this.page.$(
       ':text("' + titleName + '") + div >> nth=0'
@@ -39,6 +47,7 @@ export class BasePage {
     await expect(optionItem).toBeVisible()
     await optionItem.click({ delay: 200 })
   }
+
   async assertErrorMessageForField(titleName: string, errorMessage: string) {
     await expect(
       this.page.locator(':text("' + titleName + '")+ div + div')

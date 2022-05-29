@@ -15,7 +15,8 @@ test.describe('BYOE Editing feature', () => {
   rawdata = fs.readFileSync('test-data/ENV.json')
   const envList = JSON.parse(rawdata)
   //Specify ENV
-  const ENV = envList[0]
+  // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
+  const ENV = envList[2]
   //Specify ENV
   test.beforeEach(async ({ page }) => {
     await page.goto(ENV.URL)
@@ -27,11 +28,17 @@ test.describe('BYOE Editing feature', () => {
     await page.goto(ENV.expertsTabLink)
   })
 
+  //   test.afterEach(async ({ page }, testInfo) => {
+  //     if (testInfo.expectedStatus == 'failed') {
+  //       console.error((testInfo.title, '==>', testInfo.expectedStatus))
+  //     }
+  //   })
+
   test('Editing existing expert', async ({ page }, testInfo) => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDiplsyed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(uniqueId, BYOE)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
@@ -43,11 +50,11 @@ test.describe('BYOE Editing feature', () => {
     await byoePage.submitFormWithSaveButton()
   })
 
-  test('Editing required mandatory fields', async ({ page }, testInfo) => {
+  test('Checking mandatory fields', async ({ page }, testInfo) => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDiplsyed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInput(uniqueId, BYOE.emailpart)
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(uniqueId, BYOE)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()

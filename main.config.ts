@@ -1,9 +1,10 @@
 import { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
+  timeout: 900000,
   retries: 0,
   testDir: 'tests/BYOE',
-  reporter: 'html',
+  reporter: 'dot',
   use: {
     trace: 'retain-on-failure',
     headless: false,

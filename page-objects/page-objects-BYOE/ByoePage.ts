@@ -63,8 +63,12 @@ export class ByoePage extends BasePage {
   }
 
   async assertExpertTabDiplsyed() {
+    await expect(
+      this.page.locator('text=Please confirm to add new expert')
+    ).not.toBeVisible()
     await expect(this.addByoeTitle).toBeVisible()
   }
+
   async navigateToByoeForm() {
     await this.addByoeButton.click()
     await this.howItWorksLabel.waitFor({ timeout: 15000 })
@@ -101,7 +105,7 @@ export class ByoePage extends BasePage {
     await this.linkedinInput.type(obj.linkedinURl)
   }
 
-  async fillEmailInput(uniqueId, emailpart: string) {
+  async fillEmailInputWithUniqueEmail(uniqueId, emailpart: string) {
     await this.selectorPickOptionByName(
       'Email Address',
       emailpart + '+a' + uniqueId + '@gmail.com'
@@ -186,10 +190,14 @@ export class ByoePage extends BasePage {
     await this.page.click('div:nth-child(6) div:nth-child(7)')
     await this.callDateInput.fill(currentDate)
   }
+
+  async enableCallScheduleFields() {
+    await this.callScheduleToggle.click()
+  }
   async provideSchedulingDetails(callDuration) {
     let currentDate = getCurrentDay()
     let currentTime = getCurrentTimeFormated(1)
-    await this.callScheduleToggle.click()
+    await this.enableCallScheduleFields()
     await this.selectCallDate(currentDate)
     await this.selectorPickOptionByName('Call time (GMT+3)', currentTime)
     await this.selectorPickOptionByName('Call duration', callDuration)
