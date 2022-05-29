@@ -3,11 +3,11 @@ import { PlaywrightTestConfig } from '@playwright/test'
 const config: PlaywrightTestConfig = {
   timeout: 900000,
   retries: 0,
-  testDir: 'tests/BYOE',
+  testDir: 'tests',
   reporter: 'dot',
   use: {
     trace: 'retain-on-failure',
-    headless: false,
+    headless: true,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 15000,
     ignoreHTTPSErrors: true,

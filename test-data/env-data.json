@@ -1,0 +1,26 @@
+[
+  {
+    "URL": "https://spot-aggregator-messaging-templates.test.prosapient.app/",
+    "email": "admin@odin.expert",
+    "password": "1q2w3e4rA++!!",
+    "clientID": "1c628bf7-a32e-4f4c-ac56-f289b6430e09",
+    "projectID": "",
+    "expertsTabLink": "https://spot-aggregator-messaging-templates.test.prosapient.app/client/projects/fd59faf8-edf5-4f3e-9ef9-cf1496fa3659/experts"
+  },
+  {
+    "URL": "https://platform-aggregator.test.prosapient.app/",
+    "email": "test.admin@pSapient.onmicrosoft.com",
+    "password": "1q2w3e4rA++!!",
+    "clientID": "6cbf9743-0f9c-4b36-91a3-0c22e84d28c6",
+    "projectID": "",
+    "expertsTabLink": "https://platform-aggregator.test.prosapient.app/client/projects/6b6f7169-14e9-42be-ada1-37e4caa96e4f/experts"
+  },
+  {
+    "URL": "https://prosapient.staging.prosapient.app/",
+    "email": "test.admin@pSapient.onmicrosoft.com",
+    "password": "1q2w3e4rAAA++!!!",
+    "clientID": "0688e7ae-0d69-4732-971a-6d5a3b3a1922",
+    "projectID": "5ddc76d7-ab50-46fa-8b01-2905e24915e6",
+    "expertsTabLink": "https://prosapient.staging.prosapient.app/client/projects/5ddc76d7-ab50-46fa-8b01-2905e24915e6/experts"
+  }
+]

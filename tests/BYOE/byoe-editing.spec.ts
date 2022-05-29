@@ -1,18 +1,20 @@
 import { test } from '@playwright/test'
-import { ByoePage } from '../../page-objects/page-objects-BYOE/ByoePage'
-import { LoginPage } from '../../page-objects/page-objects-BYOE/LoginPage'
+import { ByoePage } from '../../page-objects/project-pages/ByoePage'
+import { LoginPage } from '../../page-objects/LoginPage'
 import { getRandomNumber, getRandomString } from '../../utils/data-helpers'
+import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 
 test.describe('BYOE Editing feature', () => {
   let byoePage: ByoePage
   let loginPage: LoginPage
+  let expertsPage: ExpertsPage
   const fs = require('fs')
   let rawdata = fs.readFileSync('test-data/byoe-data.json')
   const byoeList = JSON.parse(rawdata)
   //Specify BYOE data set
   let BYOE = byoeList[1]
   //Specify BYOE data set
-  rawdata = fs.readFileSync('test-data/ENV.json')
+  rawdata = fs.readFileSync('test-data/env-data.json')
   const envList = JSON.parse(rawdata)
   //Specify ENV
   // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
@@ -22,10 +24,11 @@ test.describe('BYOE Editing feature', () => {
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
+    expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
     await loginPage.loginAsUser(ENV.URL, ENV.clientID)
-    await page.goto(ENV.expertsTabLink)
+    await expertsPage.openExpertTab(ENV.URL, ENV.projectID)
   })
 
   //   test.afterEach(async ({ page }, testInfo) => {

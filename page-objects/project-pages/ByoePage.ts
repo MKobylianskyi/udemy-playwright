@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test'
 import { getCurrentDay, getCurrentTimeFormated } from '../../utils/data-helpers'
-import { BasePage } from './BasePage'
+import { BasePage } from '../BasePage'
 
 export class ByoePage extends BasePage {
   readonly addByoeTitle: Locator

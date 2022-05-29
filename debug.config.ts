@@ -1,13 +1,12 @@
 import { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
-  timeout: 10000,
+  timeout: 900000,
   retries: 0,
-  testDir: 'tests/api',
   reporter: 'html',
   use: {
     trace: 'retain-on-failure',
-    headless: true,
+    headless: false,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 15000,
     ignoreHTTPSErrors: true,

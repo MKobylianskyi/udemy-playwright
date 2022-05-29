@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test'
+
 export class BasePage {
   readonly page: Page
   readonly successAlert: Locator

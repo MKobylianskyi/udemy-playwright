@@ -4,11 +4,8 @@
   "description": "testing project",
   "main": "index.js",
   "scripts": {
-    "test:BYOE": "playwright test --config=main.config.ts --project=Chromium --repeat-each 1",
-    "test:example": "playwright test tests/example.spec.ts --config=playwright.config.ts  --project=Chromium",
-    "test:e2e": "playwright test --config=e2e.config.ts --project=Chromium",
-    "test:visual": "playwright test --config=visual.config.ts --project=Chromium",
-    "test:api": "playwright test --config=api.config.ts --project=Chromium",
+    "test:all": "playwright test --config=main.config.ts --project=Chromium --repeat-each 1",
+    "test:debug": "playwright test --config=debug.config.ts --project=Chromium --repeat-each 1",
     "test:browser": "npx playwright open --timezone='Europe/Rome' --lang='it-IT' google.com"
   },
   "author": "Mykhailo",

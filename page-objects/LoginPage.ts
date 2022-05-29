@@ -1,34 +1,29 @@
-import { Locator, Page, expect } from '@playwright/test'
-import { AbstractPage } from '../page-objects/AbstractPage'
+import { Page, Locator, expect } from '@playwright/test'
+import { BasePage } from './BasePage'
 
-export class LoginPage extends AbstractPage {
-  readonly usernameInput: Locator
-  readonly passwordInout: Locator
-  readonly submitBytton: Locator
-  readonly errorMessage: Locator
-  readonly loginForm: Locator
+export class LoginPage extends BasePage {
+  readonly loginField: Locator
+  readonly passwordField: Locator
+  readonly submitButton: Locator
 
   constructor(page: Page) {
     super(page)
-    this.usernameInput = page.locator('#user_login')
-    this.passwordInout = page.locator('#user_password')
-    this.submitBytton = page.locator('text =Sign in')
-    this.errorMessage = page.locator('.alert-error')
-    this.loginForm = page.locator('#login_form')
+    this.loginField = page.locator('[name=login]')
+    this.passwordField = page.locator('[name=password]')
+    this.submitButton = page.locator('[type=submit]')
   }
 
-  async login(username: string, password: string) {
-    await this.usernameInput.type(username)
-    await this.passwordInout.type(password)
-    await this.submitBytton.click()
+  async fillLoginForm(login: string, password: string) {
+    await this.loginField.type(login)
+    await this.passwordField.type(password)
   }
-  async assertErrorMEssage(errortext: string) {
-    await expect(this.errorMessage).toContainText(errortext)
+  async submitCredentials() {
+    await this.submitButton.click()
+    await this.page.waitForNavigation({ timeout: 20000 })
   }
-  async snapLoginForm(path: string) {
-    expect(await this.loginForm.screenshot()).toMatchSnapshot(path)
-  }
-  async snapErrorMessage(path: string) {
-    expect(await this.errorMessage.screenshot()).toMatchSnapshot(path)
+
+  async loginAsUser(URL: string, id: string) {
+    await this.page.goto(URL + 'login_as?user_id=' + id)
+    await this.page.waitForNavigation({ timeout: 20000 })
   }
 }
