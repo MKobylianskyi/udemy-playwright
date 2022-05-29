@@ -10,8 +10,7 @@
   "email": "",
   "password": "",
   "clientID": "",
-  "projectID":"",
-  "expertsTabLink": ""
+  "projectID":""
   }]
 
 ## Development
