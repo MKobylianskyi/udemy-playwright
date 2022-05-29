@@ -10,6 +10,6 @@ export class ExpertsPage extends BasePage {
   }
 
   async openExpertTab(url, projectId) {
-    await this.page.goto(url + 'client/projects/' + projectId + '/experts')
+    await this.page.goto(url + '/client/projects/' + projectId + '/experts')
   }
 }

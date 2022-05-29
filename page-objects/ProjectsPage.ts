@@ -25,6 +25,6 @@ export class ProjectsPage extends BasePage {
   }
 
   async getToProjectsPage(url) {
-    await this.page.goto(url + 'client/projects')
+    await this.page.goto(url + '/client/projects')
   }
 }

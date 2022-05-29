@@ -9,6 +9,6 @@ export class CallsPage extends BasePage {
     super(page)
   }
   async openCallsTab(url, projectId) {
-    await this.page.goto(url + 'client/projects/' + projectId + '/calls')
+    await this.page.goto(url + '/client/projects/' + projectId + '/calls')
   }
 }

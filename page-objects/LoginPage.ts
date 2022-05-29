@@ -23,7 +23,7 @@ export class LoginPage extends BasePage {
   }
 
   async loginAsUser(URL: string, id: string) {
-    await this.page.goto(URL + 'login_as?user_id=' + id)
+    await this.page.goto(URL + '/login_as?user_id=' + id)
     await this.page.waitForNavigation({ timeout: 20000 })
   }
 }

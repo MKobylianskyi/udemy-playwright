@@ -9,6 +9,6 @@ export class InfoPage extends BasePage {
     super(page)
   }
   async openInfoTab(url, projectId) {
-    await this.page.goto(url + 'client/projects/' + projectId + '/experts')
+    await this.page.goto(url + '/client/projects/' + projectId + '/experts')
   }
 }

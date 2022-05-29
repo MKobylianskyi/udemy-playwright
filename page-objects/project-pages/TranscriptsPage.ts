@@ -9,6 +9,6 @@ export class TranscriptsPage extends BasePage {
     super(page)
   }
   async openTranscriptsTab(url, projectId) {
-    await this.page.goto(url + 'client/projects/' + projectId + '/transcripts')
+    await this.page.goto(url + '/client/projects/' + projectId + '/transcripts')
   }
 }

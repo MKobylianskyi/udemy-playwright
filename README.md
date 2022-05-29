@@ -1,21 +1,22 @@
-#  Automation Playwright tests
+# Automation Playwright tests
 
 ## Prerequisites
 
 - install npm
-- Create a json file in /test-data folder 
-- Specify enviroment data in the object 
-[{
-    "URL": "",
-    "email": "",
-    "password": "",
-    "clientID": "",
-    "expertsTabLink": ""
+- Create a json file in /test-data folder
+- Specify enviroment data in the object
+  [{
+  "URL": "",
+  "email": "",
+  "password": "",
+  "clientID": "",
+  "projectID":"",
+  "expertsTabLink": ""
   }]
 
 ## Development
 
-- Run `npm init`  in the proeject folder
+- Run `npm init` in the proeject folder
 - Run `npm install prettier` to install prettier
 - Run `npm install @playwright/test` to install Playwright
 - Run `npx playwirght install` to install default browsers for tests
