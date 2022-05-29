@@ -4,7 +4,7 @@
 
 - install npm
 - Create a json file in /test-data folder 
--- Specify enviroment data in the object 
+- Specify enviroment data in the object 
 [{
     "URL": "",
     "email": "",
