@@ -7,6 +7,11 @@ export async function getRandomNumber(max) {
 export async function getRandomString(length) {
   return crypto.randomBytes(length).toString('hex')
 }
+
+export function removeSpaces(string: string) {
+  return string.replace(/\s+/g, '')
+}
+
 export function getCurrentTimeFormated(hoursInFuture) {
   let time = new Date()
   let hour = time.getHours() + hoursInFuture

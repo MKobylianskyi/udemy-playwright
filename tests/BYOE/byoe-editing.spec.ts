@@ -1,7 +1,7 @@
 import { test } from '@playwright/test'
 import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
-import { getRandomNumber, getRandomString } from '../../utils/data-helpers'
+import { getRandomString } from '../../utils/data-helpers'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 
 test.describe('BYOE Editing feature', () => {
@@ -18,7 +18,7 @@ test.describe('BYOE Editing feature', () => {
   const envList = JSON.parse(rawdata)
   //Specify ENV
   // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
-  const ENV = envList[2]
+  const ENV = envList[0]
   //Specify ENV
   test.beforeEach(async ({ page }) => {
     await page.goto(ENV.URL)
@@ -31,22 +31,17 @@ test.describe('BYOE Editing feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.projectID)
   })
 
-  //   test.afterEach(async ({ page }, testInfo) => {
-  //     if (testInfo.expectedStatus == 'failed') {
-  //       console.error((testInfo.title, '==>', testInfo.expectedStatus))
-  //     }
-  //   })
-
   test('Editing existing expert', async ({ page }, testInfo) => {
     let uniqueId = await getRandomString(5)
-    await byoePage.assertExpertTabDiplsyed()
+    await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(uniqueId, BYOE)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await byoePage.openEditExpertFormByExpertName(uniqueId)
-    await byoePage.assertAddingFormAvailable()
+    await expertsPage.searchForExpert(uniqueId)
+    await expertsPage.openEditExpertForm()
+    await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()
     BYOE = byoeList[2]
     await byoePage.fillForm(uniqueId, BYOE)
@@ -55,14 +50,15 @@ test.describe('BYOE Editing feature', () => {
 
   test('Checking mandatory fields', async ({ page }, testInfo) => {
     let uniqueId = await getRandomString(5)
-    await byoePage.assertExpertTabDiplsyed()
+    await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(uniqueId, BYOE)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await byoePage.openEditExpertFormByExpertName(uniqueId)
-    await byoePage.assertAddingFormAvailable()
+    await expertsPage.searchForExpert(uniqueId)
+    await expertsPage.openEditExpertForm()
+    await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()
     await byoePage.submitFormWithSaveButton()
     await byoePage.submitFormWithSaveButton()

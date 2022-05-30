@@ -1,5 +1,9 @@
 import { Page, Locator, expect } from '@playwright/test'
-import { getCurrentDay, getCurrentTimeFormated } from '../../utils/data-helpers'
+import {
+  removeSpaces,
+  getCurrentDay,
+  getCurrentTimeFormated,
+} from '../../utils/data-helpers'
 import { BasePage } from '../BasePage'
 
 export class ByoePage extends BasePage {
@@ -20,8 +24,6 @@ export class ByoePage extends BasePage {
   readonly clearEmailFormIcon: Locator
   readonly callDateInput: Locator
   readonly callScheduleToggle: Locator
-  readonly searchInput: Locator
-  readonly editExpertButton: Locator
   readonly conflictCallWarning: Locator
 
   constructor(page: Page) {
@@ -45,10 +47,6 @@ export class ByoePage extends BasePage {
     this.clearEmailFormIcon = page.locator(':text("Email")+div>>svg >> nth=0')
     this.callDateInput = page.locator('[placeholder="Pick date"]')
     this.callScheduleToggle = page.locator(':text("Create a call")')
-    this.editExpertButton = page.locator('button:has-text("Edit profile")')
-    this.searchInput = page.locator(
-      '[placeholder="Filter by name, keyword or company"]'
-    )
     this.conflictCallWarning = page.locator(
       'text=Please note, you have another call at this timeslot'
     )
@@ -62,7 +60,7 @@ export class ByoePage extends BasePage {
     }
   }
 
-  async assertExpertTabDiplsyed() {
+  async assertExpertTabDisplayed() {
     await expect(
       this.page.locator('text=Please confirm to add new expert')
     ).not.toBeVisible()
@@ -105,6 +103,35 @@ export class ByoePage extends BasePage {
     await this.linkedinInput.type(obj.linkedinURl)
   }
 
+  async assertFormValues(
+    uniqueId: number,
+    obj: {
+      sourceOption: string
+      positionvalue: string
+      companyname: string
+      rate: string
+      currencyOptionIndex: number
+      angleOptionIndex: number
+      tagname: string
+      expertGeo: string
+      phone: string
+      timezoneName: string
+      linkedinURl: string
+    }
+  ) {
+    await expect(this.firstnameInput).toHaveValue('FirstName-BYOE-' + uniqueId)
+    await expect(this.lastnameInput).toHaveValue('LastName-BYOE-' + uniqueId)
+    await expect(this.rateInput).toHaveValue(obj.rate)
+    let phoneNumber = await this.phoneInput.getAttribute('value')
+    await expect(removeSpaces(phoneNumber)).toEqual(obj.phone)
+    await expect(this.linkedinInput).toHaveValue(obj.linkedinURl)
+    await this.selectorPickOptionByName('Source', obj.sourceOption)
+    await this.assertSelectorInput('Geography (optional)', obj.expertGeo)
+    await this.assertSelectorInput('Timezone (optional)', obj.timezoneName)
+    // add checking tags if needed
+    // add checking Currency if needed
+  }
+
   async fillEmailInputWithUniqueEmail(uniqueId, emailpart: string) {
     await this.selectorPickOptionByName(
       'Email Address',
@@ -144,11 +171,20 @@ export class ByoePage extends BasePage {
       ).toContainText(errorMessage)
     }
   }
+
   async clearBYOEEmailField() {
     await this.clearEmailFormIcon.click()
   }
 
-  async assertAddingFormAvailable() {
+  async assertEmailAddressWarning() {
+    await expect(
+      this.page.locator(
+        `:text("This email belongs to an existing expert. Changing name, timezone or contact information will affect the expert’s profile.")`
+      )
+    ).toBeVisible()
+  }
+
+  async assertBYOEFormAvailable() {
     await expect(this.rateInput).toBeEnabled()
     await expect(this.phoneInput).toBeEnabled()
     await expect(this.companyInput).toBeEnabled()
@@ -156,15 +192,6 @@ export class ByoePage extends BasePage {
     await expect(this.firstnameInput).toBeEnabled()
     await expect(this.positionInput).toBeEnabled()
     await expect(this.linkedinInput).toBeEnabled()
-  }
-
-  async findExistedExpert(name) {
-    await this.searchInput.fill(name)
-  }
-
-  async openEditExpertFormByExpertName(name) {
-    this.findExistedExpert(name)
-    this.editExpertButton.click()
   }
 
   async submitFormWithContinueButton() {

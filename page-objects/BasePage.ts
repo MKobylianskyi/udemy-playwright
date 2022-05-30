@@ -28,6 +28,13 @@ export class BasePage {
     await element.type(textValue)
   }
 
+  async assertSelectorInput(titleName, textValue) {
+    const element = await this.page.locator(
+      ':text("' + titleName + '") + div >> nth=0'
+    )
+    await expect(element).toContainText(textValue)
+  }
+
   async clearField(field) {
     await field.fill('')
   }
