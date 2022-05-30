@@ -66,6 +66,34 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertFormValues(uniqueId, BYOE)
   })
 
+  test('BYOE:Adding existed expert with updating info', async ({
+    page,
+  }, testInfo) => {
+    let uniqueId = await getRandomString(5)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
+    await byoePage.fillForm(uniqueId, BYOE)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(
+      'FirstName-BYOE-' + uniqueId + ' LastName-BYOE-' + uniqueId
+    )
+    await expertsPage.openExpertTab(ENV.URL, ENV.projectID2)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
+    await byoePage.assertEmailAddressWarning()
+    await byoePage.assertFormValues(uniqueId, BYOE)
+    let newBYOE = byoeList[1]
+    await byoePage.fillForm(uniqueId, newBYOE)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(
+      'FirstName-BYOE-' + uniqueId + ' LastName-BYOE-' + uniqueId
+    )
+  })
+
   test('BYOE:Checking Expert mandatory fields', async ({ page }, testInfo) => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()

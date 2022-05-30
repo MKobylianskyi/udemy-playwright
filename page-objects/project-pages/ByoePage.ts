@@ -89,18 +89,18 @@ export class ByoePage extends BasePage {
     }
   ) {
     await this.selectorPickOptionByName('Source', obj.sourceOption)
-    await this.firstnameInput.type('FirstName-BYOE-' + uniqueId)
-    await this.lastnameInput.type('LastName-BYOE-' + uniqueId)
-    await this.positionInput.type(obj.positionvalue)
-    await this.companyInput.type(obj.companyname)
-    await this.rateInput.type(obj.rate)
+    await this.firstnameInput.fill('FirstName-BYOE-' + uniqueId)
+    await this.lastnameInput.fill('LastName-BYOE-' + uniqueId)
+    await this.positionInput.fill(obj.positionvalue)
+    await this.companyInput.fill(obj.companyname)
+    await this.rateInput.fill(obj.rate)
     await this.selectorPickOptionByIndex('Currency', obj.currencyOptionIndex)
     await this.selectorPickOptionByIndex('Angle', obj.angleOptionIndex)
     await this.addSeveralTags(obj.tagname, 4)
-    await this.phoneInput.type(obj.phone)
+    await this.phoneInput.fill(obj.phone)
     await this.selectorPickOptionByName('Geography (optional)', obj.expertGeo)
     await this.selectorPickOptionByName('Timezone (optional)', obj.timezoneName)
-    await this.linkedinInput.type(obj.linkedinURl)
+    await this.linkedinInput.fill(obj.linkedinURl)
   }
 
   async assertFormValues(
