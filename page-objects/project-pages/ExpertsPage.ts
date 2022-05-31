@@ -79,6 +79,9 @@ export class ExpertsPage extends BasePage {
     await this.setTimeButton.click()
   }
 
+  async requestAvailabilityClick() {
+    await this.requestAvailabilityButton.click()
+  }
   async provideSetTimeSchedulingDetails(callDuration) {
     let currentDate = getCurrentDay()
     let currentTime = getCurrentTimeFormated(1)

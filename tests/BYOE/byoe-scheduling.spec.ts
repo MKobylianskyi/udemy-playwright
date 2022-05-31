@@ -57,7 +57,7 @@ test.describe('BYOE Scheduling feature', () => {
     await expertsPage.assertTitleCallScheduled()
   })
 
-  test.skip('BYOE:Scheduling call via request times  after adding', async ({
+  test('BYOE:Scheduling call via request times  after adding', async ({
     page,
   }, testInfo) => {
     let uniqueId = await getRandomString(5)
@@ -71,23 +71,27 @@ test.describe('BYOE Scheduling feature', () => {
       'FirstName-BYOE-' + uniqueId + ' LastName-BYOE-' + uniqueId
     )
     await expertsPage.openExpertSchedulingPanel()
-    await page.pause()
+    await expertsPage.requestAvailabilityClick()
+    await expertsPage.requestAvailabilityClick()
+    await expertsPage.assertSuccessAllert('Request has been sent')
+    //complete booking by link from email
+    //assert that call booked
   })
 
-  test.skip('BYOE:Scheduling call  via provide times  after adding', async ({
-    page,
-  }, testInfo) => {
-    let uniqueId = await getRandomString(5)
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
-    await byoePage.fillForm(uniqueId, BYOE)
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
-    await expertsPage.asserExpertInProejct(
-      'FirstName-BYOE-' + uniqueId + ' LastName-BYOE-' + uniqueId
-    )
-    await expertsPage.openExpertSchedulingPanel()
-    await page.pause()
-  })
+  // test.only('BYOE:Scheduling call  via provide times  after adding', async ({
+  //   page,
+  // }, testInfo) => {
+  //   let uniqueId = await getRandomString(5)
+  //   await byoePage.assertExpertTabDisplayed()
+  //   await byoePage.navigateToByoeForm()
+  //   await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
+  //   await byoePage.fillForm(uniqueId, BYOE)
+  //   await byoePage.submitFormWithContinueButton()
+  //   await byoePage.agreeOnAgreement()
+  //   await expertsPage.asserExpertInProejct(
+  //     'FirstName-BYOE-' + uniqueId + ' LastName-BYOE-' + uniqueId
+  //   )
+  //   await expertsPage.openExpertSchedulingPanel()
+  //   await page.pause()
+  // })
 })
