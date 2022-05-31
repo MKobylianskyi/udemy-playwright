@@ -212,12 +212,6 @@ export class ByoePage extends BasePage {
     await expect(this.submitAgreementButton).toBeVisible({ timeout: 10000 })
   }
 
-  async selectCallDate(currentDate) {
-    await this.callDateInput.click()
-    await this.page.click('div:nth-child(6) div:nth-child(7)')
-    await this.callDateInput.fill(currentDate)
-  }
-
   async enableCallScheduleFields() {
     await this.callScheduleToggle.click()
   }

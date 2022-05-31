@@ -14,6 +14,13 @@ export class BasePage {
     await this.pickSelectorFirstOption()
   }
 
+  async selectCallDate(currentDate) {
+    await this.page.locator('[placeholder="Pick date"]').click()
+    await this.page.click('div:nth-child(6) div:nth-child(7)')
+    await this.page.locator('[placeholder="Pick date"]').fill(currentDate)
+    await this.page.click('text=Call date')
+  }
+
   async pickSelectorFirstOption() {
     const firstOption = await this.page.locator('.select__option >> nth=0')
     await expect(firstOption).toBeVisible()

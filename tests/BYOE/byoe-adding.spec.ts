@@ -144,7 +144,7 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.searchForExpert(
       'FirstName-BYOE-' + uniqueId + ' LastName-BYOE-' + uniqueId
     )
-    await expertsPage.assertCallScheduled()
+    await expertsPage.assertTitleCallScheduled()
   })
 
   test('BYOE:Adding + Scheduling CONFLICT call ', async ({
