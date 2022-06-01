@@ -32,7 +32,7 @@ test.describe('BYOE Scheduling feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.projectID)
   })
 
-  test('BYOE:Scheduling call via Set Time after adding', async ({
+  test('BYOE:Schedule a call via Set Time after adding', async ({
     page,
   }, testInfo) => {
     let uniqueId = await getRandomString(5)
@@ -57,7 +57,7 @@ test.describe('BYOE Scheduling feature', () => {
     await expertsPage.assertTitleCallScheduled()
   })
 
-  test('BYOE:Scheduling call via request times  after adding', async ({
+  test('BYOE:Schedule a call via request times  after adding', async ({
     page,
   }, testInfo) => {
     let uniqueId = await getRandomString(5)
