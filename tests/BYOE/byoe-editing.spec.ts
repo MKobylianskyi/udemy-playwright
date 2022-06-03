@@ -18,7 +18,7 @@ test.describe('BYOE Editing feature', () => {
   const envList = JSON.parse(rawdata)
   //Specify ENV
   // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
-  const ENV = envList[0]
+  const ENV = envList[2]
   //Specify ENV
   test.beforeEach(async ({ page }) => {
     await page.goto(ENV.URL)
