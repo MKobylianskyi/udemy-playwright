@@ -3,18 +3,20 @@ import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { getRandomString } from '../../utils/data-helpers'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
-import { faker } from '@faker-js/faker'
+import { generateRandomDataBYOE } from '../../utils/data-factory'
 
 test.describe('BYOE Editing feature', () => {
-  let randomFisrtName
-  let randomLastName
-  let randomPhoneNumber
-  let randomJobTitle
-  let randomCompanyName
-  let randomRate
-  let randomTag
-  let randomTimeZone
-  let randomCountry
+  var byoeData = {
+    fisrtName: '',
+    lastName: '',
+    phoneNumber: '',
+    randomJobTitle: '',
+    companyName: '',
+    rate: '',
+    tag: '',
+    timeZone: '',
+    country: '',
+  }
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
@@ -30,15 +32,7 @@ test.describe('BYOE Editing feature', () => {
   //Specify ENV
 
   test.beforeEach(async ({ page }) => {
-    randomFisrtName = faker.name.firstName()
-    randomLastName = faker.name.lastName()
-    randomPhoneNumber = faker.phone.phoneNumber('+38099#######')
-    randomJobTitle = faker.name.jobTitle()
-    randomCompanyName = faker.company.companyName()
-    randomRate = faker.finance.amount(0, 1000, 0)
-    randomTag = faker.company.catchPhrase()
-    randomCountry = faker.address.country()
-    randomTimeZone = faker.address.timeZone()
+    generateRandomDataBYOE(byoeData)
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -55,43 +49,37 @@ test.describe('BYOE Editing feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.searchForExpert(randomFisrtName + ' ' + randomLastName)
+    await expertsPage.searchForExpert(
+      byoeData.fisrtName + ' ' + byoeData.lastName
+    )
     await expertsPage.openEditExpertForm()
     await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()
-    randomFisrtName = faker.name.firstName()
-    randomLastName = faker.name.lastName()
-    randomPhoneNumber = faker.phone.phoneNumber('+38099#######')
-    randomJobTitle = faker.name.jobTitle()
-    randomCompanyName = faker.company.companyName()
-    randomRate = faker.finance.amount(0, 1000, 0)
-    randomTag = faker.company.catchPhrase()
-    randomCountry = faker.address.country()
-    randomTimeZone = faker.address.timeZone()
+    generateRandomDataBYOE(byoeData)
     BYOE = byoeList[2]
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.submitFormWithSaveButton()
@@ -103,20 +91,22 @@ test.describe('BYOE Editing feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.searchForExpert(randomFisrtName + ' ' + randomLastName)
+    await expertsPage.searchForExpert(
+      byoeData.fisrtName + ' ' + byoeData.lastName
+    )
     await expertsPage.openEditExpertForm()
     await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()

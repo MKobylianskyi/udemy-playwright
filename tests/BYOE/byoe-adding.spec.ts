@@ -3,19 +3,20 @@ import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { getRandomString } from '../../utils/data-helpers'
-import { ProjectsPage } from '../../page-objects/ProjectsPage'
-import { faker } from '@faker-js/faker'
+import { generateRandomDataBYOE } from '../../utils/data-factory'
 
 test.describe('BYOE Adding feature', () => {
-  let randomFisrtName
-  let randomLastName
-  let randomPhoneNumber
-  let randomJobTitle
-  let randomCompanyName
-  let randomRate
-  let randomTag
-  let randomTimeZone
-  let randomCountry
+  var byoeData = {
+    fisrtName: '',
+    lastName: '',
+    phoneNumber: '',
+    randomJobTitle: '',
+    companyName: '',
+    rate: '',
+    tag: '',
+    timeZone: '',
+    country: '',
+  }
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
@@ -32,15 +33,7 @@ test.describe('BYOE Adding feature', () => {
   const ENV = envList[2]
   //Specify ENV
   test.beforeEach(async ({ page }) => {
-    randomFisrtName = faker.name.firstName()
-    randomLastName = faker.name.lastName()
-    randomPhoneNumber = faker.phone.phoneNumber('+38099#######')
-    randomJobTitle = faker.name.jobTitle()
-    randomCompanyName = faker.company.companyName()
-    randomRate = faker.finance.amount(0, 1000, 0)
-    randomTag = faker.company.catchPhrase()
-    randomCountry = faker.address.country()
-    randomTimeZone = faker.address.timeZone()
+    generateRandomDataBYOE(byoeData)
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -57,21 +50,21 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(
-      randomFisrtName + ' ' + randomLastName
+      byoeData.fisrtName + ' ' + byoeData.lastName
     )
   })
 
@@ -81,21 +74,21 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(
-      randomFisrtName + ' ' + randomLastName
+      byoeData.fisrtName + ' ' + byoeData.lastName
     )
     await expertsPage.openExpertTab(ENV.URL, ENV.projectID2)
     await byoePage.assertExpertTabDisplayed()
@@ -103,13 +96,13 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.assertEmailAddressWarning()
     await byoePage.assertAutocompleteFormValues(
-      randomFisrtName,
-      randomLastName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
   })
@@ -122,21 +115,21 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(
-      randomFisrtName + ' ' + randomLastName
+      byoeData.fisrtName + ' ' + byoeData.lastName
     )
     await expertsPage.openExpertTab(ENV.URL, ENV.projectID2)
     await byoePage.assertExpertTabDisplayed()
@@ -144,41 +137,33 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.assertEmailAddressWarning()
     await byoePage.assertAutocompleteFormValues(
-      randomFisrtName,
-      randomLastName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
-    randomFisrtName = faker.name.firstName()
-    randomLastName = faker.name.lastName()
-    randomPhoneNumber = faker.phone.phoneNumber('+38099#######')
-    randomJobTitle = faker.name.jobTitle()
-    randomCompanyName = faker.company.companyName()
-    randomRate = faker.finance.amount(0, 1000, 0)
-    randomTag = faker.company.catchPhrase()
-    randomCountry = faker.address.country()
-    randomTimeZone = faker.address.timeZone()
+    generateRandomDataBYOE(byoeData)
     let newBYOE = byoeList[1]
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       newBYOE
     )
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(
-      randomFisrtName + ' ' + randomLastName
+      byoeData.fisrtName + ' ' + byoeData.lastName
     )
   })
 
@@ -198,21 +183,21 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.clearBYOEEmailField()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(
-      randomFisrtName + ' ' + randomLastName
+      byoeData.fisrtName + ' ' + byoeData.lastName
     )
   })
 
@@ -222,15 +207,15 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.enableCallScheduleFields()
@@ -247,15 +232,15 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.provideSchedulingDetails('45 minutes')
@@ -263,7 +248,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
     await expertsPage.searchForExpert(
-      'FirstName-BYOE-' + uniqueId + ' LastName-BYOE-' + uniqueId
+      byoeData.fisrtName + ' ' + byoeData.lastName
     )
     await expertsPage.assertTitleCallScheduled()
   })
@@ -276,15 +261,15 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.provideSchedulingDetails('45 minutes')
@@ -296,15 +281,15 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
     await byoePage.fillForm(
-      randomFisrtName,
-      randomLastName,
-      randomJobTitle,
-      randomCompanyName,
-      randomPhoneNumber,
-      randomRate,
-      randomTag,
-      randomCountry,
-      randomTimeZone,
+      byoeData.fisrtName,
+      byoeData.lastName,
+      byoeData.randomJobTitle,
+      byoeData.companyName,
+      byoeData.phoneNumber,
+      byoeData.rate,
+      byoeData.tag,
+      byoeData.country,
+      byoeData.timeZone,
       BYOE
     )
     await byoePage.provideSchedulingDetails('45 minutes')
