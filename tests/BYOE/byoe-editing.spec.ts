@@ -6,15 +6,30 @@ import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 
 test.describe('BYOE Editing feature', () => {
-  var byoeData
+  type Input = {
+    firstName: string
+    lastName: string
+    jobTitle: string
+    companyName: string
+    phoneNumber: string
+    rate: string
+    tag: string
+    country: string
+    timeZone: string
+    object: {
+      emailpart: string
+      sourceOption: string
+      currencyOptionIndex: number
+      angleOptionIndex: number
+      linkedinURl: string
+    }
+  }
+  let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
   const fs = require('fs')
-  let rawdata = fs.readFileSync('test-data/byoe-data.json')
-  const byoeList = JSON.parse(rawdata)
-  let BYOE = byoeList[1]
-  rawdata = fs.readFileSync('test-data/env-data.json')
+  let rawdata = fs.readFileSync('test-data/env-data.json')
   const envList = JSON.parse(rawdata)
   //Specify ENV
   // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
@@ -22,7 +37,7 @@ test.describe('BYOE Editing feature', () => {
   //Specify ENV
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE()
+    byoeData = generateRandomDataBYOE(1)
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -37,41 +52,22 @@ test.describe('BYOE Editing feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
-    await byoePage.fillForm(
-      byoeData.fisrtName,
-      byoeData.lastName,
-      byoeData.randomJobTitle,
-      byoeData.companyName,
-      byoeData.phoneNumber,
-      byoeData.rate,
-      byoeData.tag,
-      byoeData.country,
-      byoeData.timeZone,
-      BYOE
+    await byoePage.fillEmailInputWithUniqueEmail(
+      uniqueId,
+      byoeData.object.emailpart
     )
+    await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.searchForExpert(
-      byoeData.fisrtName + ' ' + byoeData.lastName
+      byoeData.firstName + ' ' + byoeData.lastName
     )
     await expertsPage.openEditExpertForm()
+    await byoePage.assertFormValues(byoeData)
     await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()
-    byoeData = generateRandomDataBYOE()
-    BYOE = byoeList[2]
-    await byoePage.fillForm(
-      byoeData.fisrtName,
-      byoeData.lastName,
-      byoeData.randomJobTitle,
-      byoeData.companyName,
-      byoeData.phoneNumber,
-      byoeData.rate,
-      byoeData.tag,
-      byoeData.country,
-      byoeData.timeZone,
-      BYOE
-    )
+    byoeData = generateRandomDataBYOE(2)
+    await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithSaveButton()
   })
 
@@ -79,25 +75,18 @@ test.describe('BYOE Editing feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
-    await byoePage.fillForm(
-      byoeData.fisrtName,
-      byoeData.lastName,
-      byoeData.randomJobTitle,
-      byoeData.companyName,
-      byoeData.phoneNumber,
-      byoeData.rate,
-      byoeData.tag,
-      byoeData.country,
-      byoeData.timeZone,
-      BYOE
+    await byoePage.fillEmailInputWithUniqueEmail(
+      uniqueId,
+      byoeData.object.emailpart
     )
+    await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.searchForExpert(
-      byoeData.fisrtName + ' ' + byoeData.lastName
+      byoeData.firstName + ' ' + byoeData.lastName
     )
     await expertsPage.openEditExpertForm()
+    await byoePage.assertFormValues(byoeData)
     await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()
     await byoePage.submitFormWithSaveButton()

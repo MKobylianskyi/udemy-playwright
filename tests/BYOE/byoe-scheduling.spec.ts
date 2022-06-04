@@ -6,15 +6,30 @@ import { getRandomString } from '../../utils/data-helpers'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 
 test.describe('BYOE Scheduling feature', () => {
-  var byoeData
+  type Input = {
+    firstName: string
+    lastName: string
+    jobTitle: string
+    companyName: string
+    phoneNumber: string
+    rate: string
+    tag: string
+    country: string
+    timeZone: string
+    object: {
+      emailpart: string
+      sourceOption: string
+      currencyOptionIndex: number
+      angleOptionIndex: number
+      linkedinURl: string
+    }
+  }
+  let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
   const fs = require('fs')
-  let rawdata = fs.readFileSync('test-data/byoe-data.json')
-  const byoeList = JSON.parse(rawdata)
-  const BYOE = byoeList[0]
-  rawdata = fs.readFileSync('test-data/mandatory-fields-list.json')
+  let rawdata = fs.readFileSync('test-data/mandatory-fields-list.json')
   const mandatoryFields = JSON.parse(rawdata)
   rawdata = fs.readFileSync('test-data/env-data.json')
   const envList = JSON.parse(rawdata)
@@ -23,7 +38,7 @@ test.describe('BYOE Scheduling feature', () => {
   const ENV = envList[2]
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE()
+    byoeData = generateRandomDataBYOE(1)
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -40,23 +55,15 @@ test.describe('BYOE Scheduling feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
-    await byoePage.fillForm(
-      byoeData.fisrtName,
-      byoeData.lastName,
-      byoeData.randomJobTitle,
-      byoeData.companyName,
-      byoeData.phoneNumber,
-      byoeData.rate,
-      byoeData.tag,
-      byoeData.country,
-      byoeData.timeZone,
-      BYOE
+    await byoePage.fillEmailInputWithUniqueEmail(
+      uniqueId,
+      byoeData.object.emailpart
     )
+    await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(
-      byoeData.fisrtName + ' ' + byoeData.lastName
+      byoeData.firstName + ' ' + byoeData.lastName
     )
     await expertsPage.openExpertSchedulingPanel()
     await expertsPage.openSetTimeModal()
@@ -65,7 +72,7 @@ test.describe('BYOE Scheduling feature', () => {
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.assertSuccessAllert('Call was scheduled')
     await expertsPage.searchForExpert(
-      byoeData.fisrtName + ' ' + byoeData.lastName
+      byoeData.firstName + ' ' + byoeData.lastName
     )
     await expertsPage.assertTitleCallScheduled()
   })
@@ -76,23 +83,15 @@ test.describe('BYOE Scheduling feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, BYOE.emailpart)
-    await byoePage.fillForm(
-      byoeData.fisrtName,
-      byoeData.lastName,
-      byoeData.randomJobTitle,
-      byoeData.companyName,
-      byoeData.phoneNumber,
-      byoeData.rate,
-      byoeData.tag,
-      byoeData.country,
-      byoeData.timeZone,
-      BYOE
+    await byoePage.fillEmailInputWithUniqueEmail(
+      uniqueId,
+      byoeData.object.emailpart
     )
+    await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(
-      byoeData.fisrtName + ' ' + byoeData.lastName
+      byoeData.firstName + ' ' + byoeData.lastName
     )
     await expertsPage.openExpertSchedulingPanel()
     await expertsPage.requestAvailabilityClick()
