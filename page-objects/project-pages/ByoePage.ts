@@ -73,61 +73,93 @@ export class ByoePage extends BasePage {
   }
 
   async fillForm(
-    uniqueId: number,
+    firstName: string,
+    lastName: string,
+    jobTitle: string,
+    companyName: string,
+    phone: string,
+    rate: string,
+    tagname: string,
+    expertGeo: string,
+    timezoneName: string,
     obj: {
       sourceOption: string
-      positionvalue: string
-      companyname: string
-      rate: string
       currencyOptionIndex: number
       angleOptionIndex: number
-      tagname: string
-      expertGeo: string
-      phone: string
-      timezoneName: string
       linkedinURl: string
     }
   ) {
     await this.selectorPickOptionByName('Source', obj.sourceOption)
-    await this.firstnameInput.fill('FirstName-BYOE-' + uniqueId)
-    await this.lastnameInput.fill('LastName-BYOE-' + uniqueId)
-    await this.positionInput.fill(obj.positionvalue)
-    await this.companyInput.fill(obj.companyname)
-    await this.rateInput.fill(obj.rate)
+    await this.firstnameInput.fill(firstName)
+    await this.lastnameInput.fill(lastName)
+    await this.positionInput.fill(jobTitle)
+    await this.companyInput.fill(companyName)
+    await this.rateInput.fill(rate)
     await this.selectorPickOptionByIndex('Currency', obj.currencyOptionIndex)
     await this.selectorPickOptionByIndex('Angle', obj.angleOptionIndex)
-    await this.addSeveralTags(obj.tagname, 4)
-    await this.phoneInput.fill(obj.phone)
-    await this.selectorPickOptionByName('Geography (optional)', obj.expertGeo)
-    await this.selectorPickOptionByName('Timezone (optional)', obj.timezoneName)
+    await this.addSeveralTags(tagname, 4)
+    await this.phoneInput.fill(phone)
+    await this.selectorPickOptionByName('Geography (optional)', expertGeo)
+    await this.selectorPickOptionByName('Timezone (optional)', timezoneName)
     await this.linkedinInput.fill(obj.linkedinURl)
   }
 
   async assertFormValues(
-    uniqueId: number,
+    firstName: string,
+    lastName: string,
+    jobTitle: string,
+    companyName: string,
+    phone: string,
+    rate: string,
+    tagname: string,
+    expertGeo: string,
+    timezoneName: string,
     obj: {
       sourceOption: string
-      positionvalue: string
-      companyname: string
-      rate: string
       currencyOptionIndex: number
       angleOptionIndex: number
-      tagname: string
-      expertGeo: string
-      phone: string
-      timezoneName: string
       linkedinURl: string
     }
   ) {
-    await expect(this.firstnameInput).toHaveValue('FirstName-BYOE-' + uniqueId)
-    await expect(this.lastnameInput).toHaveValue('LastName-BYOE-' + uniqueId)
-    await expect(this.rateInput).toHaveValue(obj.rate)
+    await expect(this.firstnameInput).toHaveValue(firstName)
+    await expect(this.lastnameInput).toHaveValue(lastName)
+    await expect(this.rateInput).toHaveValue(rate)
+    await expect(this.companyInput).toHaveValue(companyName)
+    await expect(this.positionInput).toHaveValue(jobTitle)
     let phoneNumber = await this.phoneInput.getAttribute('value')
-    await expect(removeSpaces(phoneNumber)).toEqual(obj.phone)
+    await expect(removeSpaces(phoneNumber)).toEqual(phone)
     await expect(this.linkedinInput).toHaveValue(obj.linkedinURl)
     await this.selectorPickOptionByName('Source', obj.sourceOption)
-    await this.assertSelectorInput('Geography (optional)', obj.expertGeo)
-    await this.assertSelectorInput('Timezone (optional)', obj.timezoneName)
+    await this.assertSelectorInput('Geography (optional)', expertGeo)
+    await this.assertSelectorInput('Timezone (optional)', timezoneName)
+    // add checking tags if needed
+    // add checking Currency if needed
+  }
+
+  async assertAutocompleteFormValues(
+    firstName: string,
+    lastName: string,
+    phone: string,
+    rate: string,
+    tagname: string,
+    expertGeo: string,
+    timezoneName: string,
+    obj: {
+      sourceOption: string
+      currencyOptionIndex: number
+      angleOptionIndex: number
+      linkedinURl: string
+    }
+  ) {
+    await expect(this.firstnameInput).toHaveValue(firstName)
+    await expect(this.lastnameInput).toHaveValue(lastName)
+    await expect(this.rateInput).toHaveValue(rate)
+    let phoneNumber = await this.phoneInput.getAttribute('value')
+    await expect(removeSpaces(phoneNumber)).toEqual(phone)
+    await expect(this.linkedinInput).toHaveValue(obj.linkedinURl)
+    await this.selectorPickOptionByName('Source', obj.sourceOption)
+    await this.assertSelectorInput('Geography (optional)', expertGeo)
+    await this.assertSelectorInput('Timezone (optional)', timezoneName)
     // add checking tags if needed
     // add checking Currency if needed
   }
