@@ -11,10 +11,10 @@
   "author": "Mykhailo",
   "license": "ISC",
   "devDependencies": {
-    "@faker-js/faker": "7.1.0",
     "prettier": "2.6.2"
   },
   "dependencies": {
-    "@playwright/test": "1.21.1"
+    "@playwright/test": "1.21.1",
+    "@faker-js/faker": "7.1.0"
   }
 }

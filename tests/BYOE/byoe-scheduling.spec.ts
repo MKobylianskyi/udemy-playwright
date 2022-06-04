@@ -6,17 +6,7 @@ import { getRandomString } from '../../utils/data-helpers'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 
 test.describe('BYOE Scheduling feature', () => {
-  var byoeData = {
-    fisrtName: '',
-    lastName: '',
-    phoneNumber: '',
-    randomJobTitle: '',
-    companyName: '',
-    rate: '',
-    tag: '',
-    timeZone: '',
-    country: '',
-  }
+  var byoeData
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
@@ -33,7 +23,7 @@ test.describe('BYOE Scheduling feature', () => {
   const ENV = envList[2]
 
   test.beforeEach(async ({ page }) => {
-    generateRandomDataBYOE(byoeData)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)

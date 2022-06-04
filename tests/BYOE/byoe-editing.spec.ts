@@ -6,17 +6,7 @@ import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 
 test.describe('BYOE Editing feature', () => {
-  var byoeData = {
-    fisrtName: '',
-    lastName: '',
-    phoneNumber: '',
-    randomJobTitle: '',
-    companyName: '',
-    rate: '',
-    tag: '',
-    timeZone: '',
-    country: '',
-  }
+  var byoeData
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
@@ -32,7 +22,7 @@ test.describe('BYOE Editing feature', () => {
   //Specify ENV
 
   test.beforeEach(async ({ page }) => {
-    generateRandomDataBYOE(byoeData)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -68,7 +58,7 @@ test.describe('BYOE Editing feature', () => {
     await expertsPage.openEditExpertForm()
     await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()
-    generateRandomDataBYOE(byoeData)
+    byoeData = generateRandomDataBYOE()
     BYOE = byoeList[2]
     await byoePage.fillForm(
       byoeData.fisrtName,
