@@ -15,14 +15,13 @@ type Input = {
   tag: string
   country: string
   timeZone: string
-  object: {
-    emailpart: string
-    sourceOption: string
-    currencyOptionIndex: number
-    angleOptionIndex: number
-    linkedinURl: string
-  }
+  emailpart: string
+  sourceOption: string
+  currencyOptionIndex: number
+  angleOptionIndex: number
+  linkedinURl: string
 }
+
 test.describe('BYOE Editing feature', () => {
   let byoeData: Input
   let byoePage: ByoePage
@@ -52,10 +51,7 @@ test.describe('BYOE Editing feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
@@ -75,10 +71,7 @@ test.describe('BYOE Editing feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()

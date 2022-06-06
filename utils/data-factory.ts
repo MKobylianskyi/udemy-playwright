@@ -16,6 +16,11 @@ export function generateRandomDataBYOE(env: number) {
     tag: faker.company.catchPhrase(),
     timeZone: faker.address.timeZone(),
     country: faker.address.country(),
-    object: byoeObject,
+    // object: byoeObject,
+    emailpart: byoeObject.emailpart,
+    sourceOption: byoeObject.sourceOption,
+    currencyOptionIndex: byoeObject.currencyOptionIndex,
+    angleOptionIndex: byoeObject.angleOptionIndex,
+    linkedinURl: byoeObject.linkedinURl,
   }
 }

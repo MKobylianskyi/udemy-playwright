@@ -73,23 +73,19 @@ export class ByoePage extends BasePage {
   }
 
   async fillForm(data) {
-    await this.selectorPickOptionByName('Source', data.object.sourceOption)
+    await this.selectorPickOptionByName('Source', data.sourceOption)
     await this.firstnameInput.fill(data.firstName)
     await this.lastnameInput.fill(data.lastName)
     await this.positionInput.fill(data.jobTitle)
     await this.companyInput.fill(data.companyName)
     await this.phoneInput.fill(data.phoneNumber)
     await this.rateInput.fill(data.rate)
-    await this.selectorPickOptionByIndex(
-      'Currency',
-      data.object.currencyOptionIndex
-    )
-    await this.selectorPickOptionByIndex('Angle', data.object.angleOptionIndex)
+    await this.selectorPickOptionByIndex('Currency', data.currencyOptionIndex)
+    await this.selectorPickOptionByIndex('Angle', data.angleOptionIndex)
     await this.addSeveralTags(data.tag, 4)
-
     await this.selectorPickOptionByName('Geography (optional)', data.country)
     await this.selectorPickOptionByName('Timezone (optional)', data.timeZone)
-    await this.linkedinInput.fill(data.object.linkedinURl)
+    await this.linkedinInput.fill(data.linkedinURl)
   }
 
   async assertFormValues(byoeData) {
@@ -100,8 +96,8 @@ export class ByoePage extends BasePage {
     await expect(this.positionInput).toHaveValue(byoeData.jobTitle)
     const phoneNumber = await this.phoneInput.getAttribute('value')
     await expect(removeSpaces(phoneNumber)).toEqual(byoeData.phoneNumber)
-    await expect(this.linkedinInput).toHaveValue(byoeData.object.linkedinURl)
-    await this.selectorPickOptionByName('Source', byoeData.object.sourceOption)
+    await expect(this.linkedinInput).toHaveValue(byoeData.linkedinURl)
+    await this.selectorPickOptionByName('Source', byoeData.sourceOption)
     await this.assertSelectorInput('Geography (optional)', byoeData.country)
     await this.assertSelectorInput('Timezone (optional)', byoeData.timeZone)
     // add checking tags if needed
@@ -114,8 +110,8 @@ export class ByoePage extends BasePage {
     await expect(this.rateInput).toHaveValue(byoeData.rate)
     let phoneNumber = await this.phoneInput.getAttribute('value')
     await expect(removeSpaces(phoneNumber)).toEqual(byoeData.phoneNumber)
-    await expect(this.linkedinInput).toHaveValue(byoeData.object.linkedinURl)
-    await this.selectorPickOptionByName('Source', byoeData.object.sourceOption)
+    await expect(this.linkedinInput).toHaveValue(byoeData.linkedinURl)
+    await this.selectorPickOptionByName('Source', byoeData.sourceOption)
     await this.assertSelectorInput('Geography (optional)', byoeData.country)
     await this.assertSelectorInput('Timezone (optional)', byoeData.timeZone)
     // add checking tags if needed

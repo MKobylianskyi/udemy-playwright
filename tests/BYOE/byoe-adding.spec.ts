@@ -14,13 +14,11 @@ type Input = {
   tag: string
   country: string
   timeZone: string
-  object: {
-    emailpart: string
-    sourceOption: string
-    currencyOptionIndex: number
-    angleOptionIndex: number
-    linkedinURl: string
-  }
+  emailpart: string
+  sourceOption: string
+  currencyOptionIndex: number
+  angleOptionIndex: number
+  linkedinURl: string
 }
 
 test.describe('BYOE Adding feature', () => {
@@ -39,7 +37,6 @@ test.describe('BYOE Adding feature', () => {
   //Specify ENV
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(0)
-
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -54,10 +51,7 @@ test.describe('BYOE Adding feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
@@ -70,10 +64,7 @@ test.describe('BYOE Adding feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
@@ -83,10 +74,7 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.projectID2)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.assertEmailAddressWarning()
     await byoePage.assertAutocompleteFormValues(byoeData)
   })
@@ -97,10 +85,7 @@ test.describe('BYOE Adding feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
@@ -110,10 +95,7 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.projectID2)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.assertEmailAddressWarning()
     await byoePage.assertAutocompleteFormValues(byoeData)
     byoeData = generateRandomDataBYOE(1)
@@ -130,10 +112,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.assertAddingFormUnavailable()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.assertBYOEFormAvailable()
     await byoePage.submitFormWithContinueButton()
     await byoePage.submitFormWithContinueButton()
@@ -142,10 +121,7 @@ test.describe('BYOE Adding feature', () => {
       `can't be blank`
     )
     await byoePage.clearBYOEEmailField()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
@@ -158,10 +134,7 @@ test.describe('BYOE Adding feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.enableCallScheduleFields()
     await byoePage.submitFormWithContinueButton()
@@ -175,10 +148,7 @@ test.describe('BYOE Adding feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.provideSchedulingDetails('45 minutes')
     await byoePage.submitFormWithContinueButton()
@@ -196,10 +166,7 @@ test.describe('BYOE Adding feature', () => {
     let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.provideSchedulingDetails('45 minutes')
     await byoePage.submitFormWithContinueButton()
@@ -208,10 +175,7 @@ test.describe('BYOE Adding feature', () => {
     uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(
-      uniqueId,
-      byoeData.object.emailpart
-    )
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
     await byoePage.fillForm(byoeData)
     await byoePage.provideSchedulingDetails('45 minutes')
     await byoePage.assertConflictCallWarning()
