@@ -5,25 +5,25 @@ import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { getRandomString } from '../../utils/data-helpers'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 
-test.describe('BYOE Scheduling feature', () => {
-  type Input = {
-    firstName: string
-    lastName: string
-    jobTitle: string
-    companyName: string
-    phoneNumber: string
-    rate: string
-    tag: string
-    country: string
-    timeZone: string
-    object: {
-      emailpart: string
-      sourceOption: string
-      currencyOptionIndex: number
-      angleOptionIndex: number
-      linkedinURl: string
-    }
+type Input = {
+  firstName: string
+  lastName: string
+  jobTitle: string
+  companyName: string
+  phoneNumber: string
+  rate: string
+  tag: string
+  country: string
+  timeZone: string
+  object: {
+    emailpart: string
+    sourceOption: string
+    currencyOptionIndex: number
+    angleOptionIndex: number
+    linkedinURl: string
   }
+}
+test.describe('BYOE Scheduling feature', () => {
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
