@@ -4,8 +4,8 @@
   "description": "testing project",
   "main": "index.js",
   "scripts": {
-    "test:headless": "playwright test --config=main.config.ts --project=Chromium --repeat-each 1",
-    "test:debug": "playwright test --config=debug.config.ts --project=Chromium --repeat-each 1",
+    "test:headless": "playwright test --config=main.config.ts --project=Chromium --repeat-each 1  --workers 3",
+    "test:debug": "playwright test --config=debug.config.ts --project=Chromium --repeat-each 1 --workers 3",
     "test:browser": "npx playwright open --timezone='Europe/Rome' --lang='it-IT' google.com"
   },
   "author": "Mykhailo",
