@@ -12,25 +12,13 @@ export class BasePage {
   async assertPresenceByText(text) {
     await expect(this.page.locator(`text=${text}`)).toBeVisible()
   }
+
   async clickByText(text) {
     await this.page.click(`text=${text}`)
   }
-
   async clickButtonHasText(text) {
     await this.page.locator(`button:has-text("${text}")`)
   }
-
-  // async selectTimeZone(title, timeZone) {
-  //   await this.fillSelectorInput(title, timeZone)
-  //   const firstOption = await this.page.locator('.select__option >> nth=0')
-  //   if (await firstOption.isVisible) {
-  //     await this.pickSelectorFirstOption()
-  //   } else {
-  //     await this.fillSelectorInput(title, ' ')
-  //     await this.selectorPickOptionByIndex(title, 0)
-  //   }
-  // }
-
   async fillInputByPlaceholder(placeholder, value) {
     await this.page.locator(`[placeholder="${placeholder}"]`).fill(value)
   }

@@ -118,7 +118,6 @@ test.describe('BYOE Adding feature', () => {
   })
 
   test('BYOE:Checking Call mandatory fields', async ({ page }, testInfo) => {
-    // let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -147,7 +146,6 @@ test.describe('BYOE Adding feature', () => {
   test('BYOE:Adding + Scheduling CONFLICT call ', async ({
     page,
   }, testInfo) => {
-    // let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -167,13 +165,13 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
   })
-  test.skip('BYOE:Checking rate pricing info on adding form', async ({
+  test.only('BYOE:Checking Additional service info modal', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-    await byoePage.fillRate(byoeData.rate)
-    await byoePage.assertRateNote()
+    await byoePage.openRateModal()
+    await byoePage.assertRateModal()
   })
 })
