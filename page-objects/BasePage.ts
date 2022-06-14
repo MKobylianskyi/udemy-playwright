@@ -33,7 +33,6 @@ export class BasePage {
   async setLocation(titleName: string, textValue: string) {
     await this.fillSelectorInput(titleName, textValue)
     const firstOption = await this.page.locator('.select__option >> nth=0')
-    await this.page.pause()
     if (await firstOption.isVisible) {
       await firstOption.click({ delay: 200 })
     } else {
