@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { getRandomString } from '../utils/data-helpers'
 
 export function generateRandomDataBYOE(env: number) {
   const fs = require('fs')
@@ -7,6 +8,7 @@ export function generateRandomDataBYOE(env: number) {
   const byoeObject = byoeList[env]
 
   return {
+    uniqueId: getRandomString(5),
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     jobTitle: faker.name.jobTitle(),

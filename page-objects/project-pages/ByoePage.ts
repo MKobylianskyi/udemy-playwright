@@ -139,10 +139,10 @@ export class ByoePage extends BasePage {
     // add checking Currency if needed
   }
 
-  async fillEmailInputWithUniqueEmail(uniqueId, emailpart: string) {
+  async fillEmailInputWithUniqueEmail(data) {
     await this.selectorPickOptionByName(
       'Email Address',
-      emailpart + '+a' + uniqueId + '@gmail.com'
+      data.emailpart + '+a' + data.uniqueId + '@gmail.com'
     )
   }
 

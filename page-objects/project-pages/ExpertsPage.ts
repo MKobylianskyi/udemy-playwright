@@ -41,12 +41,12 @@ export class ExpertsPage extends BasePage {
     this.callDateInput = page.locator('[placeholder="Pick date"]')
   }
 
-  async searchForExpert(expertFullName) {
-    await this.expertSearchinput.type(expertFullName)
+  async searchForExpert(data) {
+    await this.expertSearchinput.type(data.firstName + ' ' + data.lastName)
   }
 
-  async asserExpertInProejct(expertFullName) {
-    await this.searchForExpert(expertFullName)
+  async asserExpertInProejct(data) {
+    await this.searchForExpert(data)
     await expect(this.addToShortlistButton).toBeVisible()
   }
 

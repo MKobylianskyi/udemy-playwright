@@ -1,11 +1,11 @@
 import { test } from '@playwright/test'
 import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
-import { getRandomString } from '../../utils/data-helpers'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 
 type Input = {
+  uniqueId: string
   firstName: string
   lastName: string
   jobTitle: string
@@ -48,16 +48,13 @@ test.describe('BYOE Editing feature', () => {
   })
 
   test('Editing existing expert', async ({ page }, testInfo) => {
-    let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.searchForExpert(
-      byoeData.firstName + ' ' + byoeData.lastName
-    )
+    await expertsPage.searchForExpert(byoeData)
     await expertsPage.openEditExpertForm()
     await byoePage.assertFormValues(byoeData)
     await byoePage.assertBYOEFormAvailable()
@@ -68,16 +65,13 @@ test.describe('BYOE Editing feature', () => {
   })
 
   test('Checking mandatory fields', async ({ page }, testInfo) => {
-    let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.searchForExpert(
-      byoeData.firstName + ' ' + byoeData.lastName
-    )
+    await expertsPage.searchForExpert(byoeData)
     await expertsPage.openEditExpertForm()
     await byoePage.assertFormValues(byoeData)
     await byoePage.assertBYOEFormAvailable()

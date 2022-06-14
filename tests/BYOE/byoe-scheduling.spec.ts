@@ -2,10 +2,10 @@ import { test } from '@playwright/test'
 import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
-import { getRandomString } from '../../utils/data-helpers'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 
 type Input = {
+  uniqueId: string
   firstName: string
   lastName: string
   jobTitle: string
@@ -22,7 +22,7 @@ type Input = {
   linkedinURl: string
 }
 
-test.describe('BYOE Scheduling feature', () => {
+test.describe.only('BYOE Scheduling feature', () => {
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
@@ -51,41 +51,33 @@ test.describe('BYOE Scheduling feature', () => {
   test('BYOE:Schedule a call via Set Time after adding', async ({
     page,
   }, testInfo) => {
-    let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.asserExpertInProejct(
-      byoeData.firstName + ' ' + byoeData.lastName
-    )
+    await expertsPage.asserExpertInProejct(byoeData)
     await expertsPage.openExpertSchedulingPanel()
     await expertsPage.openSetTimeModal()
     await expertsPage.provideSetTimeSchedulingDetails('45 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.assertSuccessAllert('Call was scheduled')
-    await expertsPage.searchForExpert(
-      byoeData.firstName + ' ' + byoeData.lastName
-    )
+    await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
   })
 
   test('BYOE:Schedule a call via request times  after adding', async ({
     page,
   }, testInfo) => {
-    let uniqueId = await getRandomString(5)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.asserExpertInProejct(
-      byoeData.firstName + ' ' + byoeData.lastName
-    )
+    await expertsPage.asserExpertInProejct(byoeData)
     await expertsPage.openExpertSchedulingPanel()
     await expertsPage.requestAvailabilityClick()
     await expertsPage.requestAvailabilityClick()
