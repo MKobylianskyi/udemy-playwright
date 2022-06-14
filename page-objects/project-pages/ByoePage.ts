@@ -82,7 +82,6 @@ export class ByoePage extends BasePage {
     await expect(this.modalDialog).toBeVisible()
   }
   async openHowItWorksModal() {
-    await this.page.pause()
     await this.page.click(`button:has-text("How it works")`, { delay: 500 })
     await expect(this.modalDialog).toBeVisible()
   }
@@ -122,8 +121,10 @@ export class ByoePage extends BasePage {
     await this.selectorPickOptionByIndex('Currency', data.currencyOptionIndex)
     await this.selectorPickOptionByIndex('Angle', data.angleOptionIndex)
     await this.addSeveralTags(data.tag, 4)
-    await this.selectorPickOptionByName('Geography (optional)', data.country)
-    await this.selectorPickOptionByName('Timezone (optional)', data.timeZone)
+    // await this.selectorPickOptionByName('Geography (optional)', data.country)
+    await this.setLocation('Geography (optional)', data.country)
+    // await this.selectorPickOptionByName('Timezone (optional)', data.timeZone)
+    await this.setLocation('Timezone (optional)', data.timeZone)
     await this.linkedinInput.fill(data.linkedinURl)
   }
 
