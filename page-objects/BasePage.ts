@@ -9,6 +9,13 @@ export class BasePage {
     this.successAlert = page.locator('[type=success]')
   }
 
+  async assertPresenceByText(text) {
+    await expect(this.page.locator(`text=${text}`)).toBeVisible()
+  }
+  async clickByText(text) {
+    await this.page.click(`text=${text}`)
+  }
+
   async selectorPickOptionByName(titleName: string, textValue: string) {
     await this.fillSelectorInput(titleName, textValue)
     await this.pickSelectorFirstOption()

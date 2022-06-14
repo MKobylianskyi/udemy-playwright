@@ -183,4 +183,14 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
   })
+  test.only('BYOE:Checking alerts on adding form', async ({
+    page,
+  }, testInfo) => {
+    let uniqueId = await getRandomString(5)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(uniqueId, byoeData.emailpart)
+    await byoePage.fillRate(byoeData.rate)
+    await byoePage.assertRateNote()
+  })
 })
