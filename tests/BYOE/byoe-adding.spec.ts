@@ -165,7 +165,8 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
   })
-  test.only('BYOE:Checking Additional service info modal', async ({
+
+  test('BYOE:Checking Additional service info modal', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()

@@ -25,6 +25,7 @@ export class ByoePage extends BasePage {
   readonly callDateInput: Locator
   readonly callScheduleToggle: Locator
   readonly conflictCallWarning: Locator
+  readonly modalDialog: Locator
 
   constructor(page: Page) {
     super(page)
@@ -50,6 +51,7 @@ export class ByoePage extends BasePage {
     this.conflictCallWarning = page.locator(
       'text=Please note, you have another call at this timeslot'
     )
+    this.modalDialog = this.page.locator('div[role="dialog"]')
   }
 
   async addSeveralTags(name: string, quantity: number) {
@@ -77,7 +79,7 @@ export class ByoePage extends BasePage {
     await this.assertPresenceByText('Additional service fee will be applied')
     await this.clickByText('Learn more')
     await this.page.click(`text=Learn more`, { delay: 500 })
-    await this.page.waitForSelector('div[role="dialog"]')
+    await expect(this.modalDialog).toBeVisible()
   }
 
   async assertRateModal() {
@@ -90,8 +92,8 @@ export class ByoePage extends BasePage {
     await this.assertPresenceByText(
       'proSapient will then invoice your organisation for this call. The invoice will be a sum of the expert’s fee and proSapient service fee plus any applicable taxes. The fee to proSapient for calls shorter than 30min is 50 USD; the fee for calls longer than 30min is 100 USD. The service fee is charged in the currency set in your office billing details on the proSapient platform.'
     )
-    //CLICK TO CLOSE MODAL
-    // CHECK THAT MODAL CLOSED
+    await this.page.locator('div[role="dialog"]>svg[role="img"]').click()
+    await expect(this.modalDialog).not.toBeVisible()
   }
 
   async fillForm(data) {
