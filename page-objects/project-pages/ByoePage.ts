@@ -81,6 +81,11 @@ export class ByoePage extends BasePage {
     await this.page.click(`text=Learn more`, { delay: 500 })
     await expect(this.modalDialog).toBeVisible()
   }
+  async openHowItWorksModal() {
+    await this.page.pause()
+    await this.page.click(`button:has-text("How it works")`, { delay: 500 })
+    await expect(this.modalDialog).toBeVisible()
+  }
 
   async assertRateModal() {
     await this.assertPresenceByText(
@@ -91,6 +96,16 @@ export class ByoePage extends BasePage {
     )
     await this.assertPresenceByText(
       'proSapient will then invoice your organisation for this call. The invoice will be a sum of the expert’s fee and proSapient service fee plus any applicable taxes. The fee to proSapient for calls shorter than 30min is 50 USD; the fee for calls longer than 30min is 100 USD. The service fee is charged in the currency set in your office billing details on the proSapient platform.'
+    )
+    await this.page.locator('div[role="dialog"]>svg[role="img"]').click()
+    await expect(this.modalDialog).not.toBeVisible()
+  }
+  async assertHowItWorksModal() {
+    await this.assertPresenceByText(
+      'Schedule calls with your own experts with no hustle!'
+    )
+    await this.assertPresenceByText(
+      'We will pay the expert pro-rata and invoice you back that amount plus a small service fee and any applicable taxes. The fee to proSapient for calls shorter than 30min is 50 USD; the fee for calls longer than 30min is 100 USD. The service fee is charged in your preferred currency.'
     )
     await this.page.locator('div[role="dialog"]>svg[role="img"]').click()
     await expect(this.modalDialog).not.toBeVisible()

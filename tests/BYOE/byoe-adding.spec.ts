@@ -159,14 +159,14 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
-    await byoePage.provideSchedulingDetails('45 minutes')
+    await byoePage.provideSchedulingDetails('30 minutes')
     await byoePage.assertConflictCallWarning()
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
   })
 
-  test('BYOE:Checking Additional service info modal', async ({
+  test('BYOE:Checking Additional service info and  How it works modals', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
@@ -174,5 +174,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.openRateModal()
     await byoePage.assertRateModal()
+    await byoePage.openHowItWorksModal()
+    await byoePage.assertHowItWorksModal()
   })
 })
