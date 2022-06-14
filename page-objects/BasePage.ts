@@ -16,15 +16,37 @@ export class BasePage {
     await this.page.click(`text=${text}`)
   }
 
+  async clickButtonHasText(text) {
+    await this.page.locator(`button:has-text("${text}")`)
+  }
+
+  // async selectTimeZone(title, timeZone) {
+  //   await this.fillSelectorInput(title, timeZone)
+  //   const firstOption = await this.page.locator('.select__option >> nth=0')
+  //   if (await firstOption.isVisible) {
+  //     await this.pickSelectorFirstOption()
+  //   } else {
+  //     await this.fillSelectorInput(title, ' ')
+  //     await this.selectorPickOptionByIndex(title, 0)
+  //   }
+  // }
+
+  async fillInputByPlaceholder(placeholder, value) {
+    await this.page.locator(`[placeholder="${placeholder}"]`).fill(value)
+  }
+  async clickOnInputByPlaceholder(placeholder) {
+    await this.page.locator(`[placeholder="${placeholder}"]`).click()
+  }
+
   async selectorPickOptionByName(titleName: string, textValue: string) {
     await this.fillSelectorInput(titleName, textValue)
     await this.pickSelectorFirstOption()
   }
 
   async selectCallDate(currentDate) {
-    await this.page.locator('[placeholder="Pick date"]').click()
+    await this.clickOnInputByPlaceholder('Pick date')
     await this.page.click('div:nth-child(6) div:nth-child(7)')
-    await this.page.locator('[placeholder="Pick date"]').fill(currentDate)
+    await this.fillInputByPlaceholder('Pick date', currentDate)
     await this.page.click('text=Call date')
   }
 

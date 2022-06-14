@@ -22,7 +22,7 @@ type Input = {
   linkedinURl: string
 }
 
-test.describe.only('BYOE Scheduling feature', () => {
+test.describe('BYOE Scheduling feature', () => {
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
