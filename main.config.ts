@@ -4,7 +4,7 @@ const config: PlaywrightTestConfig = {
   timeout: 900000,
   retries: 0,
   testDir: 'tests',
-  reporter: 'dot',
+  reporter: 'html',
   use: {
     trace: 'retain-on-failure',
     headless: true,
