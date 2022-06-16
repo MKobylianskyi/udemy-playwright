@@ -30,21 +30,6 @@ export class BasePage {
     await this.fillSelectorInput(titleName, textValue)
     await this.pickSelectorFirstOption()
   }
-  async setLocation(titleName: string, textValue: string) {
-    await this.fillSelectorInput(titleName, textValue)
-    const firstOption = await this.page.locator('.select__option >> nth=0')
-    if (await firstOption.isVisible) {
-      await firstOption.click({ delay: 200 })
-    } else {
-      const element = await this.page.$(
-        ':text("' + titleName + '") + div >> nth=0'
-      )
-      await element.click()
-      await element.fill('')
-      await element.type('Europe')
-      await firstOption.click({ delay: 200 })
-    }
-  }
 
   async selectCallDate(currentDate) {
     await this.clickOnInputByPlaceholder('Pick date')

@@ -16,8 +16,11 @@ export function generateRandomDataBYOE(env: number) {
     phoneNumber: faker.phone.phoneNumber('+38099#######'),
     rate: faker.finance.amount(0, 1000, 0),
     tag: faker.company.catchPhrase(),
-    timeZone: faker.address.timeZone(),
-    country: faker.address.country(),
+    // timeZone: faker.address.timeZone(),
+    // country: faker.address.country(),
+    // HARDCODED UNTILL FIND OUT HOW TO REMOVE UNEXISTED TIMEZONE AND GEO FROM FAKER API
+    timeZone: 'Kiev',
+    country: 'Ukraine',
     emailpart: byoeObject.emailpart,
     sourceOption: byoeObject.sourceOption,
     currencyOptionIndex: byoeObject.currencyOptionIndex,
