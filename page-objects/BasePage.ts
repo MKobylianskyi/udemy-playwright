@@ -9,15 +9,32 @@ export class BasePage {
     this.successAlert = page.locator('[type=success]')
   }
 
+  async assertPresenceByText(text) {
+    await expect(this.page.locator(`text=${text}`)).toBeVisible()
+  }
+
+  async clickByText(text) {
+    await this.page.click(`text=${text}`)
+  }
+  async clickButtonHasText(text) {
+    await this.page.locator(`button:has-text("${text}")`)
+  }
+  async fillInputByPlaceholder(placeholder, value) {
+    await this.page.locator(`[placeholder="${placeholder}"]`).fill(value)
+  }
+  async clickOnInputByPlaceholder(placeholder) {
+    await this.page.locator(`[placeholder="${placeholder}"]`).click()
+  }
+
   async selectorPickOptionByName(titleName: string, textValue: string) {
     await this.fillSelectorInput(titleName, textValue)
     await this.pickSelectorFirstOption()
   }
 
   async selectCallDate(currentDate) {
-    await this.page.locator('[placeholder="Pick date"]').click()
+    await this.clickOnInputByPlaceholder('Pick date')
     await this.page.click('div:nth-child(6) div:nth-child(7)')
-    await this.page.locator('[placeholder="Pick date"]').fill(currentDate)
+    await this.fillInputByPlaceholder('Pick date', currentDate)
     await this.page.click('text=Call date')
   }
 

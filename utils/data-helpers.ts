@@ -4,7 +4,7 @@ export async function getRandomNumber(max) {
   return Math.floor(Math.random() * max + 1)
 }
 
-export async function getRandomString(length) {
+export function getRandomString(length) {
   return crypto.randomBytes(length).toString('hex')
 }
 

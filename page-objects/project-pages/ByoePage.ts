@@ -25,6 +25,7 @@ export class ByoePage extends BasePage {
   readonly callDateInput: Locator
   readonly callScheduleToggle: Locator
   readonly conflictCallWarning: Locator
+  readonly modalDialog: Locator
 
   constructor(page: Page) {
     super(page)
@@ -50,6 +51,7 @@ export class ByoePage extends BasePage {
     this.conflictCallWarning = page.locator(
       'text=Please note, you have another call at this timeslot'
     )
+    this.modalDialog = this.page.locator('div[role="dialog"]')
   }
 
   async addSeveralTags(name: string, quantity: number) {
@@ -72,6 +74,42 @@ export class ByoePage extends BasePage {
     await this.howItWorksLabel.waitFor({ timeout: 15000 })
   }
 
+  async openRateModal() {
+    await this.clickOnInputByPlaceholder('Rate')
+    await this.assertPresenceByText('Additional service fee will be applied')
+    await this.clickByText('Learn more')
+    await this.page.click(`text=Learn more`, { delay: 500 })
+    await expect(this.modalDialog).toBeVisible()
+  }
+  async openHowItWorksModal() {
+    await this.page.click(`button:has-text("How it works")`, { delay: 500 })
+    await expect(this.modalDialog).toBeVisible()
+  }
+
+  async assertRateModal() {
+    await this.assertPresenceByText(
+      'How to pay for the calls with your experts?'
+    )
+    await this.assertPresenceByText(
+      'proSapient will automatically pay the expert for your call with them. The expert will be paid pro-rata based on the hourly rate that you set for them.'
+    )
+    await this.assertPresenceByText(
+      'proSapient will then invoice your organisation for this call. The invoice will be a sum of the expert’s fee and proSapient service fee plus any applicable taxes. The fee to proSapient for calls shorter than 30min is 50 USD; the fee for calls longer than 30min is 100 USD. The service fee is charged in the currency set in your office billing details on the proSapient platform.'
+    )
+    await this.page.locator('div[role="dialog"]>svg[role="img"]').click()
+    await expect(this.modalDialog).not.toBeVisible()
+  }
+  async assertHowItWorksModal() {
+    await this.assertPresenceByText(
+      'Schedule calls with your own experts with no hustle!'
+    )
+    await this.assertPresenceByText(
+      'We will pay the expert pro-rata and invoice you back that amount plus a small service fee and any applicable taxes. The fee to proSapient for calls shorter than 30min is 50 USD; the fee for calls longer than 30min is 100 USD. The service fee is charged in your preferred currency.'
+    )
+    await this.page.locator('div[role="dialog"]>svg[role="img"]').click()
+    await expect(this.modalDialog).not.toBeVisible()
+  }
+
   async fillForm(data) {
     await this.selectorPickOptionByName('Source', data.sourceOption)
     await this.firstnameInput.fill(data.firstName)
@@ -84,7 +122,9 @@ export class ByoePage extends BasePage {
     await this.selectorPickOptionByIndex('Angle', data.angleOptionIndex)
     await this.addSeveralTags(data.tag, 4)
     await this.selectorPickOptionByName('Geography (optional)', data.country)
+    // await this.selectorPickOptionByName('Geography (optional)', data.country)
     await this.selectorPickOptionByName('Timezone (optional)', data.timeZone)
+    // await this.setLocation('Timezone (optional)', data.timeZone)
     await this.linkedinInput.fill(data.linkedinURl)
   }
 
@@ -100,8 +140,8 @@ export class ByoePage extends BasePage {
     await this.selectorPickOptionByName('Source', byoeData.sourceOption)
     await this.assertSelectorInput('Geography (optional)', byoeData.country)
     await this.assertSelectorInput('Timezone (optional)', byoeData.timeZone)
-    // add checking tags if needed
-    // add checking Currency if needed
+    // add checking tags
+    // add checking Currency
   }
 
   async assertAutocompleteFormValues(byoeData) {
@@ -114,14 +154,14 @@ export class ByoePage extends BasePage {
     await this.selectorPickOptionByName('Source', byoeData.sourceOption)
     await this.assertSelectorInput('Geography (optional)', byoeData.country)
     await this.assertSelectorInput('Timezone (optional)', byoeData.timeZone)
-    // add checking tags if needed
-    // add checking Currency if needed
+    // add checking tags
+    // add checking Currency
   }
 
-  async fillEmailInputWithUniqueEmail(uniqueId, emailpart: string) {
+  async fillEmailInputWithUniqueEmail(data) {
     await this.selectorPickOptionByName(
       'Email Address',
-      emailpart + '+a' + uniqueId + '@gmail.com'
+      data.emailpart + '+a' + data.uniqueId + '@gmail.com'
     )
   }
 
@@ -133,7 +173,7 @@ export class ByoePage extends BasePage {
     await this.clearField(this.rateInput)
     await this.clearField(this.phoneInput)
     await this.clearField(this.linkedinInput)
-    // add clearing tags if needed
+    // add clearing tags
   }
 
   async assertAddingFormUnavailable() {

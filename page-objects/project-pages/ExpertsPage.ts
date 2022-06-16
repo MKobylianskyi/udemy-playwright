@@ -13,7 +13,7 @@ export class ExpertsPage extends BasePage {
   readonly setTimeButton: Locator
   readonly provideAvailabilityButton: Locator
   readonly requestAvailabilityButton: Locator
-  readonly callDateInput: Locator
+  // readonly callDateInput: Locator
   readonly rateInput: Locator
 
   constructor(page: Page) {
@@ -38,15 +38,15 @@ export class ExpertsPage extends BasePage {
     this.requestAvailabilityButton = page.locator(
       'button:has-text("Request availability")'
     )
-    this.callDateInput = page.locator('[placeholder="Pick date"]')
+    // this.callDateInput = page.locator('[placeholder="Pick date"]')
   }
 
-  async searchForExpert(expertFullName) {
-    await this.expertSearchinput.type(expertFullName)
+  async searchForExpert(data) {
+    await this.expertSearchinput.type(data.firstName + ' ' + data.lastName)
   }
 
-  async asserExpertInProejct(expertFullName) {
-    await this.searchForExpert(expertFullName)
+  async asserExpertInProejct(data) {
+    await this.searchForExpert(data)
     await expect(this.addToShortlistButton).toBeVisible()
   }
 

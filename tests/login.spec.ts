@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { LoginPage } from '../page-objects/LoginPage'
 
-test.describe.skip('Login feature', () => {
+test.describe('Login feature', () => {
   let loginPage: LoginPage
   const fs = require('fs')
   let rawdata = fs.readFileSync('test-data/env-data.json')
