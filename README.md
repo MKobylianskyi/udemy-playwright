@@ -3,15 +3,17 @@
 ## Prerequisites
 
 - install npm
-- Create a json file in /test-data folder
+- Create a json file `env-data.json` in `/test-data` folder
 - Specify enviroment data in the object
-  [{
-  "URL": "",
+
+```
+  "URL": "https://instance.link.com",
   "email": "",
   "password": "",
-  "clientID": "",
-  "projectID":""
-  }]
+  "client_user_ID": "",
+  "project1_ID": "",
+  "project2_ID": ""
+```
 
 ## Development
 
@@ -20,5 +22,8 @@
 - Run `npm install @playwright/test` to install Playwright
 - Run `npx playwirght install` to install default browsers for tests
 
-- Run `npm run test:BYOE` to start automation testing of BYOE
-- All scripts could be found in `package.json` file
+## Run tests
+
+- Run `npm run report` to open report in browser
+- Run `npm run debug` to start tests visually
+- Run `npm run test` to start tests headless

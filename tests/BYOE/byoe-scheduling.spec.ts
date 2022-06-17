@@ -41,8 +41,8 @@ test.describe('BYOE Scheduling feature', () => {
     expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
-    await loginPage.loginAsUser(ENV.URL, ENV.clientID)
-    await expertsPage.openExpertTab(ENV.URL, ENV.projectID)
+    await loginPage.loginAsUser(ENV.URL, ENV.client_user_ID)
+    await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
   test('BYOE:Schedule a call via Set Time after adding', async ({
