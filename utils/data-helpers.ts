@@ -15,6 +15,9 @@ export function removeSpaces(string: string) {
 export function getCurrentTimeFormated(hoursInFuture) {
   let time = new Date()
   let hour = time.getHours() + hoursInFuture
+  if (hour > 23) {
+    hour = hour / 24
+  }
   let minute = time.getMinutes()
   if (minute % 15 != 0) {
     if (Math.floor(minute / 15) == 0) {

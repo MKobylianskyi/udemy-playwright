@@ -5,11 +5,7 @@ test.describe('Login feature', () => {
   let loginPage: LoginPage
   const fs = require('fs')
   let rawdata = fs.readFileSync('test-data/env-data.json')
-  const envList = JSON.parse(rawdata)
-  //Specify ENV
-  // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
-  const ENV = envList[0]
-
+  const ENV = JSON.parse(rawdata)
   test.beforeEach(async ({ page }) => {
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)

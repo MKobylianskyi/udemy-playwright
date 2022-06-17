@@ -30,11 +30,7 @@ test.describe('BYOE Adding feature', () => {
   let rawdata = fs.readFileSync('test-data/mandatory-fields-list.json')
   const mandatoryFields = JSON.parse(rawdata)
   rawdata = fs.readFileSync('test-data/env-data.json')
-  const envList = JSON.parse(rawdata)
-  //Specify ENV
-  // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
-  const ENV = envList[0]
-  //Specify ENV
+  const ENV = JSON.parse(rawdata)
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(0)
