@@ -29,11 +29,7 @@ test.describe('BYOE Editing feature', () => {
   let expertsPage: ExpertsPage
   const fs = require('fs')
   let rawdata = fs.readFileSync('test-data/env-data.json')
-  const envList = JSON.parse(rawdata)
-  //Specify ENV
-  // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
-  const ENV = envList[0]
-  //Specify ENV
+  const ENV = JSON.parse(rawdata)
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(1)
@@ -43,8 +39,8 @@ test.describe('BYOE Editing feature', () => {
     expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
-    await loginPage.loginAsUser(ENV.URL, ENV.clientID)
-    await expertsPage.openExpertTab(ENV.URL, ENV.projectID)
+    await loginPage.loginAsUser(ENV.URL, ENV.client_user_ID)
+    await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
   test('Editing existing expert', async ({ page }, testInfo) => {

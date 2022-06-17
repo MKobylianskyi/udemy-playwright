@@ -30,11 +30,7 @@ test.describe('BYOE Adding feature', () => {
   let rawdata = fs.readFileSync('test-data/mandatory-fields-list.json')
   const mandatoryFields = JSON.parse(rawdata)
   rawdata = fs.readFileSync('test-data/env-data.json')
-  const envList = JSON.parse(rawdata)
-  //Specify ENV
-  // 0 - LEK spot | 1 - Platfrom Aggregator | 2  - Staging
-  const ENV = envList[0]
-  //Specify ENV
+  const ENV = JSON.parse(rawdata)
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(0)
@@ -44,8 +40,8 @@ test.describe('BYOE Adding feature', () => {
     expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
-    await loginPage.loginAsUser(ENV.URL, ENV.clientID)
-    await expertsPage.openExpertTab(ENV.URL, ENV.projectID)
+    await loginPage.loginAsUser(ENV.URL, ENV.client_user_ID)
+    await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
   test('BYOE:Adding w/o Scheduling call', async ({ page }, testInfo) => {
@@ -66,7 +62,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(byoeData)
-    await expertsPage.openExpertTab(ENV.URL, ENV.projectID2)
+    await expertsPage.openExpertTab(ENV.URL, ENV.project2_ID)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -84,7 +80,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(byoeData)
-    await expertsPage.openExpertTab(ENV.URL, ENV.projectID2)
+    await expertsPage.openExpertTab(ENV.URL, ENV.project2_ID)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)

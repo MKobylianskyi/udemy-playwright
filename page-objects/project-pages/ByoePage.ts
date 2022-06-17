@@ -122,9 +122,7 @@ export class ByoePage extends BasePage {
     await this.selectorPickOptionByIndex('Angle', data.angleOptionIndex)
     await this.addSeveralTags(data.tag, 4)
     await this.selectorPickOptionByName('Geography (optional)', data.country)
-    // await this.selectorPickOptionByName('Geography (optional)', data.country)
     await this.selectorPickOptionByName('Timezone (optional)', data.timeZone)
-    // await this.setLocation('Timezone (optional)', data.timeZone)
     await this.linkedinInput.fill(data.linkedinURl)
   }
 
