@@ -8,7 +8,7 @@ export function getRandomString(length) {
   return crypto.randomBytes(length).toString('hex')
 }
 
-export function removeSpaces(string: string) {
+export function removeSpaces(string) {
   return string.replace(/\s+/g, '')
 }
 

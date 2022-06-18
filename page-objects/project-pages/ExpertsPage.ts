@@ -5,22 +5,22 @@ import { BasePage } from '../BasePage'
 export class ExpertsPage extends BasePage {
   readonly te1st: Locator
   readonly expertSearchinput: Locator
-  readonly addToShortlistButton: Locator
+  // readonly addToShortlistButton: Locator
   readonly callScheduledTitle: Locator
   readonly editExpertButton: Locator
   readonly scheduleCallButton: Locator
   readonly createCallButton: Locator
   readonly setTimeButton: Locator
   readonly provideAvailabilityButton: Locator
-  readonly requestAvailabilityButton: Locator
+  // readonly requestAvailabilityButton: Locator
   // readonly callDateInput: Locator
   readonly rateInput: Locator
 
   constructor(page: Page) {
     super(page)
-    this.addToShortlistButton = page.locator(
-      'button:has-text("Add to shortlist")'
-    )
+    // this.addToShortlistButton = page.locator(
+    //   'button:has-text("Add to shortlist")'
+    // )
     this.expertSearchinput = page.locator(
       '[placeholder="Filter by name, keyword or company"]'
     )
@@ -35,10 +35,9 @@ export class ExpertsPage extends BasePage {
     this.provideAvailabilityButton = page.locator(
       'button:has-text("Provide availability")'
     )
-    this.requestAvailabilityButton = page.locator(
-      'button:has-text("Request availability")'
-    )
-    // this.callDateInput = page.locator('[placeholder="Pick date"]')
+    // this.requestAvailabilityButton = page.locator(
+    //   'button:has-text("Request availability")'
+    // )
   }
 
   async searchForExpert(data) {
@@ -47,7 +46,12 @@ export class ExpertsPage extends BasePage {
 
   async asserExpertInProejct(data) {
     await this.searchForExpert(data)
-    await expect(this.addToShortlistButton).toBeVisible()
+    await this.asserExpertCardOpened(data)
+  }
+  async asserExpertCardOpened(data) {
+    await expect(
+      this.page.locator(`text=${data.jobTitle} at ${data.companyName}`)
+    ).toBeVisible()
   }
 
   async openExpertTab(url, projectId) {
@@ -62,7 +66,13 @@ export class ExpertsPage extends BasePage {
   async assertRateOnSetTimeFrom(rate) {
     await expect(this.rateInput).toHaveValue(rate)
   }
+  async filterExpertsBy(filterName) {
+    await this.clickByText(filterName)
+  }
 
+  async addToShortlist() {
+    await this.clickButtonHasText('Add to shortlist')
+  }
   async openExpertSchedulingPanel() {
     await this.scheduleCallButton.click()
     await expect(
@@ -80,7 +90,8 @@ export class ExpertsPage extends BasePage {
   }
 
   async requestAvailabilityClick() {
-    await this.requestAvailabilityButton.click()
+    await this.clickButtonHasText('Request availability')
+    // await this.requestAvailabilityButton.click()
   }
   async provideSetTimeSchedulingDetails(callDuration) {
     let currentDate = getCurrentDay()

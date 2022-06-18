@@ -17,8 +17,9 @@ export class BasePage {
     await this.page.click(`text=${text}`)
   }
   async clickButtonHasText(text) {
-    await this.page.locator(`button:has-text("${text}")`)
+    await this.page.locator(`button:has-text("${text}")`).click()
   }
+
   async fillInputByPlaceholder(placeholder, value) {
     await this.page.locator(`[placeholder="${placeholder}"]`).fill(value)
   }
