@@ -73,6 +73,14 @@ export class ByoePage extends BasePage {
     await this.howItWorksLabel.waitFor({ timeout: 15000 })
   }
 
+  async assertComplainceMessage() {
+    await this.assertPresenceByText(
+      'Expert will be required to complete compliance training before they can join the call.'
+    )
+    await this.assertPresenceByText(
+      'They will only get access to the call dial in details when the compliance training is completed.'
+    )
+  }
   async openRateModal() {
     await this.clickOnInputByPlaceholder('Rate')
     await this.assertPresenceByText('Additional service fee will be applied')
@@ -159,7 +167,7 @@ export class ByoePage extends BasePage {
   async fillEmailInputWithUniqueEmail(data) {
     await this.selectorPickOptionByName(
       'Email Address',
-      data.emailpart + '+a' + data.uniqueId + '@gmail.com'
+      `${data.emailpart}+${data.firstName}${data.lastName}-${data.uniqueId}@gmail.com`
     )
   }
 

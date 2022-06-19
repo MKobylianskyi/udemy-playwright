@@ -8,7 +8,7 @@ export function generateRandomDataBYOE(env: number) {
   const byoeObject = byoeList[env]
 
   return {
-    uniqueId: getRandomString(5),
+    uniqueId: getRandomString(3),
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     jobTitle: faker.name.jobTitle(),
