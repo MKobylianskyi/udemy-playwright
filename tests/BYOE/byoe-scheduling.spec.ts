@@ -45,7 +45,7 @@ test.describe('BYOE Scheduling feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
-  test.only('BYOE:Schedule a call via Set Time after adding', async ({
+  test('BYOE:Schedule a call via Set Time after adding', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
