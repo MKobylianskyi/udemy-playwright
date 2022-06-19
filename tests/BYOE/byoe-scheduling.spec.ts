@@ -15,7 +15,7 @@ type Input = {
   tags: string[]
   country: string
   timeZone: string
-  emailpart: string
+  email: string
   sourceOption: string
   currencyOptionIndex: number
   angleOptionIndex: number
