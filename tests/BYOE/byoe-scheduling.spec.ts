@@ -12,7 +12,7 @@ type Input = {
   companyName: string
   phoneNumber: string
   rate: string
-  tag: string
+  tags: string[]
   country: string
   timeZone: string
   emailpart: string
@@ -45,7 +45,7 @@ test.describe('BYOE Scheduling feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
-  test('BYOE:Schedule a call via Set Time after adding', async ({
+  test.only('BYOE:Schedule a call via Set Time after adding', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()

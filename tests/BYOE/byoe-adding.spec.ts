@@ -11,7 +11,7 @@ type Input = {
   companyName: string
   phoneNumber: string
   rate: string
-  tag: string
+  tags: string[]
   country: string
   timeZone: string
   emailpart: string

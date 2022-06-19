@@ -54,11 +54,10 @@ export class ByoePage extends BasePage {
     this.modalDialog = this.page.locator('div[role="dialog"]')
   }
 
-  async addSeveralTags(name: string, quantity: number) {
-    let i = 0
-    while (i < quantity) {
-      await this.selectorPickOptionByName('Expertise tags (optional)', name + i)
-      i++
+  async addTags(tags) {
+    const arrayLength = tags.length
+    for (var i = 0; i < arrayLength; i++) {
+      await this.selectorPickOptionByName('Expertise tags (optional)', tags[i])
     }
   }
 
@@ -77,8 +76,9 @@ export class ByoePage extends BasePage {
   async openRateModal() {
     await this.clickOnInputByPlaceholder('Rate')
     await this.assertPresenceByText('Additional service fee will be applied')
-    await this.clickByText('Learn more')
-    await this.page.click(`text=Learn more`, { delay: 500 })
+    await this.clickByText('Additional service fee will be applied')
+    await this.page.click(`text=Learn more`, { delay: 300 })
+    await this.modalDialog.waitFor({ state: 'attached' })
     await expect(this.modalDialog).toBeVisible()
   }
   async openHowItWorksModal() {
@@ -120,7 +120,7 @@ export class ByoePage extends BasePage {
     await this.rateInput.fill(data.rate)
     await this.selectorPickOptionByIndex('Currency', data.currencyOptionIndex)
     await this.selectorPickOptionByIndex('Angle', data.angleOptionIndex)
-    await this.addSeveralTags(data.tag, 4)
+    await this.addTags(data.tags)
     await this.selectorPickOptionByName('Geography (optional)', data.country)
     await this.selectorPickOptionByName('Timezone (optional)', data.timeZone)
     await this.linkedinInput.fill(data.linkedinURl)
