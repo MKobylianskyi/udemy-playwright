@@ -92,8 +92,11 @@ export class ExpertsPage extends BasePage {
     await this.asserExpertCardOpened(data)
   }
   async asserExpertCardOpened(data) {
+    await this.page.pause()
     await expect(
-      this.page.locator(`text=${data.jobTitle} at ${data.companyName}`)
+      this.page.locator(
+        `h3:has-text("${data.jobTitle} at ${data.companyName}")`
+      )
     ).toBeVisible()
   }
 
