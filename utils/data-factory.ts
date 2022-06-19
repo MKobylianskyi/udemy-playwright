@@ -26,10 +26,19 @@ export function generateRandomDataBYOE(env: number) {
     // HARDCODED UNTILL FIND OUT HOW TO REMOVE UNEXISTED TIMEZONE AND GEO FROM FAKER API
     timeZone: 'Kiev',
     country: 'Ukraine',
-    emailpart: byoeObject.emailpart,
+    email: byoeObject.email,
     sourceOption: byoeObject.sourceOption,
     currencyOptionIndex: byoeObject.currencyOptionIndex,
     angleOptionIndex: byoeObject.angleOptionIndex,
     linkedinURl: byoeObject.linkedinURl,
   }
+}
+export function generateUniqueEmail(data) {
+  const index = data.email.indexOf('@')
+  var uniqueEmail =
+    data.email.slice(0, index) +
+    `+${data.firstName}${data.lastName}-${data.uniqueId}` +
+    data.email.slice(index)
+
+  return uniqueEmail
 }

@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test'
+import { generateUniqueEmail } from '../../utils/data-factory'
 import {
   removeSpaces,
   getCurrentDay,
@@ -165,10 +166,8 @@ export class ByoePage extends BasePage {
   }
 
   async fillEmailInputWithUniqueEmail(data) {
-    await this.selectorPickOptionByName(
-      'Email Address',
-      `${data.emailpart}+${data.firstName}${data.lastName}-${data.uniqueId}@gmail.com`
-    )
+    const uniqueEmail = generateUniqueEmail(data)
+    await this.selectorPickOptionByName('Email Address', uniqueEmail)
   }
 
   async clearForm() {
