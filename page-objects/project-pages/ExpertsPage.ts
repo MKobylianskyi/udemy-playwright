@@ -6,6 +6,8 @@ export class ExpertsPage extends BasePage {
   readonly te1st: Locator
   readonly addToShortlistButton: Locator
   readonly removeFromShortlistButton: Locator
+  readonly rejectExpertButton: Locator
+  readonly unrejectExpertButton: Locator
   readonly callScheduledTitle: Locator
   readonly editExpertButton: Locator
   readonly scheduleCallButton: Locator
@@ -17,6 +19,7 @@ export class ExpertsPage extends BasePage {
   readonly rateInput: Locator
   readonly toolBarShowAs: Locator
   readonly toolBarSearch: Locator
+  readonly exitRejectedFilterButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -25,6 +28,13 @@ export class ExpertsPage extends BasePage {
     )
     this.removeFromShortlistButton = page.locator(
       'button:has-text("Remove from shortlist")'
+    )
+    this.rejectExpertButton = page.locator('button:has-text("Not interested")')
+    this.unrejectExpertButton = page.locator(
+      'button:has-text("Move back to list")'
+    )
+    this.exitRejectedFilterButton = page.locator(
+      '#experts-filters div:has-text("Rejected experts") >> nth=1'
     )
     this.toolBarSearch = page.locator('#experts-top-toolbar>div>>nth=1>>input')
     this.toolBarShowAs = page.locator('#experts-top-toolbar>div>> nth=0')
@@ -92,6 +102,7 @@ export class ExpertsPage extends BasePage {
   }
   async bookCallOnSetTimeForm() {
     await this.createCallButton.click()
+    await this.assertSuccessAllert('Call was scheduled')
   }
   async assertTitleCallScheduled() {
     await expect(this.callScheduledTitle).toBeVisible()
@@ -103,16 +114,29 @@ export class ExpertsPage extends BasePage {
     await this.clickByText(filterName)
   }
 
-  async addToShortlist(data) {
+  async addToShortlist() {
     await this.addToShortlistButton.click()
+    await this.assertSuccessAllert('Expert was added to shortlist.')
+  }
+  async rejectExpert() {
+    await this.rejectExpertButton.click()
+    await this.assertSuccessAllert('Expert was marked as not interested.')
+  }
+  async unrejectExpert() {
+    await this.unrejectExpertButton.click()
+    await this.assertSuccessAllert('Expert was moved back to qualified.')
   }
 
+  async exitFromRejectedFilter() {
+    await this.exitRejectedFilterButton.click()
+  }
   async removeFromShortlist(data) {
     await this.searchForExpert(data)
     await this.detailedListView()
     await expect(this.removeFromShortlistButton).toHaveCount(1)
     await expect(this.removeFromShortlistButton).toBeVisible()
     await this.removeFromShortlistButton.click()
+    await this.assertSuccessAllert('Expert was removed from shortlist.')
   }
 
   async openExpertSchedulingPanel() {

@@ -52,19 +52,17 @@ test.describe('BYOE: Adding and removing expert from shortlist', () => {
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.addToShortlist(byoeData)
-    await expertsPage.assertSuccessAllert('Expert was added to shortlist.')
+    await expertsPage.addToShortlist()
     await expertsPage.filterExpertsBy('Shortlisted profiles')
     await expertsPage.assertExpertInExpertsList(byoeData, true)
     await expertsPage.removeFromShortlist(byoeData)
-    await expertsPage.assertSuccessAllert('Expert was removed from shortlist.')
     await expertsPage.filterExpertsBy('Shortlisted profiles')
     await expertsPage.compactListView()
     await expertsPage.filterExpertsBy('Shortlisted profiles')
     await expertsPage.assertExpertInExpertsList(byoeData, false)
   })
 
-  test.skip('BYOE:Rejecting expert', async ({ page }, testInfo) => {
+  test('BYOE:Rejecting expert', async ({ page }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -72,10 +70,15 @@ test.describe('BYOE: Adding and removing expert from shortlist', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.searchForExpert(byoeData)
-    //reject expert
-    //go to the rejected filter
-    //Check that expert  is  present in the list
-    //Move expert back to the project
-    //Check that expert  is not   present in the rejected list
+    await expertsPage.rejectExpert()
+    await expertsPage.filterExpertsBy('Show rejected experts')
+    await expertsPage.compactListView()
+    await expertsPage.assertExpertInExpertsList(byoeData, true)
+    await expertsPage.detailedListView()
+    await expertsPage.unrejectExpert()
+    await expertsPage.exitFromRejectedFilter()
+    await expertsPage.searchForExpert(byoeData)
+    await expertsPage.compactListView()
+    await expertsPage.assertExpertInExpertsList(byoeData, true)
   })
 })

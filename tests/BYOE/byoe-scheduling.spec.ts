@@ -60,7 +60,6 @@ test.describe('BYOE Scheduling feature', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
-    await expertsPage.assertSuccessAllert('Call was scheduled')
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
   })
