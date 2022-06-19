@@ -4,26 +4,30 @@ import { BasePage } from '../BasePage'
 
 export class ExpertsPage extends BasePage {
   readonly te1st: Locator
-  readonly expertSearchinput: Locator
-  // readonly addToShortlistButton: Locator
+  readonly addToShortlistButton: Locator
+  readonly removeFromShortlistButton: Locator
   readonly callScheduledTitle: Locator
   readonly editExpertButton: Locator
   readonly scheduleCallButton: Locator
   readonly createCallButton: Locator
   readonly setTimeButton: Locator
   readonly provideAvailabilityButton: Locator
-  // readonly requestAvailabilityButton: Locator
-  // readonly callDateInput: Locator
+  readonly requestAvailabilityButton: Locator
+  readonly callDateInput: Locator
   readonly rateInput: Locator
+  readonly toolBarShowAs: Locator
+  readonly toolBarSearch: Locator
 
   constructor(page: Page) {
     super(page)
-    // this.addToShortlistButton = page.locator(
-    //   'button:has-text("Add to shortlist")'
-    // )
-    this.expertSearchinput = page.locator(
-      '[placeholder="Filter by name, keyword or company"]'
+    this.addToShortlistButton = page.locator(
+      'button:has-text("Add to shortlist")'
     )
+    this.removeFromShortlistButton = page.locator(
+      'button:has-text("Remove from shortlist")'
+    )
+    this.toolBarSearch = page.locator('#experts-top-toolbar>div>>nth=1>>input')
+    this.toolBarShowAs = page.locator('#experts-top-toolbar>div>> nth=0')
     this.callScheduledTitle = page.locator('button:has-text("Call scheduled")')
     this.rateInput = page.locator('[placeholder="Rate"]')
     this.editExpertButton = page.locator('button:has-text("Edit profile")')
@@ -35,13 +39,42 @@ export class ExpertsPage extends BasePage {
     this.provideAvailabilityButton = page.locator(
       'button:has-text("Provide availability")'
     )
-    // this.requestAvailabilityButton = page.locator(
-    //   'button:has-text("Request availability")'
-    // )
+    this.requestAvailabilityButton = page.locator(
+      'button:has-text("Request availability")'
+    )
   }
 
   async searchForExpert(data) {
-    await this.expertSearchinput.type(data.firstName + ' ' + data.lastName)
+    await this.toolBarSearch.type(data.firstName + ' ' + data.lastName, {
+      delay: 10,
+    })
+  }
+  async compactListView() {
+    await this.toolBarShowAs.click()
+    await this.page.click('#react-select-2-option-0')
+  }
+  async detailedListView() {
+    await this.toolBarShowAs.click()
+    await this.page.click('#react-select-2-option-1')
+  }
+
+  async assertExpertInExpertsList(data, expectedPresence: boolean) {
+    await this.compactListView()
+    if (expectedPresence) {
+      await expect(
+        this.page.locator(`text=${data.jobTitle} at ${data.companyName}`)
+      ).toBeVisible()
+      await expect(
+        this.page.locator(`text= • ${data.firstName} ${data.lastName}`)
+      ).toBeVisible()
+    } else {
+      await expect(
+        this.page.locator(`text=${data.jobTitle} at ${data.companyName}`)
+      ).not.toBeVisible()
+      await expect(
+        this.page.locator(`text= • ${data.firstName} ${data.lastName}`)
+      ).not.toBeVisible()
+    }
   }
 
   async asserExpertInProejct(data) {
@@ -70,9 +103,18 @@ export class ExpertsPage extends BasePage {
     await this.clickByText(filterName)
   }
 
-  async addToShortlist() {
-    await this.clickButtonHasText('Add to shortlist')
+  async addToShortlist(data) {
+    await this.addToShortlistButton.click()
   }
+
+  async removeFromShortlist(data) {
+    await this.searchForExpert(data)
+    await this.detailedListView()
+    await expect(this.removeFromShortlistButton).toHaveCount(1)
+    await expect(this.removeFromShortlistButton).toBeVisible()
+    await this.removeFromShortlistButton.click()
+  }
+
   async openExpertSchedulingPanel() {
     await this.scheduleCallButton.click()
     await expect(
@@ -90,8 +132,7 @@ export class ExpertsPage extends BasePage {
   }
 
   async requestAvailabilityClick() {
-    await this.clickButtonHasText('Request availability')
-    // await this.requestAvailabilityButton.click()
+    await this.requestAvailabilityButton.click()
   }
   async provideSetTimeSchedulingDetails(callDuration) {
     let currentDate = getCurrentDay()

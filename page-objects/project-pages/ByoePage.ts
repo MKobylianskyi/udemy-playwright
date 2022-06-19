@@ -234,6 +234,7 @@ export class ByoePage extends BasePage {
     await expect(this.submitAgreementButton).toBeVisible()
     await this.submitAgreementButton.click()
     await expect(this.submitAgreementButton).toBeVisible({ timeout: 10000 })
+    await this.agreementCheckbox.waitFor({ state: 'detached' })
   }
 
   async enableCallScheduleFields() {

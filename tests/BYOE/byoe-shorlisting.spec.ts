@@ -43,25 +43,28 @@ test.describe('BYOE: Adding and removing expert from shortlist', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
-  test('Adding expert to the shortlist', async ({ page }, testInfo) => {
+  test('BYOE:Adding & removing  expert to the shortlist', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.searchForExpert(byoeData)
-    await expertsPage.addToShortlist()
+    await expertsPage.addToShortlist(byoeData)
     await expertsPage.assertSuccessAllert('Expert was added to shortlist.')
     await expertsPage.filterExpertsBy('Shortlisted profiles')
-    await expertsPage.asserExpertCardOpened(byoeData)
-
-    await page.pause()
-    //navigate to the shortlist filter
-    //Check that user in shorlited
+    await expertsPage.assertExpertInExpertsList(byoeData, true)
+    await expertsPage.removeFromShortlist(byoeData)
+    await expertsPage.assertSuccessAllert('Expert was removed from shortlist.')
+    await expertsPage.filterExpertsBy('Shortlisted profiles')
+    await expertsPage.compactListView()
+    await expertsPage.filterExpertsBy('Shortlisted profiles')
+    await expertsPage.assertExpertInExpertsList(byoeData, false)
   })
 
-  test.skip('Removing expert to the shortlist', async ({ page }, testInfo) => {
+  test.skip('BYOE:Rejecting expert', async ({ page }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -69,12 +72,10 @@ test.describe('BYOE: Adding and removing expert from shortlist', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.searchForExpert(byoeData)
-    //add to the shorlist
-    //check sussess alert
-    //navigate to the shortlist filter
-    //Check that user in shorlited
-    //Remove from the shortlist
-    //check sussess alert
-    //make sure that expert absent in the filter
+    //reject expert
+    //go to the rejected filter
+    //Check that expert  is  present in the list
+    //Move expert back to the project
+    //Check that expert  is not   present in the rejected list
   })
 })

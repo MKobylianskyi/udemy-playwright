@@ -14,7 +14,7 @@ export class BasePage {
   }
 
   async clickByText(text) {
-    await this.page.click(`text=${text}`)
+    await this.page.click(`text=${text}`, { delay: 200 })
   }
   async clickButtonHasText(text) {
     await this.page.locator(`button:has-text("${text}")`).click()
@@ -67,6 +67,7 @@ export class BasePage {
   async assertSuccessAllert(message) {
     await expect(this.successAlert).toBeVisible()
     await expect(this.successAlert).toContainText(message)
+    await this.successAlert.waitFor({ state: 'detached' })
   }
   async selectorPickOptionByIndex(titleName: string, option: number) {
     const element = await this.page.$(
