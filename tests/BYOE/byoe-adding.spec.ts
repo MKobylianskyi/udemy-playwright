@@ -44,7 +44,7 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
-  test('BYOE:Adding w/o Scheduling call', async ({ page }, testInfo) => {
+  test('Adding w/o Scheduling call', async ({ page }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -54,7 +54,7 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.asserExpertInProejct(byoeData)
   })
 
-  test('BYOE:Autocomplete during adding', async ({ page }, testInfo) => {
+  test('Autocomplete during adding', async ({ page }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -70,7 +70,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertAutocompleteFormValues(byoeData)
   })
 
-  test('BYOE:Adding existed expert with updating info', async ({
+  test('Adding existed expert with updating info', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
@@ -93,7 +93,7 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.asserExpertInProejct(byoeData)
   })
 
-  test('BYOE:Checking Expert mandatory fields', async ({ page }, testInfo) => {
+  test('Checking Expert mandatory fields', async ({ page }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.assertAddingFormUnavailable()
@@ -113,7 +113,7 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.asserExpertInProejct(byoeData)
   })
 
-  test('BYOE:Checking Call mandatory fields', async ({ page }, testInfo) => {
+  test('Checking Call mandatory fields', async ({ page }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -126,7 +126,7 @@ test.describe('BYOE Adding feature', () => {
     )
   })
 
-  test('BYOE:Adding + Scheduling call', async ({ page }, testInfo) => {
+  test('Adding expert + Scheduling call', async ({ page }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -139,7 +139,7 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.assertTitleCallScheduled()
   })
 
-  test('BYOE:Adding + Scheduling CONFLICT call ', async ({
+  test('Adding  expert + Scheduling CONFLICT call ', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
@@ -162,7 +162,7 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertSuccessAllert('Call was scheduled')
   })
 
-  test('BYOE:Checking Additional service info and  How it works modals', async ({
+  test('Checking Additional service info and  How it works modals', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
@@ -172,5 +172,20 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertRateModal()
     await byoePage.openHowItWorksModal()
     await byoePage.assertHowItWorksModal()
+  })
+
+  test.only('Add note on the expert after adding', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.addExpertNote(
+      `${byoeData.lastName} works in the ${byoeData.companyName}`
+    )
   })
 })

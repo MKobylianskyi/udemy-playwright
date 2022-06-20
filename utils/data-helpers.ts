@@ -43,7 +43,7 @@ export function getCurrentTimeFormated(hoursInFuture) {
   return hour.toString() + devider + minute.toString()
 }
 
-export function formatDate(dd, mm, yyyy) {
+export function formatDateForDatePicker(dd, mm, yyyy) {
   let apendix = 'th'
   if (dd[1] == '1') {
     apendix = 'st'
@@ -118,6 +118,6 @@ export function getCurrentDay() {
   let mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
   let yyyy = today.getFullYear()
   let date: string
-  date = formatDate(dd, mm, yyyy)
+  date = formatDateForDatePicker(dd, mm, yyyy)
   return date
 }
