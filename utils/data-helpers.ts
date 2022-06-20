@@ -1,6 +1,6 @@
 const crypto = require('crypto')
 
-export async function getRandomNumber(max) {
+export function getRandomNumber(max) {
   return Math.floor(Math.random() * max + 1)
 }
 
