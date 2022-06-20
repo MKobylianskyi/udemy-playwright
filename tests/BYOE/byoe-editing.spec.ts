@@ -3,6 +3,7 @@ import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
+import TestRail from '@dlenroc/testrail'
 
 type Input = {
   uniqueId: string
@@ -23,6 +24,7 @@ type Input = {
 }
 
 test.describe('BYOE Editing feature', () => {
+  let coveredCasesIDs
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
@@ -30,6 +32,13 @@ test.describe('BYOE Editing feature', () => {
   const fs = require('fs')
   let rawdata = fs.readFileSync('test-data/env-data.json')
   const ENV = JSON.parse(rawdata)
+  const api = new TestRail({
+    host: 'https://prosapient.testrail.net',
+    username: ENV.testRailEmail,
+    password: ENV.testRailPassword,
+  })
+  rawdata = fs.readFileSync('test-data/test-run.json')
+  let testRun = JSON.parse(rawdata)
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(1)
@@ -43,7 +52,25 @@ test.describe('BYOE Editing feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
+  test.afterEach(async ({ page }, testInfo) => {
+    let status
+    switch (testInfo.status) {
+      case 'passed':
+        status = 1
+        break
+      case 'skipped':
+        status = 4
+        break
+      default:
+        status = 5
+        break
+    }
+    for (var caseID of coveredCasesIDs)
+      await api.addResultForCase(testRun.id, caseID, { status_id: status })
+  })
+
   test('Editing existing expert', async ({ page }, testInfo) => {
+    coveredCasesIDs = [14028]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -61,6 +88,7 @@ test.describe('BYOE Editing feature', () => {
   })
 
   test('Checking mandatory fields', async ({ page }, testInfo) => {
+    coveredCasesIDs = [14028]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)

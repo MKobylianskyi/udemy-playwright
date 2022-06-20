@@ -3,6 +3,8 @@ import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
+import TestRail from '@dlenroc/testrail'
+
 type Input = {
   uniqueId: string
   firstName: string
@@ -22,6 +24,7 @@ type Input = {
 }
 
 test.describe('BYOE Adding feature', () => {
+  let coveredCasesIDs
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
@@ -31,6 +34,14 @@ test.describe('BYOE Adding feature', () => {
   const mandatoryFields = JSON.parse(rawdata)
   rawdata = fs.readFileSync('test-data/env-data.json')
   const ENV = JSON.parse(rawdata)
+  const api = new TestRail({
+    host: 'https://prosapient.testrail.net',
+    username: ENV.testRailEmail,
+    password: ENV.testRailPassword,
+  })
+
+  rawdata = fs.readFileSync('test-data/test-run.json')
+  let testRun = JSON.parse(rawdata)
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(0)
@@ -44,7 +55,25 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
 
+  test.afterEach(async ({ page }, testInfo) => {
+    let status
+    switch (testInfo.status) {
+      case 'passed':
+        status = 1
+        break
+      case 'skipped':
+        status = 4
+        break
+      default:
+        status = 5
+        break
+    }
+    for (var caseID of coveredCasesIDs)
+      await api.addResultForCase(testRun.id, caseID, { status_id: status })
+  })
+
   test('Adding w/o Scheduling call', async ({ page }, testInfo) => {
+    coveredCasesIDs = [14013, 14023, 17851, 18289]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -55,6 +84,7 @@ test.describe('BYOE Adding feature', () => {
   })
 
   test('Autocomplete during adding', async ({ page }, testInfo) => {
+    coveredCasesIDs = [14037]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -73,6 +103,7 @@ test.describe('BYOE Adding feature', () => {
   test('Adding existed expert with updating info', async ({
     page,
   }, testInfo) => {
+    coveredCasesIDs = [14037, 14038, 14039]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -94,6 +125,7 @@ test.describe('BYOE Adding feature', () => {
   })
 
   test('Checking Expert mandatory fields', async ({ page }, testInfo) => {
+    coveredCasesIDs = [14013, 14034]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.assertAddingFormUnavailable()
@@ -114,6 +146,7 @@ test.describe('BYOE Adding feature', () => {
   })
 
   test('Checking Call mandatory fields', async ({ page }, testInfo) => {
+    coveredCasesIDs = [15761]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -127,6 +160,7 @@ test.describe('BYOE Adding feature', () => {
   })
 
   test('Adding expert + Scheduling call', async ({ page }, testInfo) => {
+    coveredCasesIDs = [15761]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -142,6 +176,7 @@ test.describe('BYOE Adding feature', () => {
   test('Adding  expert + Scheduling CONFLICT call ', async ({
     page,
   }, testInfo) => {
+    coveredCasesIDs = [14318, 14084]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -165,6 +200,7 @@ test.describe('BYOE Adding feature', () => {
   test('Checking Additional service info and  How it works modals', async ({
     page,
   }, testInfo) => {
+    coveredCasesIDs = [14029, 14031]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -174,9 +210,8 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertHowItWorksModal()
   })
 
-  test.only('Add note on the expert after adding', async ({
-    page,
-  }, testInfo) => {
+  test('Add note on the expert after adding', async ({ page }, testInfo) => {
+    coveredCasesIDs = [14041]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
