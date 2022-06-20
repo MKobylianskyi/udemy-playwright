@@ -3,7 +3,7 @@ import { PlaywrightTestConfig } from '@playwright/test'
 const config: PlaywrightTestConfig = {
   timeout: 90000,
   retries: 0,
-  testDir: 'tests',
+  testDir: 'tests/BYOE',
   reporter: 'html',
   use: {
     trace: 'retain-on-failure',
