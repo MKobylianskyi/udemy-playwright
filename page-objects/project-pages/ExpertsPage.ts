@@ -20,6 +20,7 @@ export class ExpertsPage extends BasePage {
   readonly toolBarShowAs: Locator
   readonly toolBarSearch: Locator
   readonly exitRejectedFilterButton: Locator
+  readonly noteInput: Locator
 
   constructor(page: Page) {
     super(page)
@@ -49,9 +50,18 @@ export class ExpertsPage extends BasePage {
     this.provideAvailabilityButton = page.locator(
       'button:has-text("Provide availability")'
     )
+    this.noteInput = page.locator('textarea')
     this.requestAvailabilityButton = page.locator(
       'button:has-text("Request availability")'
     )
+  }
+
+  async addExpertNote(noteText) {
+    await this.clickButtonHasText('Add a note')
+    await this.noteInput.waitFor({ state: 'attached' })
+    await this.noteInput.type(noteText)
+    await this.clickButtonHasText('Post a note')
+    await this.assertPresenceByText(noteText)
   }
 
   async searchForExpert(data) {
@@ -92,7 +102,7 @@ export class ExpertsPage extends BasePage {
     await this.asserExpertCardOpened(data)
   }
   async asserExpertCardOpened(data) {
-    await this.page.pause()
+    // await this.page.pause()
     await expect(
       this.page.locator(
         `h3:has-text("${data.jobTitle} at ${data.companyName}")`
