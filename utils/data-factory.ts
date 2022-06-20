@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { getRandomString } from '../utils/data-helpers'
+import { getRandomNumber, getRandomString } from '../utils/data-helpers'
 
 export function generateRandomDataBYOE(env: number) {
   const fs = require('fs')
@@ -28,7 +28,7 @@ export function generateRandomDataBYOE(env: number) {
     country: 'Ukraine',
     email: byoeObject.email,
     sourceOption: byoeObject.sourceOption,
-    currencyOptionIndex: byoeObject.currencyOptionIndex,
+    currencyOptionIndex: getRandomNumber(6),
     angleOptionIndex: byoeObject.angleOptionIndex,
     linkedinURl: byoeObject.linkedinURl,
   }
