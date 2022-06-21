@@ -8,9 +8,9 @@
     "test-testrail": "npm run pretest && npm run testrail -c _build",
     "test-headless": "npm run pretest && npm run headless -c _build",
     "test-debug": "npm run pretest && npm run debug -c _build",
-    "testrail": "playwright test --config=testrail.config.ts && playwright test --config=main.config.ts --project=Chromium --repeat-each 1  --workers 3",
-    "headless": "playwright test --config=main.config.ts --project=Chromium --repeat-each 1  --workers 3",
-    "debug": "playwright test --config=debug.config.ts --project=Chromium --repeat-each 1 --workers 3",
+    "testrail": "playwright test --config=testrun-setup.config.ts && playwright test --config=main.config.ts --project=Chromium --repeat-each 1  --workers 3",
+    "headless": "playwright test --config=testrun-erase.config.ts && playwright test --config=main.config.ts --project=Chromium --repeat-each 1  --workers 3",
+    "debug": " playwright test --config=testrun-erase.config.ts && playwright test --config=debug.config.ts --project=Chromium --repeat-each 1 --workers 3",
     "report": "npx playwright show-report",
     "simulate-browser": "npx playwright open --timezone='Europe/Rome' --lang='it-IT' google.com"
   },

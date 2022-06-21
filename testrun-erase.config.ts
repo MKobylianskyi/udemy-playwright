@@ -3,7 +3,7 @@ import { PlaywrightTestConfig } from '@playwright/test'
 const config: PlaywrightTestConfig = {
   timeout: 90000,
   retries: 0,
-  testDir: 'tests/testRun-creation',
+  testMatch: ['erase-testrun.spec.ts'],
   reporter: 'html',
   use: {
     headless: true,

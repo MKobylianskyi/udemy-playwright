@@ -29,16 +29,13 @@ test.describe('BYOE Editing feature', () => {
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
-  const fs = require('fs')
-  let rawdata = fs.readFileSync('test-data/env-data.json')
-  const ENV = JSON.parse(rawdata)
+  const ENV = require('../../test-data/env-data.json')
   const api = new TestRail({
     host: 'https://prosapient.testrail.net',
     username: ENV.testRailEmail,
     password: ENV.testRailPassword,
   })
-  rawdata = fs.readFileSync('test-data/test-run.json')
-  let testRun = JSON.parse(rawdata)
+  const testRun = require('../../test-data/test-run.json')
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(1)
@@ -53,20 +50,22 @@ test.describe('BYOE Editing feature', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    let status
-    switch (testInfo.status) {
-      case 'passed':
-        status = 1
-        break
-      case 'skipped':
-        status = 4
-        break
-      default:
-        status = 5
-        break
+    if (testRun.id != undefined) {
+      let status
+      switch (testInfo.status) {
+        case 'passed':
+          status = 1
+          break
+        case 'skipped':
+          status = 4
+          break
+        default:
+          status = 5
+          break
+      }
+      for (var caseID of coveredCasesIDs)
+        await api.addResultForCase(testRun.id, caseID, { status_id: status })
     }
-    for (var caseID of coveredCasesIDs)
-      await api.addResultForCase(testRun.id, caseID, { status_id: status })
   })
 
   test('Editing existing expert', async ({ page }, testInfo) => {
