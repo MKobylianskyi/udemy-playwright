@@ -25,5 +25,6 @@
 ## Run tests
 
 - Run `npm run report` to open report in browser
-- Run `npm run debug` to start tests visually
-- Run `npm run test` to start tests headless
+- Run `npm run test-testrail` to start tests headless and with TestRails integration
+- Run `npm run test-headless` to start tests headless
+- Run `npm run test-debug` to start tests visually
