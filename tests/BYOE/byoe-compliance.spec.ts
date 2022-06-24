@@ -3,7 +3,7 @@ import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
-import TestRail from '@dlenroc/testrail'
+import { sendTestStatusAPI } from '../../utils/data-testrails'
 
 type Input = {
   uniqueId: string
@@ -18,24 +18,17 @@ type Input = {
   timeZone: string
   email: string
   sourceOption: string
-  currencyOptionIndex: number
+  currency: string
   angleOptionIndex: number
   linkedinURl: string
 }
 
 test.describe('BYOE: Compliance Training', () => {
-  let coveredCasesIDs
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
   const ENV = require('../../test-data/env-data.json')
-  const api = new TestRail({
-    host: 'https://prosapient.testrail.net',
-    username: ENV.testRailEmail,
-    password: ENV.testRailPassword,
-  })
-  let testRun = require('../../test-data/test-run.json')
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(1)
@@ -50,28 +43,12 @@ test.describe('BYOE: Compliance Training', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    if (testRun.id != undefined) {
-      let status
-      switch (testInfo.status) {
-        case 'passed':
-          status = 1
-          break
-        case 'skipped':
-          status = 4
-          break
-        default:
-          status = 5
-          break
-      }
-      for (var caseID of coveredCasesIDs)
-        await api.addResultForCase(testRun.id, caseID, { status_id: status })
-    }
+    sendTestStatusAPI(testInfo)
   })
 
-  test('Checking message "Expert will be required to complete CT"', async ({
+  test('Check that message Expert will be required to complete CT is shown for NOT compliant experts', async ({
     page,
   }, testInfo) => {
-    coveredCasesIDs = [14118]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -87,6 +64,6 @@ test.describe('BYOE: Compliance Training', () => {
     await byoePage.assertEmailAddressWarning()
     await byoePage.assertAutocompleteFormValues(byoeData)
     await byoePage.assertComplainceMessage()
-    //for future -  on the call details page for the scheduled call
+    //for future - check on the call details page for the scheduled call
   })
 })

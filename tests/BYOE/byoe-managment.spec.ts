@@ -3,7 +3,7 @@ import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
-import TestRail from '@dlenroc/testrail'
+import { sendTestStatusAPI } from '../../utils/data-testrails'
 
 type Input = {
   uniqueId: string
@@ -18,24 +18,17 @@ type Input = {
   timeZone: string
   email: string
   sourceOption: string
-  currencyOptionIndex: number
+  currency: string
   angleOptionIndex: number
   linkedinURl: string
 }
 
-test.describe('BYOE: Adding and removing expert from shortlist', () => {
-  let coveredCasesIDs
+test.describe.parallel('Managment', () => {
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
   const ENV = require('../../test-data/env-data.json')
-  const api = new TestRail({
-    host: 'https://prosapient.testrail.net',
-    username: ENV.testRailEmail,
-    password: ENV.testRailPassword,
-  })
-  const testRun = require('../../test-data/test-run.json')
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(1)
@@ -48,29 +41,40 @@ test.describe('BYOE: Adding and removing expert from shortlist', () => {
     await loginPage.loginAsUser(ENV.URL, ENV.client_user_ID)
     await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
   })
+
   test.afterEach(async ({ page }, testInfo) => {
-    if (testRun.id != undefined) {
-      let status
-      switch (testInfo.status) {
-        case 'passed':
-          status = 1
-          break
-        case 'skipped':
-          status = 4
-          break
-        default:
-          status = 5
-          break
-      }
-      for (var caseID of coveredCasesIDs)
-        await api.addResultForCase(testRun.id, caseID, { status_id: status })
-    }
+    sendTestStatusAPI(testInfo)
   })
 
-  test('BYOE:Adding & removing  expert to the shortlist', async ({
+  test('Check that client can add selected expert to the short list', async ({
     page,
   }, testInfo) => {
-    coveredCasesIDs = [14094, 14095]
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.addToShortlist()
+    byoeData = generateRandomDataBYOE(1)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.addToShortlist()
+    await expertsPage.filterExpertsBy('Shortlisted profiles')
+    await expertsPage.assertExpertInExpertsList(byoeData, true)
+    await expertsPage.removeFromShortlist(byoeData)
+    await expertsPage.filterExpertsBy('Shortlisted profiles')
+    await expertsPage.compactListView()
+    await expertsPage.filterExpertsBy('Shortlisted profiles')
+    await expertsPage.assertExpertInExpertsList(byoeData, false)
+  })
+  test('Check that client can remove selected expert from the short list', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -95,8 +99,9 @@ test.describe('BYOE: Adding and removing expert from shortlist', () => {
     await expertsPage.assertExpertInExpertsList(byoeData, false)
   })
 
-  test('BYOE:Rejecting expert', async ({ page }, testInfo) => {
-    coveredCasesIDs = [14096]
+  test('Check that client can move BYOE to the Not Interested', async ({
+    page,
+  }, testInfo) => {
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
@@ -113,5 +118,19 @@ test.describe('BYOE: Adding and removing expert from shortlist', () => {
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.compactListView()
     await expertsPage.assertExpertInExpertsList(byoeData, true)
+  })
+  test('Check that client is able to add a note for the BYOE after adding', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.addExpertNote(
+      `${byoeData.lastName} works in the ${byoeData.companyName}`
+    )
   })
 })

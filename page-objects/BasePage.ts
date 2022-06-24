@@ -53,7 +53,15 @@ export class BasePage {
     await element.type(textValue)
   }
 
-  async assertSelectorInput(titleName, textValue) {
+  async assertSelectorFieldPresence(titleName) {
+    const element = await this.page.locator(
+      ':text("' + titleName + '") + div >> nth=0'
+    )
+    await expect(element).toBeTruthy()
+    await expect(element).toBeEnabled()
+  }
+
+  async assertValueInSelector(titleName, textValue) {
     const element = await this.page.locator(
       ':text("' + titleName + '") + div >> nth=0'
     )

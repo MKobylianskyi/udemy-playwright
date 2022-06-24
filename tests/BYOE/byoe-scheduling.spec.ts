@@ -3,7 +3,7 @@ import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
-import TestRail from '@dlenroc/testrail'
+import { sendTestStatusAPI } from '../../utils/data-testrails'
 
 type Input = {
   uniqueId: string
@@ -18,25 +18,18 @@ type Input = {
   timeZone: string
   email: string
   sourceOption: string
-  currencyOptionIndex: number
+  currency: string
   angleOptionIndex: number
   linkedinURl: string
 }
 
-test.describe('BYOE Scheduling feature', () => {
-  let coveredCasesIDs
+test.describe.parallel('Scheduling', () => {
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
   const mandatoryFields = require('../../test-data/mandatory-fields-list.json')
   const ENV = require('../../test-data/env-data.json')
-  const api = new TestRail({
-    host: 'https://prosapient.testrail.net',
-    username: ENV.testRailEmail,
-    password: ENV.testRailPassword,
-  })
-  const testRun = require('../../test-data/test-run.json')
 
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(1)
@@ -51,28 +44,29 @@ test.describe('BYOE Scheduling feature', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    if (testRun.id != undefined) {
-      let status
-      switch (testInfo.status) {
-        case 'passed':
-          status = 1
-          break
-        case 'skipped':
-          status = 4
-          break
-        default:
-          status = 5
-          break
-      }
-      for (var caseID of coveredCasesIDs)
-        await api.addResultForCase(testRun.id, caseID, { status_id: status })
-    }
+    sendTestStatusAPI(testInfo)
   })
 
-  test('BYOE:Schedule a call via Set Time after adding', async ({
+  test('Check that client is able to schedule a call with BYOE via Set time', async ({
     page,
   }, testInfo) => {
-    coveredCasesIDs = [14315, 14161, 14076, 14080, 14087, 14088]
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+  })
+
+  test('Check expert status after scheduling (Call Scheduled)', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -89,10 +83,18 @@ test.describe('BYOE Scheduling feature', () => {
     await expertsPage.assertTitleCallScheduled()
   })
 
-  test('BYOE:Schedule a call via request times  after adding', async ({
+  test('Check that message about conflict call present during Set Time scheduling', async ({
     page,
   }, testInfo) => {
-    coveredCasesIDs = []
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.provideSchedulingDetails('45 minutes')
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await byoePage.assertSuccessAllert('Call was scheduled')
+    byoeData = generateRandomDataBYOE(1)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -101,10 +103,66 @@ test.describe('BYOE Scheduling feature', () => {
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(byoeData)
     await expertsPage.openExpertSchedulingPanel()
-    await expertsPage.requestAvailabilityClick()
-    await expertsPage.requestAvailabilityClick()
-    await expertsPage.assertSuccessAllert('Request has been sent')
-    //complete booking by link from email
-    //assert that call booked
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.assertConflictCallWarning()
+    await expertsPage.bookCallOnSetTimeForm()
+  })
+
+  test('Check Create a call with expert form', async ({ page }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.assertSetTimeModal(byoeData)
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.bookCallOnSetTimeForm()
+    await expertsPage.searchForExpert(byoeData)
+    await expertsPage.assertTitleCallScheduled()
+  })
+
+  test('Check call on expert card after scheduling (‘Call sheduled: Month, date. time’)', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+    await expertsPage.searchForExpert(byoeData)
+    await expertsPage.assertTitleCallScheduled()
+  })
+
+  test('Check expert status after scheduling (Scheduled)', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+    await expertsPage.compactListView()
+    await expertsPage.searchForExpert(byoeData)
+    await expertsPage.assertExpertStatusInList('Call scheduled')
   })
 })
