@@ -3,7 +3,7 @@ import { ByoePage } from '../../page-objects/project-pages/ByoePage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
-import TestRail from '@dlenroc/testrail'
+import { sendTestStatusAPI } from '../../utils/data-testrails'
 
 type Input = {
   uniqueId: string
@@ -18,25 +18,19 @@ type Input = {
   timeZone: string
   email: string
   sourceOption: string
-  currencyOptionIndex: number
+  currency: string
   angleOptionIndex: number
   linkedinURl: string
 }
 
-test.describe('BYOE Adding feature', () => {
-  let coveredCasesIDs
+test.describe.parallel('Create and update BYOE', () => {
   let byoeData: Input
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
   const mandatoryFields = require('../../test-data/mandatory-fields-list.json')
   const ENV = require('../../test-data/env-data.json')
-  const api = new TestRail({
-    host: 'https://prosapient.testrail.net',
-    username: ENV.testRailEmail,
-    password: ENV.testRailPassword,
-  })
-  const testRun = require('../../test-data/test-run.json')
+
   test.beforeEach(async ({ page }) => {
     byoeData = generateRandomDataBYOE(0)
     await page.goto(ENV.URL)
@@ -50,27 +44,10 @@ test.describe('BYOE Adding feature', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    if (testRun.id != undefined) {
-      let status
-      switch (testInfo.status) {
-        case 'passed':
-          status = 1
-          break
-        case 'skipped':
-          status = 4
-          break
-        default:
-          status = 5
-          break
-      }
-      for (var caseID of coveredCasesIDs) {
-        await api.addResultForCase(testRun.id, caseID, { status_id: status })
-      }
-    }
+    sendTestStatusAPI(testInfo)
   })
 
-  test('Adding w/o Scheduling call', async ({ page }, testInfo) => {
-    coveredCasesIDs = [14013, 14023, 17851, 18289]
+  test('Check that user is able to add BYOE', async ({ page }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -79,28 +56,40 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(byoeData)
   })
-
-  test('Autocomplete during adding', async ({ page }, testInfo) => {
-    coveredCasesIDs = [14037]
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-    await byoePage.fillForm(byoeData)
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
-    await expertsPage.asserExpertInProejct(byoeData)
-    await expertsPage.openExpertTab(ENV.URL, ENV.project2_ID)
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-    await byoePage.assertEmailAddressWarning()
-    await byoePage.assertAutocompleteFormValues(byoeData)
-  })
-
-  test('Adding existed expert with updating info', async ({
+  test('Check that T&Cs modal is opened after a user click on the Continue button', async ({
     page,
   }, testInfo) => {
-    coveredCasesIDs = [14037, 14038, 14039]
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.assertSubmitAgreementButtonEnebled(false)
+    await byoePage.checkAggrementCheckbox()
+    await byoePage.assertSubmitAgreementButtonEnebled(true)
+  })
+
+  test('Check that Expert Source is available on the BYOE Add form', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.assertSelectorFieldPresence
+    await byoePage.assertSelectorFieldPresence('Source')
+  })
+  test('Check that Expertise tags field is available on the Add BYOE form', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.assertSelectorFieldPresence('Expertise tags (optional)')
+  })
+
+  test('Check system behaviour when user adds BYOE expert that is already added to another client project', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -114,15 +103,11 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.assertEmailAddressWarning()
     await byoePage.assertAutocompleteFormValues(byoeData)
-    byoeData = generateRandomDataBYOE(1)
-    await byoePage.fillForm(byoeData)
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
-    await expertsPage.asserExpertInProejct(byoeData)
   })
 
-  test('Checking Expert mandatory fields', async ({ page }, testInfo) => {
-    coveredCasesIDs = [14013, 14034]
+  test('Check that client can remove the email address with the X icon on the BYOE add form', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.assertAddingFormUnavailable()
@@ -142,8 +127,9 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.asserExpertInProejct(byoeData)
   })
 
-  test('Checking Call mandatory fields', async ({ page }, testInfo) => {
-    coveredCasesIDs = [15761]
+  test('Check that call details field are mandatory', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -156,8 +142,9 @@ test.describe('BYOE Adding feature', () => {
     )
   })
 
-  test('Adding expert + Scheduling call', async ({ page }, testInfo) => {
-    coveredCasesIDs = [15761]
+  test('Check that client is able to schedule a call during adding BYOE', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -170,10 +157,30 @@ test.describe('BYOE Adding feature', () => {
     await expertsPage.assertTitleCallScheduled()
   })
 
-  test('Adding  expert + Scheduling CONFLICT call ', async ({
+  test('Check that client is not prevent to schedule a conflicting call with internal expert during adding expert', async ({
     page,
   }, testInfo) => {
-    coveredCasesIDs = [14318, 14084]
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.provideSchedulingDetails('45 minutes')
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await byoePage.assertSuccessAllert('Call was scheduled')
+    byoeData = generateRandomDataBYOE(1)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.provideSchedulingDetails('30 minutes')
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await byoePage.assertSuccessAllert('Call was scheduled')
+  })
+  test('Check that message ‘Please note, you have another call at this timeslot’ is shown on the  form if client has a conflicting call during adding', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -194,30 +201,86 @@ test.describe('BYOE Adding feature', () => {
     await byoePage.assertSuccessAllert('Call was scheduled')
   })
 
-  test('Checking Additional service info and  How it works modals', async ({
+  test('Check that  Additional service message is shown after setting Rate for the BYOE', async ({
     page,
   }, testInfo) => {
-    coveredCasesIDs = [14029, 14031]
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.openRateModal()
     await byoePage.assertRateModal()
+  })
+
+  //to find out in Ana is it valid case.
+  // test.skip('Check How it works button and BYOE informative modal on BYOE edit form', async ({
+  //   page,
+  // }, testInfo) => {
+  //   await byoePage.assertExpertTabDisplayed()
+  //   await byoePage.navigateToByoeForm()
+  //   await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+  //   await byoePage.fillForm(byoeData)
+  //   await byoePage.submitFormWithContinueButton()
+  //   await byoePage.agreeOnAgreement()
+  //   await expertsPage.searchForExpert(byoeData)
+  //   await expertsPage.openEditExpertForm()
+  //   await byoePage.openHowItWorksModal()
+  //   await byoePage.assertHowItWorksModal()
+  // })
+
+  test('Check How it works button and BYOE informative modal on BYOE add form', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.openHowItWorksModal()
     await byoePage.assertHowItWorksModal()
   })
 
-  test('Add note on the expert after adding', async ({ page }, testInfo) => {
-    coveredCasesIDs = [14041]
+  test('Check that user is able to edit the expert profile after clicking on the Edit profile icon', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
-    await expertsPage.asserExpertInProejct(byoeData)
-    await expertsPage.addExpertNote(
-      `${byoeData.lastName} works in the ${byoeData.companyName}`
+    await expertsPage.searchForExpert(byoeData)
+    await expertsPage.openEditExpertForm()
+    await byoePage.assertFormValues(byoeData)
+    await byoePage.assertBYOEFormAvailable()
+    await byoePage.clearForm()
+    byoeData = generateRandomDataBYOE(2)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithSaveButton()
+  })
+
+  test('Check mandatory fields for the BYOE form', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.searchForExpert(byoeData)
+    await expertsPage.openEditExpertForm()
+    await byoePage.assertFormValues(byoeData)
+    await byoePage.assertBYOEFormAvailable()
+    await byoePage.clearForm()
+    await byoePage.submitFormWithSaveButton()
+    await byoePage.submitFormWithSaveButton()
+    await byoePage.assertErrorMessageForFields(
+      [
+        'First name',
+        'Last name',
+        'Relevant position',
+        'Company relevant to project',
+        'Project Hourly Rate',
+      ],
+      `can't be blank`
     )
   })
 })

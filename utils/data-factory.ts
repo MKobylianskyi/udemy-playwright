@@ -1,5 +1,14 @@
 import { faker } from '@faker-js/faker'
-import { getRandomNumber, getRandomString } from '../utils/data-helpers'
+// import { getRandomNumber, getRandomString } from '../utils/data-helpers'
+const crypto = require('crypto')
+
+export function getRandomNumber(max) {
+  return Math.floor(Math.random() * max + 1)
+}
+
+export function getRandomString(length) {
+  return crypto.randomBytes(length).toString('hex')
+}
 
 export function generateRandomDataBYOE(env: number) {
   const fs = require('fs')
@@ -28,11 +37,12 @@ export function generateRandomDataBYOE(env: number) {
     country: 'Ukraine',
     email: byoeObject.email,
     sourceOption: byoeObject.sourceOption,
-    currencyOptionIndex: getRandomNumber(6),
+    currency: generateCurrency(),
     angleOptionIndex: byoeObject.angleOptionIndex,
     linkedinURl: byoeObject.linkedinURl,
   }
 }
+
 export function generateUniqueEmail(data) {
   const index = data.email.indexOf('@')
   var uniqueEmail =
@@ -41,4 +51,17 @@ export function generateUniqueEmail(data) {
     data.email.slice(index)
 
   return uniqueEmail
+}
+
+export function generateCurrency() {
+  const currencyList = [
+    '$ (AUD)',
+    'Fr. (CHF)',
+    '€ (EUR)',
+    '£ (GBP)',
+    '¥ (JPY)',
+    '$ (USD)',
+  ]
+
+  return currencyList[Math.floor(Math.random() * currencyList.length)]
 }

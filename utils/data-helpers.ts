@@ -1,17 +1,6 @@
-const crypto = require('crypto')
-
-export function getRandomNumber(max) {
-  return Math.floor(Math.random() * max + 1)
-}
-
-export function getRandomString(length) {
-  return crypto.randomBytes(length).toString('hex')
-}
-
 export function removeSpaces(string) {
   return string.replace(/\s+/g, '')
 }
-
 export function getCurrentTimeFormated(hoursInFuture) {
   let time = new Date()
   let hour = time.getHours() + hoursInFuture
@@ -41,6 +30,29 @@ export function getCurrentTimeFormated(hoursInFuture) {
     devider = ':'
   }
   return hour.toString() + devider + minute.toString()
+}
+
+export function mapCurrencyWithIndex(currency) {
+  switch (currency) {
+    case '$ (AUD)': {
+      return 1
+    }
+    case 'Fr. (CHF)': {
+      return 2
+    }
+    case '€ (EUR)': {
+      return 3
+    }
+    case '£ (GBP)': {
+      return 4
+    }
+    case '¥ (JPY)': {
+      return 5
+    }
+    default: {
+      return 6
+    }
+  }
 }
 
 export function formatDateForDatePicker(dd, mm, yyyy) {

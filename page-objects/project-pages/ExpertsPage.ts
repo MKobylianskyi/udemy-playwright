@@ -3,8 +3,8 @@ import { getCurrentDay, getCurrentTimeFormated } from '../../utils/data-helpers'
 import { BasePage } from '../BasePage'
 
 export class ExpertsPage extends BasePage {
-  readonly te1st: Locator
   readonly addToShortlistButton: Locator
+  readonly expertStatus: Locator
   readonly removeFromShortlistButton: Locator
   readonly rejectExpertButton: Locator
   readonly unrejectExpertButton: Locator
@@ -51,6 +51,7 @@ export class ExpertsPage extends BasePage {
       'button:has-text("Provide availability")'
     )
     this.noteInput = page.locator('textarea')
+    this.expertStatus = page.locator('//tbody/tr[1]/td[6]/div')
     this.requestAvailabilityButton = page.locator(
       'button:has-text("Request availability")'
     )
@@ -71,13 +72,29 @@ export class ExpertsPage extends BasePage {
   }
   async compactListView() {
     await this.toolBarShowAs.click()
-    await this.page.click('#react-select-2-option-0')
+    await this.page.click('[tabindex="-1"]:has-text("compact list")')
   }
   async detailedListView() {
     await this.toolBarShowAs.click()
-    await this.page.click('#react-select-2-option-1')
+    await this.page.click('[tabindex="-1"]:has-text("detailed list")')
   }
 
+  async assertExpertStatusInList(status) {
+    await expect(this.expertStatus).toHaveText(status)
+  }
+
+  async assertConflictCallWarning() {
+    await this.assertPresenceByText(
+      'Please note, you have another call at this timeslot'
+    )
+  }
+  async assertSetTimeModal(data) {
+    await this.assertRateOnSetTimeFrom(data.rate)
+    await this.assertPresenceByText('Call time (GMT+3)')
+    await this.assertValueInSelector('Call duration', '1 hour')
+    await this.assertValueInSelector('Currency', data.currency)
+    await expect(this.createCallButton).toBeDisabled()
+  }
   async assertExpertInExpertsList(data, expectedPresence: boolean) {
     await this.compactListView()
     if (expectedPresence) {

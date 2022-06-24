@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test'
 import { generateUniqueEmail } from '../../utils/data-factory'
+import { mapCurrencyWithIndex } from '../../utils/data-helpers'
 import {
   removeSpaces,
   getCurrentDay,
@@ -25,7 +26,6 @@ export class ByoePage extends BasePage {
   readonly clearEmailFormIcon: Locator
   readonly callDateInput: Locator
   readonly callScheduleToggle: Locator
-  readonly conflictCallWarning: Locator
   readonly modalDialog: Locator
 
   constructor(page: Page) {
@@ -49,9 +49,7 @@ export class ByoePage extends BasePage {
     this.clearEmailFormIcon = page.locator(':text("Email")+div>>svg >> nth=0')
     this.callDateInput = page.locator('[placeholder="Pick date"]')
     this.callScheduleToggle = page.locator(':text("Create a call")')
-    this.conflictCallWarning = page.locator(
-      'text=Please note, you have another call at this timeslot'
-    )
+
     this.modalDialog = this.page.locator('div[role="dialog"]')
   }
 
@@ -121,13 +119,16 @@ export class ByoePage extends BasePage {
 
   async fillForm(data) {
     await this.selectorPickOptionByName('Source', data.sourceOption)
-    await this.firstnameInput.fill(data.firstName)
-    await this.lastnameInput.fill(data.lastName)
-    await this.positionInput.fill(data.jobTitle)
-    await this.companyInput.fill(data.companyName)
-    await this.phoneInput.fill(data.phoneNumber)
-    await this.rateInput.fill(data.rate)
-    await this.selectorPickOptionByIndex('Currency', data.currencyOptionIndex)
+    await this.firstnameInput.type(data.firstName)
+    await this.lastnameInput.type(data.lastName)
+    await this.positionInput.type(data.jobTitle)
+    await this.companyInput.type(data.companyName)
+    await this.phoneInput.type(data.phoneNumber)
+    await this.rateInput.type(data.rate)
+    await this.selectorPickOptionByIndex(
+      'Currency',
+      mapCurrencyWithIndex(data.currency)
+    )
     await this.selectorPickOptionByIndex('Angle', data.angleOptionIndex)
     await this.addTags(data.tags)
     await this.selectorPickOptionByName('Geography (optional)', data.country)
@@ -145,10 +146,10 @@ export class ByoePage extends BasePage {
     await expect(removeSpaces(phoneNumber)).toEqual(byoeData.phoneNumber)
     await expect(this.linkedinInput).toHaveValue(byoeData.linkedinURl)
     await this.selectorPickOptionByName('Source', byoeData.sourceOption)
-    await this.assertSelectorInput('Geography (optional)', byoeData.country)
-    await this.assertSelectorInput('Timezone (optional)', byoeData.timeZone)
+    await this.assertValueInSelector('Geography (optional)', byoeData.country)
+    await this.assertValueInSelector('Timezone (optional)', byoeData.timeZone)
+    await this.assertValueInSelector('Currency', byoeData.currency)
     // add checking tags
-    // add checking Currency
   }
 
   async assertAutocompleteFormValues(byoeData) {
@@ -159,10 +160,10 @@ export class ByoePage extends BasePage {
     await expect(removeSpaces(phoneNumber)).toEqual(byoeData.phoneNumber)
     await expect(this.linkedinInput).toHaveValue(byoeData.linkedinURl)
     await this.selectorPickOptionByName('Source', byoeData.sourceOption)
-    await this.assertSelectorInput('Geography (optional)', byoeData.country)
-    await this.assertSelectorInput('Timezone (optional)', byoeData.timeZone)
+    await this.assertValueInSelector('Geography (optional)', byoeData.country)
+    await this.assertValueInSelector('Timezone (optional)', byoeData.timeZone)
+    await this.assertValueInSelector('Currency', byoeData.currency)
     // add checking tags
-    // add checking Currency
   }
 
   async fillEmailInputWithUniqueEmail(data) {
@@ -230,17 +231,30 @@ export class ByoePage extends BasePage {
   }
 
   async assertConflictCallWarning() {
-    await expect(this.conflictCallWarning).toBeVisible()
+    await this.assertPresenceByText(
+      'Please note, you have another call at this timeslot'
+    )
   }
 
   async submitFormWithSaveButton() {
     await this.saveFormButton.click()
   }
-  async agreeOnAgreement() {
+  async assertSubmitAgreementButtonEnebled(state) {
+    if (state) {
+      await expect(this.submitAgreementButton).not.toBeDisabled()
+    } else {
+      await expect(this.submitAgreementButton).toBeDisabled()
+    }
+  }
+
+  async checkAggrementCheckbox() {
     await this.agreementCheckbox.click()
-    await expect(this.submitAgreementButton).toBeVisible()
+  }
+  async agreeOnAgreement() {
+    await this.checkAggrementCheckbox()
+    await this.assertSubmitAgreementButtonEnebled(true)
     await this.submitAgreementButton.click()
-    await expect(this.submitAgreementButton).toBeVisible({ timeout: 10000 })
+    // await expect(this.submitAgreementButton).toBeVisible({ timeout: 10000 })
     await this.agreementCheckbox.waitFor({ state: 'detached' })
   }
 
