@@ -4,6 +4,7 @@ import { LoginPage } from '../../page-objects/LoginPage'
 import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 import { sendTestStatusAPI } from '../../utils/data-testrails'
+import { faker } from '@faker-js/faker'
 
 type Input = {
   uniqueId: string
@@ -188,5 +189,32 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.compactListView()
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertExpertStatusInList('Call scheduled')
+  })
+  test('Check that  Rate and Currency is updated for the expert profile on the project level if change it on Set Time modal', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    byoeData.rate = faker.finance.amount(0, 1000, 0)
+    await expertsPage.fillInputByPlaceholder('Rate', byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+    await expertsPage.compactListView()
+    await expertsPage.searchForExpert(byoeData)
+    await expertsPage.assertExpertStatusInList('Call scheduled')
+    await expertsPage.openExpertTab(ENV.URL, ENV.project2_ID)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.assertEmailAddressWarning()
+    await byoePage.assertAutocompleteFormValues(byoeData)
   })
 })
