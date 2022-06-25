@@ -98,4 +98,18 @@ export class BasePage {
       this.page.locator(':text("' + titleName + '") + div + div')
     ).toContainText(errorMessage)
   }
+
+  async assertSelectorOptions(titleName: string, options) {
+    const element = await this.page.$(
+      ':text("' + titleName + '") + div >> nth=0'
+    )
+    await element.click()
+    let optionElement
+    for (const option of options) {
+      optionElement = await this.page.locator(
+        '.select__option >> nth=' + options.indexOf(option)
+      )
+      await expect(optionElement).toContainText(option)
+    }
+  }
 }
