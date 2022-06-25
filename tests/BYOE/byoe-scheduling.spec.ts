@@ -64,6 +64,30 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.bookCallOnSetTimeForm()
   })
 
+  test('Check call duration options on add BYOE modal', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.assertCallDurrationOptions()
+  })
+
+  test('Check duration options on Set Call modal for BYOE', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await byoePage.assertCallDurrationOptions()
+  })
+
   test('Check expert status after scheduling (Call Scheduled)', async ({
     page,
   }, testInfo) => {

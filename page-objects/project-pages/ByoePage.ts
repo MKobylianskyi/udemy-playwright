@@ -250,11 +250,13 @@ export class ByoePage extends BasePage {
   async checkAggrementCheckbox() {
     await this.agreementCheckbox.click()
   }
+  async findAddedExpert() {
+    await this.clickButtonHasText('Find expert')
+  }
   async agreeOnAgreement() {
     await this.checkAggrementCheckbox()
     await this.assertSubmitAgreementButtonEnebled(true)
     await this.submitAgreementButton.click()
-    // await expect(this.submitAgreementButton).toBeVisible({ timeout: 10000 })
     await this.agreementCheckbox.waitFor({ state: 'detached' })
   }
 
@@ -268,5 +270,18 @@ export class ByoePage extends BasePage {
     await this.selectCallDate(currentDate)
     await this.selectorPickOptionByName('Call time (GMT+3)', currentTime)
     await this.selectorPickOptionByName('Call duration', callDuration)
+  }
+  async assertCallDurrationOptions() {
+    const durations = [
+      '15 minutes',
+      '30 minutes',
+      '45 minutes',
+      '1 hour',
+      '1.5 hours',
+      '2 hours',
+      '3 hours',
+    ]
+    await this.enableCallScheduleFields()
+    await this.assertSelectorOptions('Call duration', durations)
   }
 }
