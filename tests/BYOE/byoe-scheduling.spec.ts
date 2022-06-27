@@ -71,6 +71,8 @@ test.describe.parallel('Scheduling', () => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.enableCallScheduleFields()
     await byoePage.assertCallDurrationOptions()
   })
 

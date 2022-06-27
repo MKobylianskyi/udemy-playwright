@@ -36,7 +36,7 @@ export class BasePage {
     await this.clickOnInputByPlaceholder('Pick date')
     await this.page.click('div:nth-child(6) div:nth-child(7)')
     await this.fillInputByPlaceholder('Pick date', currentDate)
-    await this.page.click('text=Call date')
+    await this.page.click('text=Call date', { delay: 400 })
   }
 
   async pickSelectorFirstOption() {
