@@ -64,7 +64,11 @@ export class ExpertsPage extends BasePage {
     await this.clickButtonHasText('Post a note')
     await this.assertPresenceByText(noteText)
   }
-
+  async assertTeaserWarningOnExpertCard() {
+    await this.assertPresenceByText(
+      'Not available for scheduling. You will be able to schedule your own experts when your organisation approves this feature.'
+    )
+  }
   async searchForExpert(data) {
     await this.clearField(this.toolBarSearch)
     await this.toolBarSearch.type(data.firstName + ' ' + data.lastName, {

@@ -70,6 +70,7 @@ export class BasePage {
 
   async clearField(field) {
     await field.fill('')
+    await this.page.waitForTimeout(200)
   }
 
   async assertSuccessAllert(message) {
@@ -112,4 +113,11 @@ export class BasePage {
       await expect(optionElement).toContainText(option)
     }
   }
+  //  FIX SELECTOR ASSSERTATION
+  // async assertSelectorDisabled(titleName: string) {
+  //   const element = await this.page.locator(
+  //     ':text("' + titleName + '") + div >> nth=0'
+  //   )
+  //   await expect(element).toBeFalsy()
+  // }
 }

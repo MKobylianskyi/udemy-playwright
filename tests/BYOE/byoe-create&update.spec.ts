@@ -39,8 +39,8 @@ test.describe.parallel('Create and update BYOE', () => {
     expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
-    await loginPage.loginAsUser(ENV.URL, ENV.client_user_ID)
-    await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
+    await loginPage.loginAsUser(ENV.URL, ENV.clientFullMode.client_user_ID)
+    await expertsPage.openExpertTab(ENV.URL, ENV.clientFullMode.project1_ID)
   })
 
   test.afterEach(async ({ page }, testInfo) => {
@@ -97,7 +97,7 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(byoeData)
-    await expertsPage.openExpertTab(ENV.URL, ENV.project2_ID)
+    await expertsPage.openExpertTab(ENV.URL, ENV.clientFullMode.project2_ID)
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -238,6 +238,7 @@ test.describe.parallel('Create and update BYOE', () => {
     byoeData = generateRandomDataBYOE(2)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithSaveButton()
+    await expertsPage.asserExpertCardOpened(byoeData)
   })
 
   test('Check mandatory fields for the BYOE form', async ({
