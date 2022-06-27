@@ -211,22 +211,6 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.assertRateModal()
   })
 
-  //to find out in Ana is it valid case.
-  // test.skip('Check How it works button and BYOE informative modal on BYOE edit form', async ({
-  //   page,
-  // }, testInfo) => {
-  //   await byoePage.assertExpertTabDisplayed()
-  //   await byoePage.navigateToByoeForm()
-  //   await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-  //   await byoePage.fillForm(byoeData)
-  //   await byoePage.submitFormWithContinueButton()
-  //   await byoePage.agreeOnAgreement()
-  //   await expertsPage.searchForExpert(byoeData)
-  //   await expertsPage.openEditExpertForm()
-  //   await byoePage.openHowItWorksModal()
-  //   await byoePage.assertHowItWorksModal()
-  // })
-
   test('Check How it works button and BYOE informative modal on BYOE add form', async ({
     page,
   }, testInfo) => {

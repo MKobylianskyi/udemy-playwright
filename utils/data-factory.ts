@@ -15,10 +15,9 @@ export function generateRandomDataBYOE(env: number) {
   let rawdata = fs.readFileSync('test-data/byoe-data.json')
   const byoeList = JSON.parse(rawdata)
   const byoeObject = byoeList[env]
-
   return {
     uniqueId: getRandomString(3),
-    firstName: faker.name.firstName(),
+    firstName: faker.name.firstName() + getRandomString(1),
     lastName: faker.name.lastName(),
     jobTitle: faker.name.jobTitle(),
     companyName: faker.company.companyName(),

@@ -66,6 +66,7 @@ export class ExpertsPage extends BasePage {
   }
 
   async searchForExpert(data) {
+    await this.clearField(this.toolBarSearch)
     await this.toolBarSearch.type(data.firstName + ' ' + data.lastName, {
       delay: 10,
     })
@@ -99,14 +100,18 @@ export class ExpertsPage extends BasePage {
     await this.compactListView()
     if (expectedPresence) {
       await expect(
-        this.page.locator(`text=${data.jobTitle} at ${data.companyName}`)
+        this.page.locator(
+          `text=${data.jobTitle} at ${data.companyName}  >> nth=0`
+        )
       ).toBeVisible()
       await expect(
         this.page.locator(`text= • ${data.firstName} ${data.lastName}`)
       ).toBeVisible()
     } else {
       await expect(
-        this.page.locator(`text=${data.jobTitle} at ${data.companyName}`)
+        this.page.locator(
+          `text=${data.jobTitle} at ${data.companyName} >> nth=0`
+        )
       ).not.toBeVisible()
       await expect(
         this.page.locator(`text= • ${data.firstName} ${data.lastName}`)
@@ -131,6 +136,7 @@ export class ExpertsPage extends BasePage {
     await this.page.goto(url + '/client/projects/' + projectId + '/experts')
   }
   async bookCallOnSetTimeForm() {
+    await expect(this.createCallButton).toBeEnabled({ timeout: 5000 })
     await this.createCallButton.click()
     await this.assertSuccessAllert('Call was scheduled')
   }

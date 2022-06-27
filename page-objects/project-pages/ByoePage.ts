@@ -48,7 +48,7 @@ export class ByoePage extends BasePage {
     this.linkedinInput = page.locator('[label="LinkedIn URL (optional)"]')
     this.clearEmailFormIcon = page.locator(':text("Email")+div>>svg >> nth=0')
     this.callDateInput = page.locator('[placeholder="Pick date"]')
-    this.callScheduleToggle = page.locator(':text("Create a call")')
+    this.callScheduleToggle = page.locator('//span[@name="callCreate"]')
 
     this.modalDialog = this.page.locator('div[role="dialog"]')
   }
@@ -145,7 +145,7 @@ export class ByoePage extends BasePage {
     const phoneNumber = await this.phoneInput.getAttribute('value')
     await expect(removeSpaces(phoneNumber)).toEqual(byoeData.phoneNumber)
     await expect(this.linkedinInput).toHaveValue(byoeData.linkedinURl)
-    await this.selectorPickOptionByName('Source', byoeData.sourceOption)
+    await this.assertValueInSelector('Source', byoeData.sourceOption)
     await this.assertValueInSelector('Geography (optional)', byoeData.country)
     await this.assertValueInSelector('Timezone (optional)', byoeData.timeZone)
     await this.assertValueInSelector('Currency', byoeData.currency)
@@ -262,6 +262,7 @@ export class ByoePage extends BasePage {
 
   async enableCallScheduleFields() {
     await this.callScheduleToggle.click()
+    await this.callDateInput.waitFor({ state: 'attached' })
   }
   async provideSchedulingDetails(callDuration) {
     let currentDate = getCurrentDay()
@@ -281,7 +282,6 @@ export class ByoePage extends BasePage {
       '2 hours',
       '3 hours',
     ]
-    await this.enableCallScheduleFields()
     await this.assertSelectorOptions('Call duration', durations)
   }
 }
