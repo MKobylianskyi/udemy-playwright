@@ -67,6 +67,37 @@ export class ByoePage extends BasePage {
     await expect(this.addByoeTitle).toBeVisible()
   }
 
+  async assertTeaserBeforeRequest() {
+    await this.assertPresenceByText(
+      'You can add your own expert to the project. To schedule a call with them, you ne'
+    )
+    await this.assertPresenceByText(
+      'You will be able to schedule a call when this feature is turned on for your account.'
+    )
+  }
+  async assertTeserFlashModal() {
+    await this.assertPresenceByText(
+      'Bring your own expert feature is now available! Click the button to see how it works'
+    )
+  }
+  async assertTeaserAfterRequest() {
+    await this.clickButtonHasText('Request feature')
+
+    await this.assertPresenceByText(
+      'Thank you! We’ll let you know when this feature is available to you.'
+    )
+    await this.assertPresenceByText(
+      'You will be able to schedule a call when this feature is turned on for your account.'
+    )
+    await this.clickButtonHasText('Cancel')
+    await this.navigateToByoeForm()
+    await this.assertPresenceByText(
+      'Thank you! We’ll let you know when this feature is available to you.'
+    )
+    await this.assertPresenceByText(
+      'You will be able to schedule a call when this feature is turned on for your account.'
+    )
+  }
   async navigateToByoeForm() {
     await this.addByoeButton.click()
     await this.howItWorksLabel.waitFor({ timeout: 15000 })
@@ -175,6 +206,8 @@ export class ByoePage extends BasePage {
     await this.clearField(this.firstnameInput)
     await this.clearField(this.lastnameInput)
     await this.clearField(this.positionInput)
+    await this.clearField(this.firstnameInput)
+    await this.clearField(this.lastnameInput)
     await this.clearField(this.companyInput)
     await this.clearField(this.rateInput)
     await this.clearField(this.phoneInput)
@@ -235,7 +268,10 @@ export class ByoePage extends BasePage {
       'Please note, you have another call at this timeslot'
     )
   }
-
+  async asserScheduleFieldsDisabled() {
+    await expect(this.callDateInput).toBeDisabled()
+    //add validation other two fields selectors
+  }
   async submitFormWithSaveButton() {
     await this.saveFormButton.click()
   }

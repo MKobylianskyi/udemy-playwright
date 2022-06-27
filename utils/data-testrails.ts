@@ -9,7 +9,7 @@ const api = new TestRail({
 })
 
 export async function getTestCase(testInfo) {
-  const filteredTestCases = await api.getCases(testRun.project_id, {
+  let filteredTestCases = await api.getCases(testRun.project_id, {
     suite_id: testRun.suite_id,
     filter: testInfo.title,
     limit: 1,
@@ -36,6 +36,6 @@ export async function sendTestStatusAPI(testInfo) {
   if (testRun.id != undefined) {
     const testCase = await getTestCase(testInfo)
     const status = getTestStatusID(testInfo.status)
-    updateTestCase(testCase, status)
+    await updateTestCase(testCase, status)
   }
 }

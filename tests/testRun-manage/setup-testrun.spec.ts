@@ -21,5 +21,6 @@ test.describe('Setup test rail', () => {
       include_all: true,
     })
     fs.writeFileSync('test-data/test-run.json', JSON.stringify(testRun))
+    console.warn(testRun.url)
   })
 })

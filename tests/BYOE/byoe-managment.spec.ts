@@ -38,8 +38,8 @@ test.describe.parallel('Managment', () => {
     expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
-    await loginPage.loginAsUser(ENV.URL, ENV.client_user_ID)
-    await expertsPage.openExpertTab(ENV.URL, ENV.project1_ID)
+    await loginPage.loginAsUser(ENV.URL, ENV.clientFullMode.client_user_ID)
+    await expertsPage.openExpertTab(ENV.URL, ENV.clientFullMode.project1_ID)
   })
 
   test.afterEach(async ({ page }, testInfo) => {
