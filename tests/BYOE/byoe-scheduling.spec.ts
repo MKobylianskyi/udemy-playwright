@@ -1,7 +1,9 @@
-import { test } from '@playwright/test'
-import { ByoePage } from '../../page-objects/project-pages/ByoePage'
+import { expect, test } from '@playwright/test'
+import { ByoePage } from '../../page-objects/project-pages/BYOePage'
+import { CallsPage } from '../../page-objects/project-pages/ProjectCallsPage'
 import { LoginPage } from '../../page-objects/LoginPage'
-import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
+import { CallPage } from '../../page-objects/calls-pages/CallPage'
+import { ExpertsPage } from '../../page-objects/project-pages/ProjectExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 import { sendTestStatusAPI } from '../../utils/data-testrails'
 import { faker } from '@faker-js/faker'
@@ -27,6 +29,8 @@ type Input = {
 test.describe.parallel('Scheduling', () => {
   let byoeData: Input
   let byoePage: ByoePage
+  let callPage: CallPage
+  let callsPage: CallsPage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
   const mandatoryFields = require('../../test-data/mandatory-fields-list.json')
@@ -37,6 +41,8 @@ test.describe.parallel('Scheduling', () => {
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
+    callsPage = new CallsPage(page)
+    callPage = new CallPage(page)
     expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
@@ -192,6 +198,7 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertExpertStatusInList('Call scheduled')
   })
+
   test('Check that  Rate and Currency is updated for the expert profile on the project level if change it on Set Time modal', async ({
     page,
   }, testInfo) => {
@@ -218,5 +225,47 @@ test.describe.parallel('Scheduling', () => {
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.assertEmailAddressWarning()
     await byoePage.assertAutocompleteFormValues(byoeData)
+  })
+
+  test('Check scheduled call on the call tab', async ({ page }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    // const callDateTime =
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+    await callsPage.openCallsTab(ENV.URL, ENV.clientFullMode.project1_ID)
+    await callsPage.searchExpertCall(byoeData)
+    await callsPage.assertCallPresence(byoeData)
+    // console.log(callDateTime)
+  })
+
+  test('Check that call Data (time, duration, expert details) correct on the Call page', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+    await expertsPage.asserExpertCardOpened(byoeData)
+    await expertsPage.clickButtonHasText('Call scheduled:')
+    await expertsPage.assertPrecenceOnPage(ENV.URL, '/client/calls/')
+    await callPage.assertExpertCardDetails(byoeData)
+    await callPage.assertCallDetails(byoeData)
   })
 })

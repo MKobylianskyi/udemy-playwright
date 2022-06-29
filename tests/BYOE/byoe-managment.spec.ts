@@ -1,7 +1,8 @@
 import { test } from '@playwright/test'
-import { ByoePage } from '../../page-objects/project-pages/ByoePage'
+import { ByoePage } from '../../page-objects/project-pages/BYOePage'
 import { LoginPage } from '../../page-objects/LoginPage'
-import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
+import { CallPage } from '../../page-objects/calls-pages/CallPage'
+import { ExpertsPage } from '../../page-objects/project-pages/ProjectExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 import { sendTestStatusAPI } from '../../utils/data-testrails'
 
@@ -26,6 +27,8 @@ type Input = {
 test.describe.parallel('Managment', () => {
   let byoeData: Input
   let byoePage: ByoePage
+  let callPage: CallPage
+
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
   const ENV = require('../../test-data/env-data.json')
@@ -35,6 +38,7 @@ test.describe.parallel('Managment', () => {
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
+    callPage = new CallPage(page)
     expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
@@ -139,6 +143,29 @@ test.describe.parallel('Managment', () => {
     await expertsPage.asserExpertInProejct(byoeData)
     await expertsPage.addExpertNote(
       `${byoeData.lastName} works in the ${byoeData.companyName}`
+    )
+  })
+  test('Check that user is able to left notes on the Call page', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+    await expertsPage.asserExpertCardOpened(byoeData)
+    await expertsPage.clickButtonHasText('Call scheduled:')
+    await expertsPage.assertPrecenceOnPage(ENV.URL, '/client/calls/')
+    await callPage.assertCallDetails(byoeData)
+    await callPage.addCallNote(
+      `${byoeData.lastName}  from ${byoeData.companyName} should be in this call`
     )
   })
 })

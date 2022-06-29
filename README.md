@@ -2,18 +2,7 @@
 
 ## Prerequisites
 
-- install npm
-- Create a json file `env-data.json` in `/test-data` folder
-- Specify enviroment data in the object
-
-```
-  "URL": "https://instance.link.com",
-  "email": "",
-  "password": "",
-  "client_user_ID": "",
-  "project1_ID": "",
-  "project2_ID": ""
-```
+- Install npm
 
 ## Development
 
@@ -21,6 +10,12 @@
 - Run `npm install prettier` to install prettier
 - Run `npm install @playwright/test` to install Playwright
 - Run `npx playwirght install` to install default browsers for tests
+
+## Before running tests
+
+- Create a json file `env-data.json` in `/test-data` folder.
+- In the same folder present `env-data.example` with file structure.
+- Copy from example and specify nececery parameters in `env-data.json`
 
 ## Run tests
 
