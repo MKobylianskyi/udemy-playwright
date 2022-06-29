@@ -3,10 +3,12 @@ import { Page, Locator, expect } from '@playwright/test'
 export class BasePage {
   readonly page: Page
   readonly successAlert: Locator
+  readonly noteInput: Locator
 
   constructor(page: Page) {
     this.page = page
     this.successAlert = page.locator('[type=success]')
+    this.noteInput = page.locator('textarea')
   }
 
   async assertPresenceByText(text) {
@@ -32,11 +34,34 @@ export class BasePage {
     await this.pickSelectorFirstOption()
   }
 
-  async selectCallDate(currentDate) {
+  async blurElement(element) {
+    await element.evaluate((e) => e.blur())
+  }
+  async setAttribute(element, name, value) {
+    await element.evaluate((node) => node.setAttribute(name, value))
+  }
+
+  async assertPrecenceOnPage(baseURL, rout) {
+    await expect(this.page).toHaveURL(new RegExp(`${baseURL}${rout}`))
+  }
+
+  // fix method after adding ID to the caleendar date picker
+  async selectCallDate(date) {
     await this.clickOnInputByPlaceholder('Pick date')
     await this.page.click('div:nth-child(6) div:nth-child(7)')
-    await this.fillInputByPlaceholder('Pick date', currentDate)
+    await this.fillInputByPlaceholder('Pick date', date)
     await this.page.click('text=Call date', { delay: 400 })
+    // const element = await this.page.locator(`[placeholder="Pick date"]`)
+    // await this.clickOnInputByPlaceholder('Pick date')
+    // await this.page.locator('div:has(label:has-text("Call date"))').click()
+    // const day = date.substring(0, 2)
+    // let dayElement
+    // if ((await this.page.locator(`text=${day}`).count()) > 1) {
+    //   dayElement = await this.page.locator(`text=${day}>>nth=1`)
+    // } else {
+    //   dayElement = await this.page.locator(`text=${day}>>nth=0`)
+    // }
+    // await dayElement.click()
   }
 
   async pickSelectorFirstOption() {
@@ -46,7 +71,7 @@ export class BasePage {
   }
 
   async fillSelectorInput(titleName, textValue) {
-    const element = await this.page.$(
+    const element = await this.page.locator(
       ':text("' + titleName + '") + div >> nth=0'
     )
     await element.click()
@@ -79,7 +104,7 @@ export class BasePage {
     await this.successAlert.waitFor({ state: 'detached' })
   }
   async selectorPickOptionByIndex(titleName: string, option: number) {
-    const element = await this.page.$(
+    const element = await this.page.locator(
       ':text("' + titleName + '") + div >> nth=0'
     )
     await element.click()
@@ -101,7 +126,7 @@ export class BasePage {
   }
 
   async assertSelectorOptions(titleName: string, options) {
-    const element = await this.page.$(
+    const element = await this.page.locator(
       ':text("' + titleName + '") + div >> nth=0'
     )
     await element.click()

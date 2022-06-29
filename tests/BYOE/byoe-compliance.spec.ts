@@ -1,7 +1,7 @@
 import { test } from '@playwright/test'
-import { ByoePage } from '../../page-objects/project-pages/ByoePage'
+import { ByoePage } from '../../page-objects/project-pages/BYOePage'
 import { LoginPage } from '../../page-objects/LoginPage'
-import { ExpertsPage } from '../../page-objects/project-pages/ExpertsPage'
+import { ExpertsPage } from '../../page-objects/project-pages/ProjectExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 import { sendTestStatusAPI } from '../../utils/data-testrails'
 

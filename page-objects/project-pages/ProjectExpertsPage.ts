@@ -5,6 +5,7 @@ import { BasePage } from '../BasePage'
 export class ExpertsPage extends BasePage {
   readonly addToShortlistButton: Locator
   readonly expertStatus: Locator
+
   readonly removeFromShortlistButton: Locator
   readonly rejectExpertButton: Locator
   readonly unrejectExpertButton: Locator
@@ -20,13 +21,14 @@ export class ExpertsPage extends BasePage {
   readonly toolBarShowAs: Locator
   readonly toolBarSearch: Locator
   readonly exitRejectedFilterButton: Locator
-  readonly noteInput: Locator
+  // readonly noteInput: Locator
 
   constructor(page: Page) {
     super(page)
     this.addToShortlistButton = page.locator(
       'button:has-text("Add to shortlist")'
     )
+
     this.removeFromShortlistButton = page.locator(
       'button:has-text("Remove from shortlist")'
     )
@@ -50,7 +52,7 @@ export class ExpertsPage extends BasePage {
     this.provideAvailabilityButton = page.locator(
       'button:has-text("Provide availability")'
     )
-    this.noteInput = page.locator('textarea')
+    // this.noteInput = page.locator('textarea')
     this.expertStatus = page.locator('//tbody/tr[1]/td[6]/div')
     this.requestAvailabilityButton = page.locator(
       'button:has-text("Request availability")'
@@ -64,6 +66,7 @@ export class ExpertsPage extends BasePage {
     await this.clickButtonHasText('Post a note')
     await this.assertPresenceByText(noteText)
   }
+
   async assertTeaserWarningOnExpertCard() {
     await this.assertPresenceByText(
       'Not available for scheduling. You will be able to schedule your own experts when your organisation approves this feature.'
@@ -128,7 +131,6 @@ export class ExpertsPage extends BasePage {
     await this.asserExpertCardOpened(data)
   }
   async asserExpertCardOpened(data) {
-    // await this.page.pause()
     await expect(
       this.page.locator(
         `h3:has-text("${data.jobTitle} at ${data.companyName}")`
@@ -204,5 +206,6 @@ export class ExpertsPage extends BasePage {
     await this.selectCallDate(currentDate)
     await this.selectorPickOptionByName('Call time (GMT+3)', currentTime)
     await this.selectorPickOptionByName('Call duration', callDuration)
+    return { currentDate, currentTime, callDuration }
   }
 }
