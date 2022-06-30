@@ -17,6 +17,7 @@
   "author": "Mykhailo",
   "license": "ISC",
   "devDependencies": {
+    "mailosaur": "^8.4.0",
     "prettier": "2.6.2"
   },
   "dependencies": {
