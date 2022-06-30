@@ -1,9 +1,10 @@
 import { test } from '@playwright/test'
-import { ByoePage } from '../../page-objects/project-pages/BYOePage'
-import { CallsPage } from '../../page-objects/project-pages/ProjectCallsPage'
-import { LoginPage } from '../../page-objects/LoginPage'
-import { CallPage } from '../../page-objects/calls-pages/CallPage'
-import { ExpertsPage } from '../../page-objects/project-pages/ProjectExpertsPage'
+import { ByoePage } from '../../page-objects/client-pages/project-pages/BYOePage'
+import { CallsPage } from '../../page-objects/client-pages/project-pages/ProjectCallsPage'
+import { LoginPage } from '../../page-objects/public-pages/LoginPage'
+import { CallPage } from '../../page-objects/client-pages/calls-pages/CallPage'
+import { ComplianceTrainingPage } from '../../page-objects/public-pages/ComplainceTraningPage'
+import { ExpertsPage } from '../../page-objects/client-pages/project-pages/ProjectExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 import { sendTestStatusAPI } from '../../utils/data-testrails'
 import { faker } from '@faker-js/faker'
@@ -33,6 +34,7 @@ test.describe.parallel('Scheduling', () => {
   let callsPage: CallsPage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
+  let complianceTrainingPage: ComplianceTrainingPage
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
@@ -42,6 +44,7 @@ test.describe.parallel('Scheduling', () => {
     byoePage = new ByoePage(page)
     callsPage = new CallsPage(page)
     callPage = new CallPage(page)
+    complianceTrainingPage = new ComplianceTrainingPage(page)
     expertsPage = new ExpertsPage(page)
     await loginPage.fillLoginForm(ENV.email, ENV.password)
     await loginPage.submitCredentials()
@@ -267,42 +270,39 @@ test.describe.parallel('Scheduling', () => {
     await callPage.assertExpertCardDetails(byoeData)
     await callPage.assertCallDetails(byoeData)
   })
+
+  test('Check that invite (placeholder) is received by expert after scheduling', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+    await complianceTrainingPage.navigateCTpageFromPlaceholder(byoeData)
+  })
+  test('Check that reminder is received by expert after scheduling', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await expertsPage.asserExpertInProejct(byoeData)
+    await expertsPage.openExpertSchedulingPanel()
+    await expertsPage.openSetTimeModal()
+    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
+    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
+    await expertsPage.bookCallOnSetTimeForm()
+    await complianceTrainingPage.navigateCTpageFromReminder(byoeData)
+  })
 })
-
-// import { expect, test } from '@playwright/test'
-// import { ByoePage } from '../../page-objects/project-pages/BYOePage'
-// import { LoginPage } from '../../page-objects/LoginPage'
-// import { ExpertsPage } from '../../page-objects/project-pages/ProjectExpertsPage'
-// import { generateRandomDataBYOE } from '../../utils/data-factory'
-// import { getEmailLink, getEmail } from '../../utils/mailosour-manager'
-// import { sendTestStatusAPI } from '../../utils/data-testrails'
-
-// test.describe.parallel('login', () => {
-//   let loginPage: LoginPage
-//   const ENV = require('../../test-data/env-data.json')
-
-//   test.beforeEach(async ({ page }) => {
-//     await page.goto(ENV.URL)
-//     loginPage = new LoginPage(page)
-//   })
-
-//   test.afterEach(async ({ page }, testInfo) => {
-//     sendTestStatusAPI(testInfo)
-//   })
-
-//   test.only('reset test', async ({ page }, testInfo) => {
-//     const userEmail = 'mykhailo@ccjat8kv.mailosaur.net'
-//     await loginPage.clickByText('Reset My Password')
-//     await loginPage.fillInputByPlaceholder('Enter here', userEmail)
-//     await loginPage.clickByText('Send Instructions')
-//     const email = await getEmail(userEmail)
-//     const resetLink = await getEmailLink(userEmail, 1)
-
-//     console.log(resetLink)
-//     await expect(email.subject).toEqual(
-//       '[STAGING] proSapient password recovery'
-//     )
-//     await page.goto(resetLink)
-//     await page.pause()
-//   })
-// })
