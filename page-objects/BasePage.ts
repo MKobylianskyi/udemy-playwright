@@ -11,6 +11,17 @@ export class BasePage {
     this.noteInput = page.locator('textarea')
   }
 
+  async assertErrorMessageForFields(fields: string[], errorMessage: string) {
+    for (const titleName of fields) {
+      await expect(
+        this.page.locator(':text("' + titleName + '") + div + div')
+      ).toBeVisible()
+      await expect(
+        this.page.locator(':text("' + titleName + '") + div + div')
+      ).toContainText(errorMessage)
+    }
+  }
+
   async assertPresenceByText(text) {
     await expect(this.page.locator(`text=${text}`)).toBeVisible()
   }

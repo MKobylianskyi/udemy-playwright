@@ -1,5 +1,4 @@
 import { Page, Locator, expect } from '@playwright/test'
-import { generateUniqueEmail } from '../../utils/data-factory'
 import { mapCurrencyWithIndex } from '../../utils/data-helpers'
 import {
   removeSpaces,
@@ -198,8 +197,8 @@ export class ByoePage extends BasePage {
   }
 
   async fillEmailInputWithUniqueEmail(data) {
-    const uniqueEmail = generateUniqueEmail(data)
-    await this.selectorPickOptionByName('Email Address', uniqueEmail)
+    // const uniqueEmail = generateUniqueEmail(data)
+    await this.selectorPickOptionByName('Email Address', data.email)
   }
 
   async clearForm() {
@@ -226,15 +225,21 @@ export class ByoePage extends BasePage {
     await expect(this.linkedinInput).toBeDisabled()
   }
 
-  async assertErrorMessageForFields(fields: string[], errorMessage: string) {
-    for (const titleName of fields) {
-      await expect(
-        this.page.locator(':text("' + titleName + '") + div + div')
-      ).toBeVisible()
-      await expect(
-        this.page.locator(':text("' + titleName + '") + div + div')
-      ).toContainText(errorMessage)
-    }
+  async assertMandatoryFieldsOnBYOEForm() {
+    const mandatoryFields = [
+      'Source',
+      'Angle',
+      'First name',
+      'Last name',
+      'Relevant position',
+      'Company relevant to project',
+      'Project Hourly Rate',
+    ]
+    await this.assertErrorMessageForFields(mandatoryFields, `can't be blank`)
+  }
+  async assertMandatoryFieldsOnScheduleCallForm() {
+    const mandatoryFields = ['Call date', 'Call time (GMT+3)', 'Call duration']
+    await this.assertErrorMessageForFields(mandatoryFields, `can't be blank`)
   }
 
   async clearBYOEEmailField() {

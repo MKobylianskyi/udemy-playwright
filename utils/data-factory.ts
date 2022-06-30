@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker'
-// import { getRandomNumber, getRandomString } from '../utils/data-helpers'
 const crypto = require('crypto')
 
 export function getRandomNumber(max) {
@@ -11,45 +10,47 @@ export function getRandomString(length) {
 }
 
 export function generateRandomDataBYOE(env: number) {
-  const fs = require('fs')
-  let rawdata = fs.readFileSync('test-data/byoe-data.json')
-  const byoeList = JSON.parse(rawdata)
-  const byoeObject = byoeList[env]
+  const uniqueId = getRandomString(3)
+  const firstName = faker.name.firstName() + getRandomString(1)
+  const lastName = faker.name.lastName()
+  const email = `${firstName}-${lastName}@ccjat8kv.mailosaur.net`
+  const jobTitle = faker.name.jobTitle()
+  const companyName = faker.company.companyName()
+  const phoneNumber = faker.phone.phoneNumber('+38099#######')
+  const rate = faker.finance.amount(0, 1000, 0)
+  const tags = [
+    faker.company.catchPhrase(),
+    faker.company.catchPhrase(),
+    faker.company.catchPhrase(),
+    faker.company.catchPhrase(),
+  ]
+  // cosnt  timeZone =  faker.address.timeZone(),
+  // cosnt  country =  faker.address.country(),
+  // HARDCODED UNTILL FIND OUT HOW TO REMOVE UNEXISTED TIMEZONE AND GEO FROM FAKER API
+  const timeZone = 'Kiev'
+  const country = 'Ukraine'
+  const sourceOption = generateSource()
+  const currency = generateCurrency()
+  const angleOptionIndex = getRandomNumber(2)
+  const linkedinURl =
+    'https://www.linkedin.com/in/mykhailo-kobylianskyi-22023b133/'
   return {
-    uniqueId: getRandomString(3),
-    firstName: faker.name.firstName() + getRandomString(1),
-    lastName: faker.name.lastName(),
-    jobTitle: faker.name.jobTitle(),
-    companyName: faker.company.companyName(),
-    phoneNumber: faker.phone.phoneNumber('+38099#######'),
-    rate: faker.finance.amount(0, 1000, 0),
-    tags: [
-      faker.company.catchPhrase(),
-      faker.company.catchPhrase(),
-      faker.company.catchPhrase(),
-      faker.company.catchPhrase(),
-    ],
-    // timeZone: faker.address.timeZone(),
-    // country: faker.address.country(),
-    // HARDCODED UNTILL FIND OUT HOW TO REMOVE UNEXISTED TIMEZONE AND GEO FROM FAKER API
-    timeZone: 'Kiev',
-    country: 'Ukraine',
-    email: byoeObject.email,
-    sourceOption: byoeObject.sourceOption,
-    currency: generateCurrency(),
-    angleOptionIndex: byoeObject.angleOptionIndex,
-    linkedinURl: byoeObject.linkedinURl,
+    uniqueId,
+    firstName,
+    lastName,
+    jobTitle,
+    companyName,
+    phoneNumber,
+    rate,
+    tags,
+    timeZone,
+    country,
+    email,
+    sourceOption,
+    currency,
+    angleOptionIndex,
+    linkedinURl,
   }
-}
-
-export function generateUniqueEmail(data) {
-  const index = data.email.indexOf('@')
-  var uniqueEmail =
-    data.email.slice(0, index) +
-    `+${data.firstName}${data.lastName}-${data.uniqueId}` +
-    data.email.slice(index)
-
-  return uniqueEmail
 }
 
 export function generateCurrency() {
@@ -60,6 +61,28 @@ export function generateCurrency() {
     '£ (GBP)',
     '¥ (JPY)',
     '$ (USD)',
+  ]
+
+  return currencyList[Math.floor(Math.random() * currencyList.length)]
+}
+export function generateSource() {
+  const currencyList = [
+    'AlphaSights',
+    'APAC',
+    'Atheneum Partners',
+    'Coleman Research',
+    'Definitive Healthcare',
+    'Dialectica',
+    'ExactData',
+    'Guidepoint Global',
+    'Hoovers',
+    'Independently sourced',
+    'InfoUSA/Edith Roman',
+    'LinkedIn/Monster',
+    'List from client',
+    'NABU',
+    'Online panel company',
+    'ProSapient',
   ]
 
   return currencyList[Math.floor(Math.random() * currencyList.length)]
