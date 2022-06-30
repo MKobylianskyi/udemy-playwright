@@ -269,3 +269,41 @@ test.describe.parallel('Scheduling', () => {
     await callPage.assertCallDetails(byoeData)
   })
 })
+
+// import { expect, test } from '@playwright/test'
+// import { ByoePage } from '../../page-objects/project-pages/BYOePage'
+// import { LoginPage } from '../../page-objects/LoginPage'
+// import { ExpertsPage } from '../../page-objects/project-pages/ProjectExpertsPage'
+// import { generateRandomDataBYOE } from '../../utils/data-factory'
+// import { getEmailLink, getEmail } from '../../utils/mailosour-manager'
+// import { sendTestStatusAPI } from '../../utils/data-testrails'
+
+// test.describe.parallel('login', () => {
+//   let loginPage: LoginPage
+//   const ENV = require('../../test-data/env-data.json')
+
+//   test.beforeEach(async ({ page }) => {
+//     await page.goto(ENV.URL)
+//     loginPage = new LoginPage(page)
+//   })
+
+//   test.afterEach(async ({ page }, testInfo) => {
+//     sendTestStatusAPI(testInfo)
+//   })
+
+//   test.only('reset test', async ({ page }, testInfo) => {
+//     const userEmail = 'mykhailo@ccjat8kv.mailosaur.net'
+//     await loginPage.clickByText('Reset My Password')
+//     await loginPage.fillInputByPlaceholder('Enter here', userEmail)
+//     await loginPage.clickByText('Send Instructions')
+//     const email = await getEmail(userEmail)
+//     const resetLink = await getEmailLink(userEmail, 1)
+
+//     console.log(resetLink)
+//     await expect(email.subject).toEqual(
+//       '[STAGING] proSapient password recovery'
+//     )
+//     await page.goto(resetLink)
+//     await page.pause()
+//   })
+// })
