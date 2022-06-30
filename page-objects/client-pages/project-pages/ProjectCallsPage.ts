@@ -1,6 +1,9 @@
 import { Page, Locator, expect } from '@playwright/test'
-import { getCurrentDay, getCurrentTimeFormated } from '../../utils/data-helpers'
-import { BasePage } from '../BasePage'
+import {
+  getCurrentDay,
+  getCurrentTimeFormated,
+} from '../../../utils/data-helpers'
+import { BasePage } from '../../BasePage'
 
 export class CallsPage extends BasePage {
   readonly searchInput: Locator

@@ -1,12 +1,16 @@
 import { Page, Locator, expect } from '@playwright/test'
+import { MailClient } from '../utils/mailosaur-client-manager'
 
 export class BasePage {
   readonly page: Page
+  readonly mailClient: MailClient
   readonly successAlert: Locator
   readonly noteInput: Locator
 
   constructor(page: Page) {
+    this.mailClient = new MailClient()
     this.page = page
+
     this.successAlert = page.locator('[type=success]')
     this.noteInput = page.locator('textarea')
   }
