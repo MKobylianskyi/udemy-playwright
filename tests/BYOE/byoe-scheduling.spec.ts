@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import { ByoePage } from '../../page-objects/project-pages/BYOePage'
 import { CallsPage } from '../../page-objects/project-pages/ProjectCallsPage'
 import { LoginPage } from '../../page-objects/LoginPage'
@@ -33,7 +33,6 @@ test.describe.parallel('Scheduling', () => {
   let callsPage: CallsPage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
-  const mandatoryFields = require('../../test-data/mandatory-fields-list.json')
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {

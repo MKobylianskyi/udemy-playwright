@@ -28,7 +28,6 @@ test.describe.parallel('Create and update BYOE', () => {
   let byoePage: ByoePage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
-  const mandatoryFields = require('../../test-data/mandatory-fields-list.json')
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
@@ -115,10 +114,7 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.assertBYOEFormAvailable()
     await byoePage.submitFormWithContinueButton()
     await byoePage.submitFormWithContinueButton()
-    await byoePage.assertErrorMessageForFields(
-      mandatoryFields,
-      `can't be blank`
-    )
+    await byoePage.assertMandatoryFieldsOnBYOEForm()
     await byoePage.clearBYOEEmailField()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
@@ -136,10 +132,7 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.fillForm(byoeData)
     await byoePage.enableCallScheduleFields()
     await byoePage.submitFormWithContinueButton()
-    await byoePage.assertErrorMessageForFields(
-      ['Call date', 'Call time (GMT+3)', 'Call duration'],
-      `can't be blank`
-    )
+    await byoePage.assertMandatoryFieldsOnScheduleCallForm()
   })
 
   test('Check that client is able to schedule a call during adding BYOE', async ({
