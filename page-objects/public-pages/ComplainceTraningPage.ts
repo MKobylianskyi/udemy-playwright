@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test'
-import { getCurrentDay, getCurrentTimeFormated } from '../../utils/data-helpers'
+// import { getCurrentDay, getCurrentTimeFormated } from '../../utils/data-helpers'
 import { BasePage } from '../BasePage'
 
 export class ComplianceTrainingPage extends BasePage {
@@ -12,12 +12,12 @@ export class ComplianceTrainingPage extends BasePage {
     )
   }
   async navigateCTpageFromReminder(data) {
-    await this.page.goto(await this.mailClient.assertReminderAndGetLink(data))
+    await this.page.goto(await this.mailClient.getCTLinkFromReminderEmail(data))
     await expect(this.startButton).toBeVisible()
   }
   async navigateCTpageFromPlaceholder(data) {
     await this.page.goto(
-      await this.mailClient.assertPlaceholderAndGetLink(data)
+      await this.mailClient.getCTLinkFromPlaceholderEmail(data)
     )
     await expect(this.startButton).toBeVisible()
   }

@@ -85,7 +85,7 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await byoePage.assertComplainceMessage()
   })
 
-  test.skip('Check that BYOE gets invitation after compliting CT', async ({
+  test('Check that BYOE gets invitation after compliting CT', async ({
     page,
   }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
@@ -100,10 +100,9 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
-    await complianceTrainingPage.navigateCTpageFromReminder(byoeData)
+    await complianceTrainingPage.navigateCTpageFromPlaceholder(byoeData)
     await complianceTrainingPage.completeCT()
-    // get real invitation
-    // assert invitation
+    await expertsPage.mailClient.assertInvitation(byoeData)
   })
 
   test('Check CT email details', async ({ page }, testInfo) => {
