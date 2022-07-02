@@ -1,6 +1,9 @@
 import { test } from '@playwright/test'
 import TestRail from '@dlenroc/testrail'
-import { getCurrentDay, getCurrentTimeFormated } from '../../utils/data-helpers'
+import {
+  getCurrentDayForDatepicker,
+  getCurrentTimeFormated,
+} from '../../utils/data-helpers'
 
 test.describe('Setup test rail', () => {
   let testRun
@@ -15,7 +18,9 @@ test.describe('Setup test rail', () => {
   test('Setup test Run', async () => {
     testRun = await api.addRun(2, {
       suite_id: 60,
-      name: `BYOE AQA: ${getCurrentDay()} ${getCurrentTimeFormated(0)} `,
+      name: `BYOE AQA: ${getCurrentDayForDatepicker()} ${getCurrentTimeFormated(
+        0
+      )} `,
       description: `Test Server: ${ENV.URL}`,
       assignedto_id: 2,
       include_all: true,

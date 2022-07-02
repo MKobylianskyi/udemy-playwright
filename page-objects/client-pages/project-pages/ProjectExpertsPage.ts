@@ -1,6 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test'
 import {
   getCurrentDay,
+  getCurrentDayForDatepicker,
   getCurrentTimeFormated,
 } from '../../../utils/data-helpers'
 import { BasePage } from '../../BasePage'
@@ -159,6 +160,15 @@ export class ExpertsPage extends BasePage {
     await this.clickByText(filterName)
   }
 
+  async assertCTCompletedNote() {
+    await this.page.waitForSelector(
+      'text=No bio available for the experts you or your team have added.'
+    )
+    this.assertPresenceByText(
+      `Expert completed compliance training on ${getCurrentDay()}`
+    )
+  }
+
   async addToShortlist() {
     await this.addToShortlistButton.click()
     await this.assertSuccessAllert('Expert was added to shortlist.')
@@ -202,13 +212,5 @@ export class ExpertsPage extends BasePage {
 
   async requestAvailabilityClick() {
     await this.requestAvailabilityButton.click()
-  }
-  async provideSetTimeSchedulingDetails(callDuration) {
-    let currentDate = getCurrentDay()
-    let currentTime = getCurrentTimeFormated(1)
-    await this.selectCallDate(currentDate)
-    await this.selectorPickOptionByName('Call time (GMT+3)', currentTime)
-    await this.selectorPickOptionByName('Call duration', callDuration)
-    return { currentDate, currentTime, callDuration }
   }
 }

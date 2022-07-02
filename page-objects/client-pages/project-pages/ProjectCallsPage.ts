@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test'
 import {
-  getCurrentDay,
+  getCurrentDayForDatepicker,
   getCurrentTimeFormated,
 } from '../../../utils/data-helpers'
 import { BasePage } from '../../BasePage'
