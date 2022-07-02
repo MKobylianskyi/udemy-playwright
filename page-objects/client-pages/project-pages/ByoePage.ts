@@ -2,7 +2,7 @@ import { Page, Locator, expect } from '@playwright/test'
 import { mapCurrencyWithIndex } from '../../../utils/data-helpers'
 import {
   removeSpaces,
-  getCurrentDay,
+  getCurrentDayForDatepicker,
   getCurrentTimeFormated,
 } from '../../../utils/data-helpers'
 import { BasePage } from '../../BasePage'
@@ -306,7 +306,7 @@ export class ByoePage extends BasePage {
     await this.callDateInput.waitFor({ state: 'attached' })
   }
   async provideSchedulingDetails(callDuration) {
-    let currentDate = getCurrentDay()
+    let currentDate = getCurrentDayForDatepicker()
     let currentTime = getCurrentTimeFormated(1)
     await this.enableCallScheduleFields()
     await this.selectCallDate(currentDate)

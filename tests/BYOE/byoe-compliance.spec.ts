@@ -100,12 +100,13 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
-    await complianceTrainingPage.navigateCTpageFromPlaceholder(byoeData)
-    await complianceTrainingPage.completeCT()
-    await expertsPage.mailClient.assertInvitation(byoeData)
+    await complianceTrainingPage.compelteCTFromPlaceholder(byoeData)
+    await expertsPage.mailClient.assertInvitationRecevied(byoeData)
   })
 
-  test('Check CT email details', async ({ page }, testInfo) => {
+  test('Check not compliant expert can complete compliance training after call is scheduled', async ({
+    page,
+  }, testInfo) => {
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -116,7 +117,23 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await byoePage.assertSuccessAllert('Call was scheduled')
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
-    await complianceTrainingPage.navigateCTpageFromReminder(byoeData)
-    await complianceTrainingPage.completeCT()
+    await complianceTrainingPage.compelteCTFromReminder(byoeData)
+  })
+  test('Check that client is able to see the date when compliance training was completed', async ({
+    page,
+  }, testInfo) => {
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.provideSchedulingDetails('45 minutes')
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
+    await byoePage.assertSuccessAllert('Call was scheduled')
+    await expertsPage.searchForExpert(byoeData)
+    await expertsPage.assertTitleCallScheduled()
+    await complianceTrainingPage.compelteCTFromPlaceholder(byoeData)
+    await page.reload()
+    await expertsPage.assertCTCompletedNote()
   })
 })

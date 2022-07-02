@@ -1,4 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test'
+import {
+  getCurrentDayForDatepicker,
+  getCurrentTimeFormated,
+} from '../utils/data-helpers'
 import { MailClient } from '../utils/mailosaur-client-manager'
 
 export class BasePage {
@@ -6,6 +10,7 @@ export class BasePage {
   readonly mailClient: MailClient
   readonly successAlert: Locator
   readonly noteInput: Locator
+  readonly modalWindow: Locator
 
   constructor(page: Page) {
     this.mailClient = new MailClient()
@@ -13,8 +18,17 @@ export class BasePage {
 
     this.successAlert = page.locator('[type=success]')
     this.noteInput = page.locator('textarea')
+    this.modalWindow = page.locator('[role="dialog"]')
   }
 
+  async provideSetTimeSchedulingDetails(callDuration) {
+    let currentDate = getCurrentDayForDatepicker()
+    let currentTime = getCurrentTimeFormated(1)
+    await this.selectCallDate(currentDate)
+    await this.selectorPickOptionByName('Call time (GMT+3)', currentTime)
+    await this.selectorPickOptionByName('Call duration', callDuration)
+    return { currentDate, currentTime, callDuration }
+  }
   async assertErrorMessageForFields(fields: string[], errorMessage: string) {
     for (const titleName of fields) {
       await expect(

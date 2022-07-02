@@ -55,7 +55,7 @@ export function mapCurrencyWithIndex(currency) {
   }
 }
 
-export function formatDateForDatePicker(dd, mm, yyyy) {
+export function formatDate(option: string, { dd, mm, yyyy }) {
   let apendix = 'th'
   if (dd[1] == '1') {
     apendix = 'st'
@@ -121,7 +121,14 @@ export function formatDateForDatePicker(dd, mm, yyyy) {
       break
     }
   }
-  return dd + apendix + ' ' + month + ' ' + yyyy
+  if (option == 'datepicker') {
+    return dd + apendix + ' ' + month + ' ' + yyyy
+  } else {
+    if (dd[0] == '0') {
+      dd = dd.substring(1)
+    }
+    return dd + ' ' + month + ' ' + yyyy
+  }
 }
 
 export function getCurrentDay() {
@@ -130,6 +137,15 @@ export function getCurrentDay() {
   let mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
   let yyyy = today.getFullYear()
   let date: string
-  date = formatDateForDatePicker(dd, mm, yyyy)
+  date = formatDate('default', { dd, mm, yyyy })
+  return date
+}
+export function getCurrentDayForDatepicker() {
+  let today = new Date()
+  let dd = String(today.getDate()).padStart(2, '0')
+  let mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
+  let yyyy = today.getFullYear()
+  let date: string
+  date = formatDate('datepicker', { dd, mm, yyyy })
   return date
 }

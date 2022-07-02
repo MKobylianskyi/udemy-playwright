@@ -15,7 +15,7 @@ export class MailClient {
         subject: emailSubject,
       },
       {
-        timeout: 60000,
+        timeout: 180000,
       }
     )
     return email
@@ -29,7 +29,7 @@ export class MailClient {
         sentFrom: fromEmail,
       },
       {
-        timeout: 60000,
+        timeout: 180000,
       }
     )
     return email
@@ -60,7 +60,7 @@ export class MailClient {
     return this.getLink(email, 0)
   }
 
-  async assertInvitation(data) {
+  async assertInvitationRecevied(data) {
     const email = await this.getEmailByAddressFrom(
       data.email,
       `booking@pSapient.onmicrosoft.com`
@@ -74,9 +74,39 @@ export class MailClient {
       email,
       'Please ensure a fast & stable internet connection by closing unnecessary programs and windows'
     )
+    await this.deleteEmail(email.id)
   }
 
-  // async openCTfromPlaceholder(data) {
-  //   const email = await this.getEmailBySubject(data.email, `ACTION NEEDED`)
-  // }
+  async assertPlaceholderRecevied(data) {
+    const email = await this.getEmailBySubject(data.email, `ACTION NEEDED`)
+    await this.assertPresenceInEmailBody(
+      email,
+      'When you complete the training, you will get a new invitation with the call dial-in details.'
+    )
+    await this.assertPresenceInEmailBody(
+      email,
+      'To complete the mandatory compliance training, please'
+    )
+    await this.deleteEmail(email.id)
+  }
+  async assertCanceletionInvitationRecevied(data) {
+    const email = await this.getEmailBySubject(data.email, `Canceled:`)
+    await this.deleteEmail(email.id)
+  }
+
+  async assertRemindeRecevied(data) {
+    const email = await this.getEmailBySubject(
+      data.email,
+      `Please complete your compliance training ahead of your call`
+    )
+    await this.assertPresenceInEmailBody(
+      email,
+      'Before you are able to participate in a consultation, we need to make sure that you are fully aware of the compliance rules that apply to the expert consultations.'
+    )
+    await this.assertPresenceInEmailBody(
+      email,
+      'We would like to have a call with you!'
+    )
+    await this.deleteEmail(email.id)
+  }
 }
