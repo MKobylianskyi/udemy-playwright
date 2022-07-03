@@ -70,6 +70,8 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
+    await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
+    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await expertsPage.clickButtonHasText('Call scheduled:')
     await expertsPage.assertPrecenceOnPage(ENV.URL, '/client/calls/')
     await callPage.assertExpertCardDetails(byoeData)
