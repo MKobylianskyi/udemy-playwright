@@ -148,6 +148,8 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.assertSuccessAllert('Call was scheduled')
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
+    await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
+    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
   })
 
   test('Check that client is not prevent to schedule a conflicting call with internal expert during adding expert', async ({
@@ -170,6 +172,8 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
+    await byoePage.mailClient.assertPlaceholderRecevied(byoeData)
+    await byoePage.mailClient.assertRemindeRecevied(byoeData)
   })
   test('Check that message ‘Please note, you have another call at this timeslot’ is shown on the  form if client has a conflicting call during adding', async ({
     page,
@@ -192,6 +196,8 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
+    await byoePage.mailClient.assertPlaceholderRecevied(byoeData)
+    await byoePage.mailClient.assertRemindeRecevied(byoeData)
   })
 
   test('Check that  Additional service message is shown after setting Rate for the BYOE', async ({
