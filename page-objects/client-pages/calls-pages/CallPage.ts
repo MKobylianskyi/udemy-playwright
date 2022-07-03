@@ -63,4 +63,10 @@ export class CallPage extends BasePage {
     await this.cancelCallButton.click()
     await this.assertPresenceByText('Canceled')
   }
+
+  async assertConflictWarning() {
+    await this.assertPresenceByText(
+      'Please note, you have another call at this timeslot'
+    )
+  }
 }

@@ -15,7 +15,7 @@ export class MailClient {
         subject: emailSubject,
       },
       {
-        timeout: 180000,
+        timeout: 500000,
       }
     )
     return email
@@ -29,7 +29,7 @@ export class MailClient {
         sentFrom: fromEmail,
       },
       {
-        timeout: 180000,
+        timeout: 500000,
       }
     )
     return email
@@ -65,11 +65,11 @@ export class MailClient {
       data.email,
       `booking@pSapient.onmicrosoft.com`
     )
+    // console.log(email.subject)
     await this.assertPresenceInEmailBody(
       email,
       'Please open the link in one of the following browsers: Chrome, Firefox, Safari'
     )
-
     await this.assertPresenceInEmailBody(
       email,
       'Please ensure a fast & stable internet connection by closing unnecessary programs and windows'
@@ -89,6 +89,7 @@ export class MailClient {
     )
     await this.deleteEmail(email.id)
   }
+
   async assertCanceletionInvitationRecevied(data) {
     const email = await this.getEmailBySubject(data.email, `Canceled:`)
     await this.deleteEmail(email.id)
