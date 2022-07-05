@@ -43,7 +43,8 @@ test.describe.parallel('Create and update BYOE', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    sendTestStatusAPI(testInfo)
+    loginPage.addScreenshotUponFailure(testInfo)
+    await sendTestStatusAPI(testInfo)
   })
 
   test('Check that user is able to add BYOE', async ({ page }, testInfo) => {

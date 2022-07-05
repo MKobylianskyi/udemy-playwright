@@ -47,7 +47,8 @@ test.describe.parallel('Managment', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    sendTestStatusAPI(testInfo)
+    loginPage.addScreenshotUponFailure(testInfo)
+    await sendTestStatusAPI(testInfo)
   })
 
   test('Check that client can add selected expert to the short list', async ({

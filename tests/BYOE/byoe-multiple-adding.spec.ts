@@ -43,7 +43,8 @@ test.describe.parallel('Multiple submission on a project handling', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    sendTestStatusAPI(testInfo)
+    loginPage.addScreenshotUponFailure(testInfo)
+    await sendTestStatusAPI(testInfo)
   })
 
   test('Check Find Expert when user try to add already added expert', async ({

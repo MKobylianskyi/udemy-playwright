@@ -128,8 +128,8 @@ export class BasePage {
   }
 
   async assertSuccessAllert(message) {
-    await expect(this.successAlert).toBeVisible()
-    await expect(this.successAlert).toContainText(message)
+    await expect(this.successAlert).toBeVisible({ timeout: 10000 })
+    await expect(this.successAlert).toContainText(message, { timeout: 10000 })
     await this.successAlert.waitFor({ state: 'detached' })
   }
   async selectorPickOptionByIndex(titleName: string, option: number) {
@@ -167,6 +167,17 @@ export class BasePage {
       await expect(optionElement).toContainText(option)
     }
   }
+
+  async addScreenshotUponFailure(testInfo) {
+    if (testInfo.status == 'failed') {
+      const screenshot = await this.page.screenshot()
+      await testInfo.attach('screenshot.png', {
+        body: screenshot,
+        contentType: 'image/png',
+      })
+    }
+  }
+
   //  FIX SELECTOR ASSSERTATION
   // async assertSelectorDisabled(titleName: string) {
   //   const element = await this.page.locator(
