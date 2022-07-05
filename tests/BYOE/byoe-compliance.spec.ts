@@ -49,7 +49,8 @@ test.describe.parallel('BYOE: Compliance Training', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    sendTestStatusAPI(testInfo)
+    loginPage.addScreenshotUponFailure(testInfo)
+    await sendTestStatusAPI(testInfo)
   })
 
   test('Check that message Expert will be required to complete CT is shown for NOT compliant experts', async ({

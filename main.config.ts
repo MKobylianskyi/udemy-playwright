@@ -9,7 +9,7 @@ const config: PlaywrightTestConfig = {
     trace: 'retain-on-failure',
     headless: true,
     viewport: { width: 1280, height: 720 },
-    actionTimeout: 15000,
+    actionTimeout: 25000,
     ignoreHTTPSErrors: true,
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',

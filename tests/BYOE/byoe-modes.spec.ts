@@ -43,7 +43,8 @@ test.describe.parallel('BYOE modes', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    sendTestStatusAPI(testInfo)
+    loginPage.addScreenshotUponFailure(testInfo)
+    await sendTestStatusAPI(testInfo)
   })
 
   test('Check that user is not able to schedule a call in BYOE Teaser mode', async ({

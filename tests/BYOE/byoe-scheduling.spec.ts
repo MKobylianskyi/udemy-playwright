@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { ByoePage } from '../../page-objects/client-pages/project-pages/BYOePage'
 import { CallsPage } from '../../page-objects/client-pages/project-pages/ProjectCallsPage'
 import { LoginPage } from '../../page-objects/public-pages/LoginPage'
@@ -53,7 +53,8 @@ test.describe.parallel('Scheduling', () => {
   })
 
   test.afterEach(async ({ page }, testInfo) => {
-    sendTestStatusAPI(testInfo)
+    loginPage.addScreenshotUponFailure(testInfo)
+    await sendTestStatusAPI(testInfo)
   })
 
   test('Check that client is able to schedule a call with BYOE via Set time', async ({
