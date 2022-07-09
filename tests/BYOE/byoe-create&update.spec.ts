@@ -40,6 +40,8 @@ test.describe.parallel('Create and update BYOE', () => {
     await loginPage.submitCredentials()
     await loginPage.loginAsUser(ENV.URL, ENV.clientFullMode.client_user_ID)
     await expertsPage.openExpertTab(ENV.URL, ENV.clientFullMode.project1_ID)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
   })
 
   test.afterEach(async ({ page }, testInfo) => {
@@ -48,19 +50,16 @@ test.describe.parallel('Create and update BYOE', () => {
   })
 
   test('Check that user is able to add BYOE', async ({ page }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(byoeData)
   })
+
   test('Check that T&Cs modal is opened after a user click on the Continue button', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
@@ -72,17 +71,14 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check that Expert Source is available on the BYOE Add form', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.assertSelectorFieldPresence
     await byoePage.assertSelectorFieldPresence('Source')
   })
+
   test('Check that Expertise tags field is available on the Add BYOE form', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.assertSelectorFieldPresence('Expertise tags (optional)')
   })
@@ -90,8 +86,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check system behaviour when user adds BYOE expert that is already added to another client project', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
@@ -108,8 +102,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check that client can remove the email address with the X icon on the BYOE add form', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.assertAddingFormUnavailable()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.assertBYOEFormAvailable()
@@ -127,8 +119,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check that call details field are mandatory', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.enableCallScheduleFields()
@@ -139,8 +129,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check that client is able to schedule a call during adding BYOE', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.provideSchedulingDetails('45 minutes')
@@ -156,8 +144,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check that client is not prevent to schedule a conflicting call with internal expert during adding expert', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.provideSchedulingDetails('45 minutes')
@@ -179,8 +165,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check that message ‘Please note, you have another call at this timeslot’ is shown on the  form if client has a conflicting call during adding', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.provideSchedulingDetails('45 minutes')
@@ -204,8 +188,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check that  Additional service message is shown after setting Rate for the BYOE', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.openRateModal()
     await byoePage.assertRateModal()
@@ -214,8 +196,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check How it works button and BYOE informative modal on BYOE add form', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.openHowItWorksModal()
     await byoePage.assertHowItWorksModal()
@@ -224,8 +204,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check that user is able to edit the expert profile after clicking on the Edit profile icon', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
@@ -244,8 +222,6 @@ test.describe.parallel('Create and update BYOE', () => {
   test('Check mandatory fields for the BYOE form', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()

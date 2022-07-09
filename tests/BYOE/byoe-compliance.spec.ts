@@ -46,6 +46,9 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await loginPage.submitCredentials()
     await loginPage.loginAsUser(ENV.URL, ENV.clientFullMode.client_user_ID)
     await expertsPage.openExpertTab(ENV.URL, ENV.clientFullMode.project1_ID)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
   })
 
   test.afterEach(async ({ page }, testInfo) => {
@@ -57,9 +60,7 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     page,
   }, testInfo) => {
     //checking Complaince Warnign on the Expert card - Expert tab
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+
     await byoePage.assertComplainceMessage()
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
@@ -91,9 +92,6 @@ test.describe.parallel('BYOE: Compliance Training', () => {
   test('Check that BYOE gets invitation after compliting CT', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
@@ -110,9 +108,6 @@ test.describe.parallel('BYOE: Compliance Training', () => {
   test('Check not compliant expert can complete compliance training after call is scheduled', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.provideSchedulingDetails('45 minutes')
     await byoePage.submitFormWithContinueButton()
@@ -125,9 +120,6 @@ test.describe.parallel('BYOE: Compliance Training', () => {
   test('Check that client is able to see the date when compliance training was completed', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.provideSchedulingDetails('45 minutes')
     await byoePage.submitFormWithContinueButton()
