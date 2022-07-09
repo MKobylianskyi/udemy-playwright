@@ -40,6 +40,9 @@ test.describe.parallel('BYOE modes', () => {
     await loginPage.submitCredentials()
     await loginPage.loginAsUser(ENV.URL, ENV.clientTeaserMode.client_user_ID)
     await expertsPage.openExpertTab(ENV.URL, ENV.clientTeaserMode.project1_ID)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.assertTeserFlashModal()
+    await byoePage.navigateToByoeForm()
   })
 
   test.afterEach(async ({ page }, testInfo) => {
@@ -50,9 +53,6 @@ test.describe.parallel('BYOE modes', () => {
   test('Check that user is not able to schedule a call in BYOE Teaser mode', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.assertTeserFlashModal()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.asserScheduleFieldsDisabled()
@@ -65,9 +65,6 @@ test.describe.parallel('BYOE modes', () => {
   test('Check that Expert can only be created and updated in BYOE Teaser mode', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.assertTeserFlashModal()
-    await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
@@ -87,9 +84,6 @@ test.describe.parallel('BYOE modes', () => {
   test('Check that user can Request feature in BYOE Teaser mode', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.assertTeserFlashModal()
-    await byoePage.navigateToByoeForm()
     await byoePage.assertTeaserBeforeRequest()
     await byoePage.assertTeaserAfterRequest()
   })

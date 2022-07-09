@@ -44,6 +44,12 @@ test.describe.parallel('Managment', () => {
     await loginPage.submitCredentials()
     await loginPage.loginAsUser(ENV.URL, ENV.clientFullMode.client_user_ID)
     await expertsPage.openExpertTab(ENV.URL, ENV.clientFullMode.project1_ID)
+    await byoePage.assertExpertTabDisplayed()
+    await byoePage.navigateToByoeForm()
+    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
+    await byoePage.fillForm(byoeData)
+    await byoePage.submitFormWithContinueButton()
+    await byoePage.agreeOnAgreement()
   })
 
   test.afterEach(async ({ page }, testInfo) => {
@@ -54,12 +60,6 @@ test.describe.parallel('Managment', () => {
   test('Check that client can add selected expert to the short list', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-    await byoePage.fillForm(byoeData)
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
     await expertsPage.addToShortlist()
     byoeData = generateRandomDataBYOE(1)
     await byoePage.assertExpertTabDisplayed()
@@ -80,12 +80,6 @@ test.describe.parallel('Managment', () => {
   test('Check that client can remove selected expert from the short list', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-    await byoePage.fillForm(byoeData)
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
     await expertsPage.addToShortlist()
     byoeData = generateRandomDataBYOE(1)
     await byoePage.assertExpertTabDisplayed()
@@ -107,11 +101,6 @@ test.describe.parallel('Managment', () => {
   test('Check that client can move BYOE to the Not Interested', async ({
     page,
   }, testInfo) => {
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-    await byoePage.fillForm(byoeData)
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.rejectExpert()
     byoeData = generateRandomDataBYOE(1)
@@ -132,29 +121,19 @@ test.describe.parallel('Managment', () => {
     await expertsPage.compactListView()
     await expertsPage.assertExpertInExpertsList(byoeData, true)
   })
+
   test('Check that client is able to add a note for the BYOE after adding', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-    await byoePage.fillForm(byoeData)
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(byoeData)
     await expertsPage.addExpertNote(
       `${byoeData.lastName} works in the ${byoeData.companyName}`
     )
   })
+
   test('Check that user is able to left notes on the Call page', async ({
     page,
   }, testInfo) => {
-    await byoePage.assertExpertTabDisplayed()
-    await byoePage.navigateToByoeForm()
-    await byoePage.fillEmailInputWithUniqueEmail(byoeData)
-    await byoePage.fillForm(byoeData)
-    await byoePage.submitFormWithContinueButton()
-    await byoePage.agreeOnAgreement()
     await expertsPage.asserExpertInProejct(byoeData)
     await expertsPage.openExpertSchedulingPanel()
     await expertsPage.openSetTimeModal()
