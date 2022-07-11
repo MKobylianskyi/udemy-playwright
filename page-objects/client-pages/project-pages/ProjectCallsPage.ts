@@ -11,7 +11,7 @@ export class CallsPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.searchInput = page.locator(
-      '[placeholder="Filter by expert name, angle, geography"]'
+      '[placeholder="Filter by expert name (min 3 characters)"]'
     )
   }
   async openCallsTab(url, projectId) {

@@ -79,19 +79,26 @@ export class ExpertsPage extends BasePage {
   async searchForExpert(data) {
     await this.clearField(this.toolBarSearch)
     await this.toolBarSearch.type(data.firstName + ' ' + data.lastName, {
-      delay: 10,
+      delay: 20,
     })
+    await this.page.waitForTimeout(1000)
   }
   async compactListView() {
     await this.toolBarShowAs.click()
     await this.page.click('[tabindex="-1"]:has-text("compact list")')
   }
   async detailedListView() {
-    await this.toolBarShowAs.click()
-    await this.page.click('[tabindex="-1"]:has-text("detailed list")')
+    await this.toolBarShowAs.click({
+      delay: 100,
+    })
+    await this.page.click('[tabindex="-1"]:has-text("detailed list")', {
+      delay: 100,
+    })
   }
 
-  async assertExpertStatusInList(status) {
+  async assertExpertStatusInList(data, status) {
+    await this.compactListView()
+    await this.searchForExpert(data)
     await expect(this.expertStatus).toHaveText(status)
   }
 
@@ -128,6 +135,13 @@ export class ExpertsPage extends BasePage {
         this.page.locator(`text= • ${data.firstName} ${data.lastName}`)
       ).not.toBeVisible()
     }
+  }
+
+  async openExpertsCallPage(baseURL, data, callStatus) {
+    await this.searchForExpert(data)
+    await this.detailedListView()
+    await this.clickButtonHasText(callStatus)
+    await this.assertPrecenceOnPage(baseURL, '/client/calls/')
   }
 
   async asserExpertInProejct(data) {
@@ -210,7 +224,11 @@ export class ExpertsPage extends BasePage {
     await this.setTimeButton.click()
   }
 
-  async requestAvailabilityClick() {
+  async openRequestAvalabilityModal() {
     await this.requestAvailabilityButton.click()
+  }
+  async requestAvailabilityOnModal() {
+    await this.clickButtonHasText('Request Availability')
+    await this.assertSuccessAllert('Request has been sent')
   }
 }
