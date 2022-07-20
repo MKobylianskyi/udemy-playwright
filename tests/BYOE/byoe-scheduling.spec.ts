@@ -4,6 +4,7 @@ import { CallsPage } from '../../page-objects/client-pages/project-pages/Project
 import { LoginPage } from '../../page-objects/public-pages/LoginPage'
 import { CallPage } from '../../page-objects/client-pages/calls-pages/CallPage'
 import { ComplianceTrainingPage } from '../../page-objects/public-pages/ComplainceTraningPage'
+import { CalendarPage } from '../../page-objects/public-pages/CalendarPage'
 import { ExpertsPage } from '../../page-objects/client-pages/project-pages/ProjectExpertsPage'
 import { generateRandomDataBYOE } from '../../utils/data-factory'
 import { sendTestStatusAPI } from '../../utils/data-testrails'
@@ -87,6 +88,7 @@ test.describe.parallel('Scheduling', () => {
   let callsPage: CallsPage
   let loginPage: LoginPage
   let expertsPage: ExpertsPage
+  let calendarPage: CalendarPage
   let complianceTrainingPage: ComplianceTrainingPage
   const ENV = require('../../test-data/env-data.json')
 
@@ -96,6 +98,7 @@ test.describe.parallel('Scheduling', () => {
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
     callsPage = new CallsPage(page)
+    calendarPage = new CalendarPage(page)
     callPage = new CallPage(page)
     complianceTrainingPage = new ComplianceTrainingPage(page)
     expertsPage = new ExpertsPage(page)
@@ -348,6 +351,9 @@ test.describe.parallel('Scheduling', () => {
       byoeData,
       'Waiting for times'
     )
+    await calendarPage.openProvideTimesFromEmail(byoeData)
+    await calendarPage.selectAvailableSlot(0)
+    await page.pause()
     //get email
     //get link
     //redireft to teh link in new tab
@@ -355,7 +361,7 @@ test.describe.parallel('Scheduling', () => {
     // Submit windiw
     //select timeslot
     // make sure call booked
-    await callPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await callPage.mailClient.assertRemindeRecevied(byoeData)
+    // await callPage.mailClient.assertPlaceholderRecevied(byoeData)
+    // await callPage.mailClient.assertRemindeRecevied(byoeData)
   })
 })

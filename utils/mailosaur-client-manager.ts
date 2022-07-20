@@ -1,10 +1,10 @@
 import { expect } from '@playwright/test'
 
 const Mailosaur = require('mailosaur')
-const apiKey = '2d6p7S349brQ4LZL'
+const apiKey = 'VeAbI3lehwlNHCvw'
 const mailosaur = new Mailosaur(apiKey)
-const serverId = 'ccjat8kv'
-const serverDomain = 'ccjat8kv.mailosaur.net'
+const serverId = 'kfbjvete'
+const serverDomain = 'kfbjvete.mailosaur.net'
 
 export class MailClient {
   async getEmailBySubject(sentTo: string, emailSubject: string) {
@@ -19,6 +19,10 @@ export class MailClient {
       }
     )
     return email
+  }
+
+  getServerDomain() {
+    return serverDomain
   }
 
   async getEmailByAddressFrom(sentTo: string, fromEmail: string) {
@@ -57,6 +61,14 @@ export class MailClient {
   async getCTLinkFromPlaceholderEmail(data) {
     const email = await this.getEmailBySubject(data.email, `ACTION NEEDED`)
     await this.deleteEmail(email.id)
+    return this.getLink(email, 0)
+  }
+  async getBookingLinkFromRequestTimesEmail(data) {
+    const email = await this.getEmailBySubject(
+      data.email,
+      `Consultation request`
+    )
+    // await this.deleteEmail(email.id)
     return this.getLink(email, 0)
   }
 

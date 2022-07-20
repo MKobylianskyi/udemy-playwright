@@ -117,6 +117,26 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await expertsPage.assertTitleCallScheduled()
     await complianceTrainingPage.compelteCTFromReminder(byoeData)
   })
+
+  // test.only('prod test', async ({ page }, testInfo) => {
+  //   await page.goto(
+  //     ' https://platform.prosapient.com/admin/projects/ad982c45-694f-4fb9-b270-02e54fe28715/info'
+  //   )
+  //   await page
+  //     .locator('[name=login]')
+  //     .type('mykhailo.kobylianskyi@prosapient.com')
+  //   await page.locator('[name=password]').type('1q2w3e4rAA@@++!!')
+  //   await page.click('[type="submit"]')
+  //   await page.waitForTimeout(2000)
+  //   await page.goto(
+  //     'https://platform.prosapient.com/admin/projects/ad982c45-694f-4fb9-b270-02e54fe28715/info'
+  //   )
+  //   for (var i = 0; i <= 1000; i++) {
+  //     await page.waitForSelector('text=French fintech')
+  //     await page.reload()
+  //   }
+  // })
+
   test('Check that client is able to see the date when compliance training was completed', async ({
     page,
   }, testInfo) => {
