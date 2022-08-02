@@ -25,13 +25,14 @@ export class ExpertsPage extends BasePage {
   readonly toolBarShowAs: Locator
   readonly toolBarSearch: Locator
   readonly exitRejectedFilterButton: Locator
-  // readonly noteInput: Locator
+  readonly callStatusButton: Locator
 
   constructor(page: Page) {
     super(page)
     this.addToShortlistButton = page.locator(
       'button:has-text("Add to shortlist")'
     )
+    this.callStatusButton = page.locator('button:has([data-icon="phone"])')
 
     this.removeFromShortlistButton = page.locator(
       'button:has-text("Remove from shortlist")'
@@ -137,11 +138,11 @@ export class ExpertsPage extends BasePage {
     }
   }
 
-  async openExpertsCallPage(baseURL, data, callStatus) {
+  async openExpertsCallPage(data) {
     await this.searchForExpert(data)
     await this.detailedListView()
-    await this.clickButtonHasText(callStatus)
-    await this.assertPrecenceOnPage(baseURL, '/client/calls/')
+    await this.callStatusButton.click()
+    await this.assertPrecenceOnPage('/client/calls/')
   }
 
   async asserExpertInProejct(data) {

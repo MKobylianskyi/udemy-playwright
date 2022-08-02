@@ -70,8 +70,8 @@ export class BasePage {
     await element.evaluate((node) => node.setAttribute(name, value))
   }
 
-  async assertPrecenceOnPage(baseURL, rout) {
-    await expect(this.page).toHaveURL(new RegExp(`${baseURL}${rout}`))
+  async assertPrecenceOnPage(rout) {
+    await expect(this.page).toHaveURL(new RegExp(`${rout}`))
   }
 
   // FIX method after adding ID to the calendar date picker

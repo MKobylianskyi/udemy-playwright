@@ -15,7 +15,7 @@ export function getRandomString(length) {
 export function generateRandomDataBYOE() {
   const uniqueId = getRandomString(3)
   const firstName = faker.name.firstName() + getRandomString(1)
-  const lastName = faker.name.lastName()
+  const lastName = faker.name.lastName() + getRandomString(1)
   const email = `${firstName}-${lastName}@${mailClient.getServerDomain()}`
   const jobTitle = faker.name.jobTitle()
   const companyName = faker.company.companyName()

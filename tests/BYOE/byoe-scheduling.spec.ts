@@ -239,7 +239,7 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
+    await expertsPage.openExpertsCallPage(byoeData)
     await callPage.assertExpertCardDetails(byoeData)
     await callPage.assertCallDetails(byoeData)
   })
@@ -261,7 +261,7 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
-    await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
+    await expertsPage.openExpertsCallPage(byoeData)
     await callPage.cancelCall()
   })
   test('Check rescheduling after cancelation call - Set time for new call (Check email for expert)', async ({
@@ -271,7 +271,7 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
-    await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
+    await expertsPage.openExpertsCallPage(byoeData)
     await callPage.mailClient.assertPlaceholderRecevied(byoeData)
     await callPage.cancelCall()
     await callPage.mailClient.assertCanceletionInvitationRecevied(byoeData)
@@ -289,7 +289,7 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
-    await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
+    await expertsPage.openExpertsCallPage(byoeData)
     await callPage.mailClient.assertPlaceholderRecevied(byoeData)
     await callPage.openRescheduleSetTimeModal()
     await callPage.provideSetTimeSchedulingDetails('30 minutes')
@@ -306,7 +306,7 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
-    await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
+    await expertsPage.openExpertsCallPage(byoeData)
     await callPage.mailClient.assertPlaceholderRecevied(byoeData)
     await callPage.openRescheduleSetTimeModal()
     await callPage.provideSetTimeSchedulingDetails('30 minutes')
@@ -317,28 +317,22 @@ test.describe.parallel('Scheduling', () => {
     await callPage.mailClient.assertInvitationRecevied(byoeData)
   })
 
-  test.fixme(
-    'Check that client is able to schedule a call with BYOE via Request availability',
-    async ({ page }, testInfo) => {
-      await expertsPage.openRequestAvalabilityModal()
-      await expertsPage.requestAvailabilityOnModal()
-      await expertsPage.openExpertsCallPage(
-        ENV.URL,
-        byoeData,
-        'Waiting for times'
-      )
-      await calendarPage.openProvideTimesFromEmail(byoeData)
-      await calendarPage.selectAvailableSlot(0)
-      await page.pause()
-      //get email
-      //get link
-      //redireft to teh link in new tab
-      //select closest window
-      // Submit windiw
-      //select timeslot
-      // make sure call booked
-      // await callPage.mailClient.assertPlaceholderRecevied(byoeData)
-      // await callPage.mailClient.assertRemindeRecevied(byoeData)
-    }
-  )
+  test.skip('Check that client is able to schedule a call with BYOE via Request availability', async ({
+    page,
+  }, testInfo) => {
+    await expertsPage.openRequestAvalabilityModal()
+    await expertsPage.requestAvailabilityOnModal()
+    await expertsPage.openExpertsCallPage(byoeData)
+    await calendarPage.openProvideTimesFromEmail(byoeData)
+    await calendarPage.selectAvailableSlot(0)
+    await page.pause()
+    //get email
+    //get link
+    //redireft to teh link in new tab
+    //select closest window
+    // Submit windiw
+    //select timeslot
+    // make sure call booked
+    // await callPage.mailClient.assertPlaceholderRecevied(byoeData)
+  })
 })

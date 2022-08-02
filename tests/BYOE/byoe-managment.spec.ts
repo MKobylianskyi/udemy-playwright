@@ -141,12 +141,10 @@ test.describe.parallel('Managment', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.asserExpertCardOpened(byoeData)
-    await expertsPage.clickButtonHasText('Call scheduled:')
-    await expertsPage.assertPrecenceOnPage(ENV.URL, '/client/calls/')
+    await expertsPage.openExpertsCallPage(byoeData)
     await callPage.assertCallDetails(byoeData)
     await callPage.addCallNote(
-      `${byoeData.lastName}  from ${byoeData.companyName} should be in this call`
+      `${byoeData.lastName} from ${byoeData.companyName} should be in this call`
     )
   })
 })
