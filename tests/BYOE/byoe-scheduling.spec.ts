@@ -39,7 +39,7 @@ test.describe.parallel('Scheduling - Fields checking', () => {
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -93,7 +93,7 @@ test.describe.parallel('Scheduling', () => {
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -129,7 +129,6 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
   })
 
   test('Check expert status after scheduling (Call Scheduled)', async ({
@@ -152,7 +151,7 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -167,7 +166,6 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.assertConflictCallWarning()
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
   })
 
   test('Check Create a call with expert form', async ({ page }, testInfo) => {
@@ -176,7 +174,6 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
   })
@@ -189,7 +186,6 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
   })
@@ -202,7 +198,6 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await expertsPage.assertExpertStatusInList(byoeData, 'Call scheduled')
   })
 
@@ -216,7 +211,6 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.fillInputByPlaceholder('Rate', byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await expertsPage.assertExpertStatusInList(byoeData, 'Call scheduled')
     await expertsPage.openExpertTab(ENV.URL, ENV.clientFullMode.project2_ID)
     await byoePage.assertExpertTabDisplayed()
@@ -228,16 +222,13 @@ test.describe.parallel('Scheduling', () => {
 
   test('Check scheduled call on the call tab', async ({ page }, testInfo) => {
     await expertsPage.openSetTimeModal()
-    // const callDateTime =
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await callsPage.openCallsTab(ENV.URL, ENV.clientFullMode.project1_ID)
     await callsPage.searchExpertCall(byoeData)
     await callsPage.assertCallPresence(byoeData)
-    // console.log(callDateTime)
   })
 
   test('Check that call Data (time, duration, expert details) correct on the Call page', async ({
@@ -248,7 +239,6 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
     await callPage.assertExpertCardDetails(byoeData)
     await callPage.assertCallDetails(byoeData)
@@ -262,15 +252,6 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await complianceTrainingPage.compelteCTFromPlaceholder(byoeData)
-  })
-  test('Check that reminder is received by expert after scheduling', async ({
-    page,
-  }, testInfo) => {
-    await expertsPage.openSetTimeModal()
-    await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
-    await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
-    await expertsPage.bookCallOnSetTimeForm()
-    await complianceTrainingPage.compelteCTFromReminder(byoeData)
   })
 
   test('Check that client is able to cancel BYOE call', async ({
@@ -292,13 +273,11 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
     await callPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await callPage.mailClient.assertRemindeRecevied(byoeData)
     await callPage.cancelCall()
     await callPage.mailClient.assertCanceletionInvitationRecevied(byoeData)
     await callPage.openRescheduleSetTimeModal()
     await expertsPage.provideSetTimeSchedulingDetails('30 minutes')
     await callPage.bookCallOnRescheduleModal()
-    await callPage.mailClient.assertRemindeRecevied(byoeData)
     await complianceTrainingPage.compelteCTFromPlaceholder(byoeData)
     await callPage.mailClient.assertInvitationRecevied(byoeData)
   })
@@ -312,12 +291,10 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
     await callPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await callPage.mailClient.assertRemindeRecevied(byoeData)
     await callPage.openRescheduleSetTimeModal()
     await callPage.provideSetTimeSchedulingDetails('30 minutes')
     await callPage.bookCallOnRescheduleModal()
     await callPage.mailClient.assertCanceletionInvitationRecevied(byoeData)
-    await callPage.mailClient.assertRemindeRecevied(byoeData)
     await complianceTrainingPage.compelteCTFromPlaceholder(byoeData)
     await callPage.mailClient.assertInvitationRecevied(byoeData)
   })
@@ -331,37 +308,37 @@ test.describe.parallel('Scheduling', () => {
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.openExpertsCallPage(ENV.URL, byoeData, 'Call scheduled:')
     await callPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await callPage.mailClient.assertRemindeRecevied(byoeData)
     await callPage.openRescheduleSetTimeModal()
     await callPage.provideSetTimeSchedulingDetails('30 minutes')
     await callPage.assertConflictWarning()
     await callPage.bookCallOnRescheduleModal()
     await callPage.mailClient.assertCanceletionInvitationRecevied(byoeData)
-    await callPage.mailClient.assertRemindeRecevied(byoeData)
     await complianceTrainingPage.compelteCTFromPlaceholder(byoeData)
     await callPage.mailClient.assertInvitationRecevied(byoeData)
   })
-  test.skip('Check that client is able to schedule a call with BYOE via Request availability', async ({
-    page,
-  }, testInfo) => {
-    await expertsPage.openRequestAvalabilityModal()
-    await expertsPage.requestAvailabilityOnModal()
-    await expertsPage.openExpertsCallPage(
-      ENV.URL,
-      byoeData,
-      'Waiting for times'
-    )
-    await calendarPage.openProvideTimesFromEmail(byoeData)
-    await calendarPage.selectAvailableSlot(0)
-    await page.pause()
-    //get email
-    //get link
-    //redireft to teh link in new tab
-    //select closest window
-    // Submit windiw
-    //select timeslot
-    // make sure call booked
-    // await callPage.mailClient.assertPlaceholderRecevied(byoeData)
-    // await callPage.mailClient.assertRemindeRecevied(byoeData)
-  })
+
+  test.fixme(
+    'Check that client is able to schedule a call with BYOE via Request availability',
+    async ({ page }, testInfo) => {
+      await expertsPage.openRequestAvalabilityModal()
+      await expertsPage.requestAvailabilityOnModal()
+      await expertsPage.openExpertsCallPage(
+        ENV.URL,
+        byoeData,
+        'Waiting for times'
+      )
+      await calendarPage.openProvideTimesFromEmail(byoeData)
+      await calendarPage.selectAvailableSlot(0)
+      await page.pause()
+      //get email
+      //get link
+      //redireft to teh link in new tab
+      //select closest window
+      // Submit windiw
+      //select timeslot
+      // make sure call booked
+      // await callPage.mailClient.assertPlaceholderRecevied(byoeData)
+      // await callPage.mailClient.assertRemindeRecevied(byoeData)
+    }
+  )
 })

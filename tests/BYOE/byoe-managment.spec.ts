@@ -34,7 +34,7 @@ test.describe.parallel('Managment', () => {
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -61,7 +61,7 @@ test.describe.parallel('Managment', () => {
     page,
   }, testInfo) => {
     await expertsPage.addToShortlist()
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -81,7 +81,7 @@ test.describe.parallel('Managment', () => {
     page,
   }, testInfo) => {
     await expertsPage.addToShortlist()
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -103,7 +103,7 @@ test.describe.parallel('Managment', () => {
   }, testInfo) => {
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.rejectExpert()
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
     await byoePage.fillForm(byoeData)
@@ -141,7 +141,6 @@ test.describe.parallel('Managment', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await expertsPage.asserExpertCardOpened(byoeData)
     await expertsPage.clickButtonHasText('Call scheduled:')
     await expertsPage.assertPrecenceOnPage(ENV.URL, '/client/calls/')

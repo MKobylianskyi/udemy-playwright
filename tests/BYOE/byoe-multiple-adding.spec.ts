@@ -31,7 +31,7 @@ test.describe.parallel('Multiple submission on a project handling', () => {
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)

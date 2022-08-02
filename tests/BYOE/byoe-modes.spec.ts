@@ -31,7 +31,7 @@ test.describe.parallel('BYOE modes', () => {
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -62,7 +62,7 @@ test.describe.parallel('BYOE modes', () => {
     await expertsPage.assertTeaserWarningOnExpertCard()
   })
 
-  test('Check that Expert can only be created and updated in BYOE Teaser mode', async ({
+  test('[C23443]Check that Expert can only be created and updated in BYOE Teaser mode', async ({
     page,
   }, testInfo) => {
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -75,7 +75,7 @@ test.describe.parallel('BYOE modes', () => {
     await byoePage.assertFormValues(byoeData)
     await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()
-    byoeData = generateRandomDataBYOE(2)
+    byoeData = generateRandomDataBYOE()
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithSaveButton()
     await expertsPage.asserExpertCardOpened(byoeData)

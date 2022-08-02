@@ -12,7 +12,7 @@ export function getRandomString(length) {
   return crypto.randomBytes(length).toString('hex')
 }
 
-export function generateRandomDataBYOE(env: number) {
+export function generateRandomDataBYOE() {
   const uniqueId = getRandomString(3)
   const firstName = faker.name.firstName() + getRandomString(1)
   const lastName = faker.name.lastName()

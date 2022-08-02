@@ -35,7 +35,7 @@ test.describe.parallel('BYOE: Compliance Training', () => {
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -60,7 +60,6 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     page,
   }, testInfo) => {
     //checking Complaince Warnign on the Expert card - Expert tab
-
     await byoePage.assertComplainceMessage()
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithContinueButton()
@@ -73,7 +72,6 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await expertsPage.assertRateOnSetTimeFrom(byoeData.rate)
     await expertsPage.bookCallOnSetTimeForm()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
     await expertsPage.clickButtonHasText('Call scheduled:')
     await expertsPage.assertPrecenceOnPage(ENV.URL, '/client/calls/')
     await callPage.assertExpertCardDetails(byoeData)
@@ -115,27 +113,8 @@ test.describe.parallel('BYOE: Compliance Training', () => {
     await byoePage.assertSuccessAllert('Call was scheduled')
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
-    await complianceTrainingPage.compelteCTFromReminder(byoeData)
+    await complianceTrainingPage.compelteCTFromPlaceholder(byoeData)
   })
-
-  // test.only('prod test', async ({ page }, testInfo) => {
-  //   await page.goto(
-  //     ' https://platform.prosapient.com/admin/projects/ad982c45-694f-4fb9-b270-02e54fe28715/info'
-  //   )
-  //   await page
-  //     .locator('[name=login]')
-  //     .type('mykhailo.kobylianskyi@prosapient.com')
-  //   await page.locator('[name=password]').type('1q2w3e4rAA@@++!!')
-  //   await page.click('[type="submit"]')
-  //   await page.waitForTimeout(2000)
-  //   await page.goto(
-  //     'https://platform.prosapient.com/admin/projects/ad982c45-694f-4fb9-b270-02e54fe28715/info'
-  //   )
-  //   for (var i = 0; i <= 1000; i++) {
-  //     await page.waitForSelector('text=French fintech')
-  //     await page.reload()
-  //   }
-  // })
 
   test('Check that client is able to see the date when compliance training was completed', async ({
     page,

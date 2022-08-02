@@ -15,7 +15,7 @@ export class MailClient {
         subject: emailSubject,
       },
       {
-        timeout: 500000,
+        timeout: 100000,
       }
     )
     return email
@@ -33,7 +33,7 @@ export class MailClient {
         sentFrom: fromEmail,
       },
       {
-        timeout: 500000,
+        timeout: 100000,
       }
     )
     return email
@@ -48,14 +48,6 @@ export class MailClient {
 
   async deleteEmail(emailID) {
     await mailosaur.messages.del(emailID)
-  }
-
-  async getCTLinkFromReminderEmail(data) {
-    const email = await this.getEmailBySubject(
-      data.email,
-      `Please complete your compliance training ahead of your call`
-    )
-    return this.getLink(email, 1)
   }
 
   async getCTLinkFromPlaceholderEmail(data) {
@@ -77,7 +69,6 @@ export class MailClient {
       data.email,
       `booking@pSapient.onmicrosoft.com`
     )
-    // console.log(email.subject)
     await this.assertPresenceInEmailBody(
       email,
       'Please open the link in one of the following browsers: Chrome, Firefox, Safari'
@@ -104,22 +95,6 @@ export class MailClient {
 
   async assertCanceletionInvitationRecevied(data) {
     const email = await this.getEmailBySubject(data.email, `Canceled:`)
-    await this.deleteEmail(email.id)
-  }
-
-  async assertRemindeRecevied(data) {
-    const email = await this.getEmailBySubject(
-      data.email,
-      `Please complete your compliance training ahead of your call`
-    )
-    await this.assertPresenceInEmailBody(
-      email,
-      'Before you are able to participate in a consultation, we need to make sure that you are fully aware of the compliance rules that apply to the expert consultations.'
-    )
-    await this.assertPresenceInEmailBody(
-      email,
-      'We would like to have a call with you!'
-    )
     await this.deleteEmail(email.id)
   }
 }

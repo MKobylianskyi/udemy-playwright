@@ -74,7 +74,7 @@ export class BasePage {
     await expect(this.page).toHaveURL(new RegExp(`${baseURL}${rout}`))
   }
 
-  // fix method after adding ID to the caleendar date picker
+  // FIX method after adding ID to the calendar date picker
   async selectCallDate(date) {
     await this.clickOnInputByPlaceholder('Pick date')
     await this.page.click('div:nth-child(6) div:nth-child(7)')
@@ -177,12 +177,4 @@ export class BasePage {
       })
     }
   }
-
-  //  FIX SELECTOR ASSSERTATION
-  // async assertSelectorDisabled(titleName: string) {
-  //   const element = await this.page.locator(
-  //     ':text("' + titleName + '") + div >> nth=0'
-  //   )
-  //   await expect(element).toBeFalsy()
-  // }
 }

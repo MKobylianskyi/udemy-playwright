@@ -31,7 +31,7 @@ test.describe.parallel('Create and update BYOE', () => {
   const ENV = require('../../test-data/env-data.json')
 
   test.beforeEach(async ({ page }) => {
-    byoeData = generateRandomDataBYOE(0)
+    byoeData = generateRandomDataBYOE()
     await page.goto(ENV.URL)
     loginPage = new LoginPage(page)
     byoePage = new ByoePage(page)
@@ -138,7 +138,7 @@ test.describe.parallel('Create and update BYOE', () => {
     await expertsPage.searchForExpert(byoeData)
     await expertsPage.assertTitleCallScheduled()
     await expertsPage.mailClient.assertPlaceholderRecevied(byoeData)
-    await expertsPage.mailClient.assertRemindeRecevied(byoeData)
+    // await expertsPage.mailClient.assertRemindeRecevied(byoeData)
   })
 
   test('Check that client is not prevent to schedule a conflicting call with internal expert during adding expert', async ({
@@ -150,7 +150,7 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -160,8 +160,8 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
     await byoePage.mailClient.assertPlaceholderRecevied(byoeData)
-    await byoePage.mailClient.assertRemindeRecevied(byoeData)
   })
+
   test('Check that message ‘Please note, you have another call at this timeslot’ is shown on the  form if client has a conflicting call during adding', async ({
     page,
   }, testInfo) => {
@@ -171,7 +171,7 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.submitFormWithContinueButton()
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
-    byoeData = generateRandomDataBYOE(1)
+    byoeData = generateRandomDataBYOE()
     await byoePage.assertExpertTabDisplayed()
     await byoePage.navigateToByoeForm()
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
@@ -182,7 +182,6 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.agreeOnAgreement()
     await byoePage.assertSuccessAllert('Call was scheduled')
     await byoePage.mailClient.assertPlaceholderRecevied(byoeData)
-    await byoePage.mailClient.assertRemindeRecevied(byoeData)
   })
 
   test('Check that  Additional service message is shown after setting Rate for the BYOE', async ({
@@ -213,7 +212,7 @@ test.describe.parallel('Create and update BYOE', () => {
     await byoePage.assertFormValues(byoeData)
     await byoePage.assertBYOEFormAvailable()
     await byoePage.clearForm()
-    byoeData = generateRandomDataBYOE(2)
+    byoeData = generateRandomDataBYOE()
     await byoePage.fillForm(byoeData)
     await byoePage.submitFormWithSaveButton()
     await expertsPage.asserExpertCardOpened(byoeData)

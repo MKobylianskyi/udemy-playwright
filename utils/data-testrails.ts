@@ -17,7 +17,7 @@ export async function getTestCase(testInfo) {
   return filteredTestCases[0]
 }
 
-export function getTestStatusID(status) {
+export function statusCode(status) {
   switch (status) {
     case 'passed':
       return 1
@@ -31,7 +31,6 @@ export async function updateTestCase(testCase, status, testInfo) {
   let result = await api.addResultForCase(testRun.id, testCase.id, {
     status_id: status,
   })
-
   if (status == 5) {
     await api.addAttachmentToResult(result.id, {
       name: testInfo.attachments[0].name,
@@ -42,7 +41,7 @@ export async function updateTestCase(testCase, status, testInfo) {
 export async function sendTestStatusAPI(testInfo) {
   if (testRun.id != undefined) {
     const testCase = await getTestCase(testInfo)
-    const status = getTestStatusID(testInfo.status)
+    const status = statusCode(testInfo.status)
     await updateTestCase(testCase, status, testInfo)
   }
 }
