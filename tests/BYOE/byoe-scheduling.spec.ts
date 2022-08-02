@@ -326,11 +326,7 @@ test.describe.parallel('Scheduling', () => {
     await calendarPage.openProvideTimesFromEmail(byoeData)
     await calendarPage.selectAvailableSlot(0)
     await page.pause()
-    //get email
-    //get link
-    //redireft to teh link in new tab
-    //select closest window
-    // Submit windiw
+    // Submit timslots
     //select timeslot
     // make sure call booked
     // await callPage.mailClient.assertPlaceholderRecevied(byoeData)

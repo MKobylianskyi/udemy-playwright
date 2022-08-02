@@ -13,8 +13,9 @@ export class CalendarPage extends BasePage {
 
   async selectAvailableSlot(number) {
     await this.page.pause()
-    await this.page.locator('.//*[@cursor="pointer"]').click()
+    await this.page.locator('div>[cursor="pointer"]>>nth=1').hover()
     await this.page.pause()
+    await this.page.locator('div>[cursor="pointer"]>>nth=1').click()
     await this.page
       .locator('div>[cursor="pointer"]>>nth=1')
       .click({ delay: 100 })

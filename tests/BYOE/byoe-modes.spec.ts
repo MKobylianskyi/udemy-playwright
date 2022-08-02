@@ -62,7 +62,7 @@ test.describe.parallel('BYOE modes', () => {
     await expertsPage.assertTeaserWarningOnExpertCard()
   })
 
-  test('[C23443]Check that Expert can only be created and updated in BYOE Teaser mode', async ({
+  test('Check that Expert can only be created and updated in BYOE Teaser mode', async ({
     page,
   }, testInfo) => {
     await byoePage.fillEmailInputWithUniqueEmail(byoeData)
